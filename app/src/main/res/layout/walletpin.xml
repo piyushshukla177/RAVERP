@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        style="@style/DialogCardViewStyle"
+        app:cardUseCompatPadding="false"
+        android:id="@+id/card1"
+        app:cardPreventCornerOverlap="false">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Set 4-digit Login Pin :"
+              android:gravity="center"
+              android:textColor="@color/black"
+              android:textSize="@dimen/_20sdp"
+              android:layout_marginTop="@dimen/_40sdp"/>
+
+
+
+    <com.goodiebag.pinview.Pinview
+        android:id="@+id/pinview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:pinWidth="45dp"
+        app:pinHeight="45dp"
+        app:pinLength="4"
+        app:cursorVisible="true"
+        app:forceKeyboard="true"
+        app:hint="0"
+        app:inputType="number"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:password="false"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirm Pin :"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_20sdp"
+            app:forceKeyboard="true"
+            android:layout_marginTop="@dimen/_20sdp"/>
+
+    <com.goodiebag.pinview.Pinview
+        android:id="@+id/pinview1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:pinWidth="45dp"
+        app:pinHeight="45dp"
+        app:pinLength="4"
+        app:cursorVisible="true"
+        app:forceKeyboard="true"
+        app:hint="0"
+        app:inputType="number"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:password="false"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#B85FC6"
+            android:text="Set pin"
+            android:textAllCaps="true"
+            android:id="@+id/btn_set_pin"
+            android:layout_gravity="center"
+            android:fontFamily="@font/googlesans_medium"
+            android:layout_marginLeft="@dimen/_60sdp"
+            android:layout_marginRight="@dimen/_60sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12sdp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        style="@style/DialogCardViewStyle"
+        app:cardUseCompatPadding="false"
+        android:id="@+id/card2"
+        app:cardPreventCornerOverlap="false">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_40sdp"
+                android:gravity="center"
+                android:text="Enter 4-digit Wallet Login Pin:"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_20sdp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:gravity="center"
+                android:text="(we want to make sure it's you before use wallet)"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp" />
+
+            <com.goodiebag.pinview.Pinview
+                android:id="@+id/pinview2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:cursorVisible="true"
+                app:forceKeyboard="true"
+                app:hint="0"
+                app:inputType="number"
+                app:password="false"
+                app:pinHeight="45dp"
+                app:pinLength="4"
+                app:pinWidth="45dp"
+              />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_verify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_50sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_50sdp"
+                android:background="#B85FC6"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Verify"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:gravity="center"
+                android:text="Didn't receive the code?"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10sdp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvForgotPin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="Forgot Pin?"
+                android:textColor="#007bff"
+                android:textSize="@dimen/_10sdp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send Otp"
+                android:background="@drawable/rectangle_broder"
+                android:textAllCaps="false"
+                android:id="@+id/btnSendOtp"
+                android:layout_gravity="center"
+                android:fontFamily="@font/googlesans_medium"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:textColor="@color/green"
+                android:textSize="@dimen/_12sdp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+</androidx.appcompat.widget.LinearLayoutCompat>

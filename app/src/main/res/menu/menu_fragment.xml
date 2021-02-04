@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.NewConnectionRequestActivity">
+
+    <item
+        android:id="@+id/action_cart"
+        android:title="Total"
+        app:showAsAction="ifRoom"
+        app:actionLayout="@layout/action_count"
+        android:icon="@drawable/sigma"
+        />
+    <item
+        android:id="@+id/action_filter"
+        android:title="@string/action_filter"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_filter_list" />
+
+</menu>
