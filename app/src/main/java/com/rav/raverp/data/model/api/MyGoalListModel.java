@@ -11,8 +11,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.rav.raverp.R;
 
-public class MyGoalListModel implements Serializable
-{
+public class MyGoalListModel implements Serializable {
 
     @SerializedName("intMyGoalId")
     @Expose
@@ -29,6 +28,43 @@ public class MyGoalListModel implements Serializable
     @SerializedName("strMyGoaIImage")
     @Expose
     private String strMyGoaIImage;
+
+    @SerializedName("IsSelected")
+    @Expose
+    private boolean IsSelected;
+
+    @SerializedName("DaysLeft")
+    @Expose
+    private String DaysLeft;
+
+    @SerializedName("GoalStatus")
+    @Expose
+    private String GoalStatus;
+
+    public String getDaysLeft() {
+        return DaysLeft;
+    }
+
+    public void setDaysLeft(String daysLeft) {
+        DaysLeft = daysLeft;
+    }
+
+    public String getGoalStatus() {
+        return GoalStatus;
+    }
+
+    public void setGoalStatus(String goalStatus) {
+        GoalStatus = goalStatus;
+    }
+
+    public boolean isSelected() {
+        return IsSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        IsSelected = selected;
+    }
+
     private final static long serialVersionUID = 5023414775916186215L;
 
     public Integer getIntMyGoalId() {
@@ -70,18 +106,18 @@ public class MyGoalListModel implements Serializable
     public void setStrMyGoaIImage(String strMyGoaIImage) {
         this.strMyGoaIImage = strMyGoaIImage;
     }
-    public String getImageUrl(){
+
+    public String getImageUrl() {
         return strMyGoaIImage;
     }
 
     @BindingAdapter({"imageUrls"})
-    public  static void loadImage(ImageView imageView, String imageUrl) {
+    public static void loadImage(ImageView imageView, String imageUrl) {
 
-        String img=imageUrl;
-        Glide.with(imageView.getContext()).load("http://ravbiz.in" + imageUrl)
+        String img = imageUrl;
+        Glide.with(imageView.getContext()).load("https://ravgroup.org" + imageUrl)
                 .placeholder(R.drawable.account)
                 .into(imageView);
-
 
 
     }

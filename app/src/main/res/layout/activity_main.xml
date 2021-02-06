@@ -33,9 +33,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
-                android:divider="@null"
+                app:divider="@drawable/dotted"
                 android:groupIndicator="@null"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical"
+                android:childDivider="@drawable/dotted"
+                />
         </ScrollView>
 
         <TextView

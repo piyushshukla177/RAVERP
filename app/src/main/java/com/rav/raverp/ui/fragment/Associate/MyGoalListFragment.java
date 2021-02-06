@@ -48,8 +48,6 @@ public class MyGoalListFragment extends Fragment {
         public void onItemClicked(int itemPosition) {
             MyGoalListModel myGoalListModel =
                     myGoalListAdapter.getMyGoalListModels().get(itemPosition);
-
-
         }
     };
 

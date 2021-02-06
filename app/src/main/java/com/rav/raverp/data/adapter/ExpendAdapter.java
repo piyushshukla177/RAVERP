@@ -1,5 +1,6 @@
 package com.rav.raverp.data.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,8 +24,7 @@ public class ExpendAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<HeaderModel> listHeader;
 
-    public ExpendAdapter(Context context
-            , List<HeaderModel> listHeader) {
+    public ExpendAdapter(Context context, List<HeaderModel> listHeader) {
 
         this.context = context;
         this.listHeader = listHeader;
@@ -51,6 +52,8 @@ public class ExpendAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.navigation_list_item, null);
         }
 
+        LinearLayout llMain = (LinearLayout) convertView.findViewById(R.id.llMain);
+
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
 
@@ -62,8 +65,10 @@ public class ExpendAdapter extends BaseExpandableListAdapter {
 
         if (childText.isSelected()) {
             txtListChild.setTypeface(null, Typeface.BOLD);
+           // llMain.setBackgroundColor(context.getResources().getColor(R.color.login_background));
         } else {
             txtListChild.setTypeface(null, Typeface.NORMAL);
+           // llMain.setBackgroundColor(context.getResources().getColor(R.color.white));
         }
 
         return convertView;
@@ -112,6 +117,7 @@ public class ExpendAdapter extends BaseExpandableListAdapter {
 
         lblListHeader.setText(header.getTitle());
 
+
         if (header.getResource() != -1)
             iconMenu.setBackgroundResource(header.getResource());
 
@@ -120,13 +126,14 @@ public class ExpendAdapter extends BaseExpandableListAdapter {
             ivGroupIndicator.setVisibility(View.VISIBLE);
         } else {
             ivGroupIndicator.setVisibility(View.GONE);
-                if (header.isSelected()) {
-                    layoutGroup.setBackground(context.getResources().getDrawable(R.drawable.nav_background));
-                    lblListHeader.setTypeface(null, Typeface.BOLD);
-                } else {
-                    layoutGroup.setBackground(null);
-                    lblListHeader.setTypeface(null, Typeface.NORMAL);
-                }
+            if (header.isSelected()) {
+                layoutGroup.setBackground(context.getResources().getDrawable(R.drawable.nav_background));
+                lblListHeader.setTypeface(null, Typeface.BOLD);
+                lblListHeader.setTextColor(context.getResources().getColor(R.color.white));
+            } else {
+                layoutGroup.setBackground(null);
+                lblListHeader.setTypeface(null, Typeface.NORMAL);
+            }
 
         }
 
@@ -139,12 +146,14 @@ public class ExpendAdapter extends BaseExpandableListAdapter {
         if (isExpanded) {
             layoutGroup.setBackground(context.getResources().getDrawable(R.drawable.nav_background));
             ivGroupIndicator.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+            lblListHeader.setTextColor(context.getResources().getColor(R.color.white));
         } else {
-            if (groupPosition==0){
+            if (groupPosition == 0) {
                 layoutGroup.setBackground(context.getResources().getDrawable(R.drawable.nav_background));
-            }else{
+            } else {
                 layoutGroup.setBackground(null);
                 ivGroupIndicator.setImageResource(R.drawable.ic_keyboard_arrow_down_24dp);
+                lblListHeader.setTextColor(context.getResources().getColor(R.color.black));
             }
 
         }

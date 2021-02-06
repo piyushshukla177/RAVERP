@@ -184,7 +184,7 @@ public class LoginModel implements Serializable {
     public  static void loadImage(ImageView imageView, String imageUrl) {
 
         String img=imageUrl;
-        Glide.with(imageView.getContext()).load("http://ravbiz.in" + imageUrl)
+        Glide.with(imageView.getContext()).load("https://ravgroup.org" + imageUrl)
                 .placeholder(R.drawable.account)
                 .into(imageView);
 

@@ -2,20 +2,22 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="walletAmountListModel"
-            type="com.rav.raverp.data.model.api.WalletAmountListModel"/>
+            type="com.rav.raverp.data.model.api.WalletAmountListModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#aa9e45">
+        android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:fillViewport="true"
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,846 +36,758 @@
                     android:id="@+id/m1"
                     style="@style/CardViewDashboard"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_95sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
-                    app:cardBackgroundColor="@color/white">
+                    app:cardBackgroundColor="@color/colorPrimary">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:layout_marginVertical="@dimen/_10sdp"
+                        android:orientation="vertical">
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="@dimen/_50sdp"
-                            android:layout_height="@dimen/_40sdp"
-                            android:layout_marginTop="@dimen/_30sdp"
-                            app:srcCompat="@drawable/business"
-                            tools:ignore="VectorDrawableCompat" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="MY BUSINESS"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_16sdp" />
+
+                        <View
+                            android:layout_width="@dimen/_110sdp"
+                            android:layout_height="0.5dip"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@color/white" />
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="Personal"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvPersonalBv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="BV 434995.00"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
                             <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Business (Points)"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_15sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvTotalBusiness"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="9,60,000"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground"
-                                android:visibility="gone">
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Self"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="4,00,000"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
-
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_weight="1"
                                     android:fontFamily="@font/googlesans_regular"
                                     android:text="Left"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
+                                    android:textColor="@color/white" />
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvLeftBusiness"
+                                    android:id="@+id/tvLeftBv"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
+                                    android:layout_marginLeft="@dimen/_10sdp"
                                     android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="34645"
+                                    android:text=" BV 434995.00"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
+                                    android:textColor="@color/white" />
                             </androidx.appcompat.widget.LinearLayoutCompat>
 
-
                             <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
-
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Right"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:orientation="horizontal">
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvRightBusiness"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
                                     android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="3,22,000"
+                                    android:text="Team"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
+                                    android:textColor="@color/white" />
 
-
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvLeftTeam"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/_10sdp"
+                                    android:fontFamily="@font/googlesans_regular"
+                                    android:text="1343"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                    android:textColor="@color/white" />
                             </androidx.appcompat.widget.LinearLayoutCompat>
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/googlesans_regular"
+                                    android:text="Right"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                    android:textColor="@color/white" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvRightBv"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/_10sdp"
+                                    android:fontFamily="@font/googlesans_regular"
+                                    android:text="BV 434995.00"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                    android:textColor="@color/white" />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:orientation="horizontal">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/googlesans_regular"
+                                    android:text="Team"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                    android:textColor="@color/white" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvRightTeam"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/_10sdp"
+                                    android:fontFamily="@font/googlesans_regular"
+                                    android:text="1343"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                    android:textColor="@color/white" />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/m2"
                     style="@style/CardViewDashboard"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_95sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
-                    app:cardBackgroundColor="@color/white">
+                    app:cardBackgroundColor="@color/colorPrimary">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:layout_marginVertical="@dimen/_10sdp"
+                        android:orientation="vertical">
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="@dimen/_50sdp"
-                            android:layout_height="@dimen/_40sdp"
-                            android:layout_marginTop="@dimen/_35sdp"
-                            app:srcCompat="@drawable/wallet"
-                            tools:ignore="VectorDrawableCompat" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="MY INCOME"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_16sdp" />
+
+                        <View
+                            android:layout_width="@dimen/_100sdp"
+                            android:layout_height="0.5dip"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@color/white" />
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:background="?attr/selectableItemBackground">
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="Current"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Wallet (in Rs.)"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_15sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvCurrent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="My Wallet"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvMyWallet"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="0.0"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
-
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="R-Platinum"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvRPlatinumWallet"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="0.0"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
-
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="R-Gold"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvRGoldWallet"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="0.0"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text="0"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="Quarterly Avg."
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvQuarterly"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text="0"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="Last F.Y"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvLastFy"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text="0"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="Till Date"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvTillDate"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text="0"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/m3"
                     style="@style/CardViewDashboard"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_80sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
-                    app:cardBackgroundColor="@color/white">
+                    app:cardBackgroundColor="@color/colorPrimary">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:layout_marginVertical="@dimen/_10sdp"
+                        android:orientation="vertical">
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="@dimen/_50sdp"
-                            android:layout_height="@dimen/_40sdp"
-                            android:layout_marginTop="@dimen/_20sdp"
-                            app:srcCompat="@drawable/plot"
-                            tools:ignore="VectorDrawableCompat" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="MY REWARDS"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_16sdp" />
+
+                        <View
+                            android:layout_width="@dimen/_110sdp"
+                            android:layout_height="0.5dip"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@color/white" />
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="Rank"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Plot"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_15sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvTotalPlot"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="385"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp"
-                                    android:visibility="gone" />
-
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvRank"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text="0"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Book Plots"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvBookedPlot"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="108"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="Achieved"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
 
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvAchieved"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text="0"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Hold Plots"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvHoldPlot"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="277"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="Net Worth (Rs)"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
 
-                            </androidx.appcompat.widget.LinearLayoutCompat>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvNetWorth"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text="0"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:orientation="horizontal"></androidx.appcompat.widget.LinearLayoutCompat>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/m4"
                     style="@style/CardViewDashboard"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_80sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
-                    app:cardBackgroundColor="@color/white">
+                    app:cardBackgroundColor="@color/colorPrimary">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:layout_marginVertical="@dimen/_10sdp"
+                        android:orientation="vertical">
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="@dimen/_50sdp"
-                            android:layout_height="@dimen/_40sdp"
-                            android:layout_marginTop="@dimen/_20sdp"
-                            app:srcCompat="@drawable/member"
-                            tools:ignore="VectorDrawableCompat" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="CLUBS STATUS"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_16sdp" />
+
+                        <View
+                            android:layout_width="@dimen/_120sdp"
+                            android:layout_height="0.5dip"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@color/white" />
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="Founder Club (LY Status)"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Member"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_15sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvMember"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="185"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp"
-                                    android:visibility="gone" />
-
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvFounderClubLyStatus"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text=""
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Active"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
-                                <androidx.appcompat.widget.AppCompatTextView
-
-                                    android:id="@+id/tvActiveMember"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="115"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="CY Status"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
 
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvFounderClubCyStatus"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text="0"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="IN Active"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/tvInActiveMember"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="70"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="Elite Club (LY Status)"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
 
-                            </androidx.appcompat.widget.LinearLayoutCompat>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvEliteClubLyStatus"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text=""
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="CY Status"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvEliteClubCyStatus"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:gravity="right"
+                                android:text=""
+                                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                                android:textColor="@color/white" />
                         </androidx.appcompat.widget.LinearLayoutCompat>
                     </androidx.appcompat.widget.LinearLayoutCompat>
-
-
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/m5"
-                    style="@style/CardViewDashboard"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:fontFamily="@font/googlesans_regular"
+                    android:text="MY GOALS"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_16sdp" />
+
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_80sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:visibility="gone"
-                    app:cardBackgroundColor="@color/white">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:scrollbars="none">
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
-
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="@dimen/_50sdp"
-                            android:layout_height="@dimen/_40sdp"
-                            android:layout_marginTop="@dimen/_20sdp"
-                            app:srcCompat="@drawable/directmember"
-                            tools:ignore="VectorDrawableCompat" />
+                        android:orientation="vertical">
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:background="#C0C0C0"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/_4sdp"
+                            android:paddingRight="@dimen/_4sdp">
 
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="@dimen/_40sdp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/_9sdp"
+                                android:paddingBottom="@dimen/_9sdp"
+                                android:text="S.No."
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_12sdp" />
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Direct Member"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_15sdp" />
+                            <View
+                                android:layout_width="@dimen/_1sdp"
+                                android:layout_height="match_parent"
+                                android:background="@color/background" />
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="115"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="200dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
+                                android:layout_marginLeft="@dimen/_2sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/_9sdp"
+                                android:paddingBottom="@dimen/_9sdp"
+                                android:text="My Goal"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_12sdp" />
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Direct"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
+                            <View
+                                android:layout_width="@dimen/_1sdp"
+                                android:layout_height="match_parent"
+                                android:background="@color/background" />
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="85"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="90dp"
                                 android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
+                                android:layout_marginLeft="@dimen/_2sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/_9sdp"
+                                android:paddingBottom="@dimen/_9sdp"
+                                android:text="Start Date"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_12sdp" />
+
+                            <View
+                                android:layout_width="@dimen/_1sdp"
+                                android:layout_height="match_parent"
+                                android:background="@color/background" />
 
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="IN Direct"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_2sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/_9sdp"
+                                android:paddingBottom="@dimen/_9sdp"
+                                android:text="End Date"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_12sdp" />
 
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="30"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
+                            <View
+                                android:layout_width="@dimen/_1sdp"
+                                android:layout_height="match_parent"
+                                android:background="@color/background" />
 
-                            </androidx.appcompat.widget.LinearLayoutCompat>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_2sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/_9sdp"
+                                android:paddingBottom="@dimen/_9sdp"
+                                android:text="Days Left"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_12sdp" />
+
+                            <View
+                                android:layout_width="@dimen/_1sdp"
+                                android:layout_height="match_parent"
+                                android:background="@color/background" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_2sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/_9sdp"
+                                android:paddingBottom="@dimen/_9sdp"
+                                android:text="Action"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_12sdp" />
+
+                            <View
+                                android:layout_width="@dimen/_1sdp"
+                                android:layout_height="match_parent"
+                                android:background="@color/background" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="@dimen/_50sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_2sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/_9sdp"
+                                android:paddingBottom="@dimen/_9sdp"
+                                android:text="Image"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_12sdp" />
                         </androidx.appcompat.widget.LinearLayoutCompat>
-                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:visibility="gone"
-                    android:id="@+id/m6"
-                    style="@style/CardViewDashboard"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_95sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    app:cardBackgroundColor="@color/white">
-
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="@dimen/_50sdp"
-                            android:layout_height="@dimen/_40sdp"
-                            android:layout_marginTop="@dimen/_35sdp"
-                            app:srcCompat="@drawable/plot"
-                            tools:ignore="VectorDrawableCompat" />
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvGoalList"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            tools:listitem="@layout/item_dashboard_goal" />
 
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:background="?attr/selectableItemBackground">
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="KYC"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_15sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Status"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_10sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="Pending"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
+                    </LinearLayout>
 
 
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
-
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="Aadhar Status"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="Pending"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground">
-
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:text="PAN Status"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textSize="@dimen/_12sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:fontFamily="@font/googlesans_regular"
-                                    android:gravity="center_horizontal"
-                                    android:text="Pending"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_12sdp" />
-
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    </androidx.appcompat.widget.LinearLayoutCompat>
-
-                </com.google.android.material.card.MaterialCardView>
-
+                </HorizontalScrollView>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
 

@@ -48,9 +48,9 @@ public class ForgotPassword extends AppCompatActivity {
     String ForgotLoginId;
     Button submit;
     CountDownTimer countDownTimer;
-    String otp,number;
+    String otp, number;
     String Userid;
-    String NewPassword,ConfirmPassword;
+    String NewPassword, ConfirmPassword;
 
 
     @Override
@@ -111,42 +111,39 @@ public class ForgotPassword extends AppCompatActivity {
 
     private void ResetPassword() {
 
-        Call<ResetPasswordModel> getResetPasswordModelCall = apiHelper.getResetPasswordModel(Userid,binding.newPassword.getText().toString());
+        Call<ResetPasswordModel> getResetPasswordModelCall = apiHelper.getResetPasswordModel(Userid, binding.newPassword.getText().toString());
         getResetPasswordModelCall.enqueue(new Callback<ResetPasswordModel>() {
             @Override
-            public void onResponse(@NonNull Call<ResetPasswordModel>  call,
-                                   @NonNull Response<ResetPasswordModel>  response) {
+            public void onResponse(@NonNull Call<ResetPasswordModel> call,
+                                   @NonNull Response<ResetPasswordModel> response) {
 
                 if (response.isSuccessful()) {
-                    if (response!=null){
-                        if (response.body().getResponse().equalsIgnoreCase("Success")){
-                            ViewUtils.showSuccessDialog(mContext,response.body().getMessage(),
+                    if (response != null) {
+                        if (response.body().getResponse().equalsIgnoreCase("Success")) {
+                            ViewUtils.showSuccessDialog(mContext, response.body().getMessage(),
                                     new DialogActionCallback() {
                                         @Override
                                         public void okAction() {
 
-                                            Intent intent =new Intent(ForgotPassword.this,LoginActivity.class);
+                                            Intent intent = new Intent(ForgotPassword.this, LoginActivity.class);
                                             startActivity(intent);
                                         }
                                     });
 
-                        }else{
-
-
-
+                        } else {
 
 
                         }
                     }
 
-                }else{
+                } else {
 
 
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<ResetPasswordModel>  call,
+            public void onFailure(@NonNull Call<ResetPasswordModel> call,
                                   @NonNull Throwable t) {
                 if (!call.isCanceled()) {
                     ViewUtils.showToast(t.getLocalizedMessage());
@@ -159,79 +156,78 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
 
-
     public void checkNetwork() {
-            if (NetworkUtils.isNetworkConnected()) {
-                ForgotExecute();
-            } else {
-                ViewUtils.showOfflineDialog(mContext, new DialogActionCallback() {
-                    @Override
-                    public void okAction() {
-                        checkNetwork();
-                    }
-                });
-            }
-        }
-
-        private void ForgotExecute() {
-
-        //show progress bar
-
-            Call<ForgotApiResponse> getForgotpasswordModelCall = apiHelper.getForgotpasswordModel(binding.forgotPasswordLoginId.getText().toString());
-            getForgotpasswordModelCall.enqueue(new Callback<ForgotApiResponse>() {
+        if (NetworkUtils.isNetworkConnected()) {
+            ForgotExecute();
+        } else {
+            ViewUtils.showOfflineDialog(mContext, new DialogActionCallback() {
                 @Override
-                public void onResponse(@NonNull Call<ForgotApiResponse>  call,
-                                       @NonNull Response<ForgotApiResponse>  response) {
-
-                    if (response.isSuccessful()) {
-                        if (response!=null){
-                            if (response.body().getResponse().equalsIgnoreCase("Success")){
-                                ForgotpasswordModel forgotpasswordModel=response.body().getBody().get(0);
-                                otp=forgotpasswordModel.getOTP();
-                                Userid=forgotpasswordModel.getUserId();
-
-                                ViewUtils.showSuccessDialog(mContext,response.body().getMessage(),
-                                        new DialogActionCallback() {
-                                            @Override
-                                            public void okAction() {
-                                             binding.l1.setVisibility(View.GONE);
-                                             binding.l2.setVisibility(View.VISIBLE);
-                                                StartCountDown();
-                                                countDownTimer.start();
-                                            }
-                                        });
-
-                            }else{
-
-                                Toast.makeText(mContext, "Please Enter Valid Login Id", Toast.LENGTH_SHORT).show();
-
-
-
-                            }
-                        }
-
-                    }else{
-
-
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ForgotApiResponse>  call,
-                                      @NonNull Throwable t) {
-                    if (!call.isCanceled()) {
-                        ViewUtils.showToast(t.getLocalizedMessage());
-                    }
-                    t.printStackTrace();
+                public void okAction() {
+                    checkNetwork();
                 }
             });
-
-
         }
+    }
+
+    private void ForgotExecute() {
+
+        //show progress bar
+        ViewUtils.startProgressDialog(mContext);
+        Call<ForgotApiResponse> getForgotpasswordModelCall = apiHelper.getForgotpasswordModel(binding.forgotPasswordLoginId.getText().toString());
+        getForgotpasswordModelCall.enqueue(new Callback<ForgotApiResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ForgotApiResponse> call,
+                                   @NonNull Response<ForgotApiResponse> response) {
+                ViewUtils.endProgressDialog();
+                if (response.isSuccessful()) {
+                    if (response != null) {
+                        if (response.body().getResponse().equalsIgnoreCase("Success")) {
+                            ForgotpasswordModel forgotpasswordModel = response.body().getBody().get(0);
+                            otp = forgotpasswordModel.getOTP();
+                            Userid = forgotpasswordModel.getUserId();
+
+                            ViewUtils.showSuccessDialog(mContext, response.body().getMessage(),
+                                    new DialogActionCallback() {
+                                        @Override
+                                        public void okAction() {
+                                            binding.l1.setVisibility(View.GONE);
+                                            binding.l2.setVisibility(View.VISIBLE);
+                                            StartCountDown();
+                                            countDownTimer.start();
+                                        }
+                                    });
+
+                        } else {
+
+                            Toast.makeText(mContext, "Please Enter Valid Login Id", Toast.LENGTH_SHORT).show();
+
+
+                        }
+                    }
+
+                } else {
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ForgotApiResponse> call,
+                                  @NonNull Throwable t) {
+                ViewUtils.endProgressDialog();
+                if (!call.isCanceled()) {
+                    ViewUtils.showToast(t.getLocalizedMessage());
+                }
+                t.printStackTrace();
+            }
+        });
+
+
+    }
 
 
     private void StartCountDown() {
-        countDownTimer=new CountDownTimer(120000,1000) {
+        countDownTimer = new CountDownTimer(300000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -245,16 +241,17 @@ public class ForgotPassword extends AppCompatActivity {
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60);
                 binding.timer.setText(text);
 
-               // binding.timer.setText(millisUntilFinished/1000+" ");
+                // binding.timer.setText(millisUntilFinished/1000+" ");
                 binding.resendotp.setFocusable(false);
-                binding.resendotp.setEnabled(false);;
+                binding.resendotp.setEnabled(false);
+                ;
                 binding.resendotp.setClickable(false);
 
             }
 
             @Override
             public void onFinish() {
-                otp="";
+                otp = "";
                 binding.timer.setText("");
                 binding.resendotp.setFocusable(true);
                 binding.resendotp.setEnabled(true);
@@ -265,15 +262,15 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
 
-        private void submitForm() {
-            if (!validateForgotLoginId()) {
-                return;
-            }
-
-
-
-            checkNetwork();
+    private void submitForm() {
+        if (!validateForgotLoginId()) {
+            return;
         }
+
+
+        checkNetwork();
+    }
+
     private void resetSubmitFrom() {
         if (!validateNewPassword()) {
             return;
@@ -285,6 +282,7 @@ public class ForgotPassword extends AppCompatActivity {
         }
         ResetPassword();
     }
+
     private boolean validateNewPassword() {
         NewPassword = binding.newPassword.getText().toString().trim();
         if (CommonUtils.isNullOrEmpty(NewPassword)) {
@@ -292,7 +290,7 @@ public class ForgotPassword extends AppCompatActivity {
             requestFocus(binding.newPassword);
             return false;
 
-        }else if (!CommonUtils.isPasswordValid(NewPassword)) {
+        } else if (!CommonUtils.isPasswordValid(NewPassword)) {
             binding.newPassword.setError(getString(R.string.invalid_password));
             requestFocus(binding.newPassword);
             return false;

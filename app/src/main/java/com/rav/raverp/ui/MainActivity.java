@@ -28,6 +28,7 @@ import com.rav.raverp.BuildConfig;
 import com.rav.raverp.MyApplication;
 import com.rav.raverp.R;
 import com.rav.raverp.View.ExpandableNavigationListView;
+import com.rav.raverp.data.interfaces.StoragePermissionListener;
 import com.rav.raverp.data.model.ChildModel;
 import com.rav.raverp.data.model.HeaderModel;
 import com.rav.raverp.data.model.api.ApiResponse;
@@ -39,6 +40,7 @@ import com.rav.raverp.network.ApiHelper;
 
 
 import com.rav.raverp.ui.fragment.Associate.AddAssociateFragment;
+import com.rav.raverp.ui.fragment.Associate.ComplaintFragment;
 import com.rav.raverp.ui.fragment.Associate.CustomerListFragment;
 import com.rav.raverp.ui.fragment.Associate.DashBoardAssociateFragment;
 import com.rav.raverp.ui.fragment.Associate.FollowUpLeadListFragment;
@@ -62,7 +64,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements StoragePermissionListener, NavigationView.OnNavigationItemSelectedListener {
 
 
     public static String mobile = "mobile";
@@ -75,7 +77,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView Name, Role;
     ImageView iamgeprofile;
     TextView textView;
-
+    private boolean isPermissionGranted = false;
+    private boolean isFromPermissionSettings = false;
     private int lastExpandedPosition = -1;
 
 
@@ -85,9 +88,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Dashboard");
+        toolbar.setTitleTextColor(this.getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
+        setStoragePermissionListener(this);
         login = MyApplication.getLoginModel();
         textView = (TextView) findViewById(R.id.txtversion);
         textView.setText("Version : " + BuildConfig.VERSION_NAME + ", Date : " + CommonUtils.getCurrentDate());
@@ -101,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -129,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         navigationExpandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
             @Override
             public void onGroupExpand(int groupPosition) {
                 if (lastExpandedPosition != -1
@@ -167,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             String name = login1.get(0).getStrDisplayName();
                             Name.setText(name);
 
-                            Glide.with(iamgeprofile.getContext()).load("http://ravbiz.in" + profile)
+                            Glide.with(iamgeprofile.getContext()).load("https://ravgroup.org" + profile)
                                     .placeholder(R.drawable.account)
                                     .into(iamgeprofile);
 
@@ -190,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 t.printStackTrace();
             }
         });
+
     }
 
     private void show1stDashboard() {
@@ -221,6 +228,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 /* .addHeaderModel(
                          new HeaderModel("Customer Management", R.drawable.ic_baseline_my_location_24, true)
                                  .addChildModel(new ChildModel("View Customer", R.drawable.ic_baseline_arrow_forward_24)))*/
+                .addHeaderModel(new HeaderModel("Supports", R.drawable.ic_baseline_my_location_24, true)
+                        .addChildModel(new ChildModel("Complaint", R.drawable.ic_baseline_arrow_forward_24))
+                        .addChildModel(new ChildModel("Feedback", R.drawable.ic_baseline_arrow_forward_24)))
+
                 .build()
 
                 .addOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -255,19 +266,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (groupPosition == 1) {
                             if (id == 0) {
                                 toolbar.setTitle("Plot Available");
-                                Fragment fragment = new PlotAvailabilityFragment();
+                                loadFragment(new PlotAvailabilityFragment());
+                         /*       Fragment fragment = new PlotAvailabilityFragment();
                                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.homepage, fragment);
                                 transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);
+                                drawer.closeDrawer(GravityCompat.START);*/
                             }
                             if (id == 1) {
                                 toolbar.setTitle("My Booking");
-                                Fragment fragment = new MyBookingFragment();
+                                loadFragment(new MyBookingFragment());
+                                /*Fragment fragment = new MyBookingFragment();
                                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.homepage, fragment);
                                 transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);
+                                drawer.closeDrawer(GravityCompat.START);*/
                             }
                         } else if (groupPosition == 2) {
                             if (id == 0) {
@@ -283,65 +296,71 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         } else if (groupPosition == 3) {
                             if (id == 0) {
                                 toolbar.setTitle("Lead List");
-                                Fragment fragment = new LeadListFragment();
+                                loadFragment(new LeadListFragment());
+                              /*  Fragment fragment = new LeadListFragment();
                                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.homepage, fragment);
                                 transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);
+                                drawer.closeDrawer(GravityCompat.START);*/
                             }
                             if (id == 1) {
                                 toolbar.setTitle("Follow UP List");
-                                Fragment fragment = new FollowUpLeadListFragment();
+                                loadFragment(new FollowUpLeadListFragment());
+                               /* Fragment fragment = new FollowUpLeadListFragment();
                                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.homepage, fragment);
                                 transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);
+                                drawer.closeDrawer(GravityCompat.START);*/
 
 
                             }
                         } else if (groupPosition == 4) {
                             if (id == 0) {
                                 toolbar.setTitle("Site Visit");
-                                Fragment fragment = new SiteVisitRequestFragment();
+                                loadFragment(new SiteVisitRequestFragment());
+                               /* Fragment fragment = new SiteVisitRequestFragment();
                                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.homepage, fragment);
                                 transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);
+                                drawer.closeDrawer(GravityCompat.START);*/
 
                             }
 
                             if (id == 1) {
 
                                 toolbar.setTitle("Site Visit List");
-                                Fragment fragment = new SiteVisitRequestStatusFragment();
+                                loadFragment(new SiteVisitRequestStatusFragment());
+                               /* Fragment fragment = new SiteVisitRequestStatusFragment();
                                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.homepage, fragment);
                                 transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);
+                                drawer.closeDrawer(GravityCompat.START);*/
 
                             }
                         } else if (groupPosition == 5) {
                             if (id == 0) {
                                 toolbar.setTitle("Associate Registration...!");
-                                Fragment fragment = new AddAssociateFragment();
+                                loadFragment(new AddAssociateFragment());
+                              /*  Fragment fragment = new AddAssociateFragment();
                                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.homepage, fragment);
                                 transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);
+                                drawer.closeDrawer(GravityCompat.START);*/
 
                             }
                         } else if (groupPosition == 6) {
                             if (id == 0) {
                                 toolbar.setTitle("Goal List");
-                                Fragment fragment = new MyGoalListFragment();
+                                loadFragment(new MyGoalListFragment());
+                              /*  Fragment fragment = new MyGoalListFragment();
                                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.homepage, fragment);
                                 transaction.addToBackStack(null).commit();
                                 drawer.closeDrawer(GravityCompat.START);
-
+*/
                             }
 
-                        } else if (groupPosition == 7) {
+                        }/*else if (groupPosition == 7) {
                             if (id == 0) {
                                 toolbar.setTitle("Customer List");
                                 Fragment fragment = new CustomerListFragment();
@@ -352,6 +371,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             }
 
+                        }*/ else if (groupPosition == 7) {
+                            if (id == 0) {
+                                toolbar.setTitle("Complaint");
+                                loadFragment(new ComplaintFragment());
+
+                            }
                         }
 
 
@@ -563,6 +588,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public void isStoragePermissionGranted(boolean granted) {
+        isPermissionGranted = granted;
+    }
+
+    @Override
+    public void isUserPressedSetting(boolean pressed) {
+        isFromPermissionSettings = pressed;
+    }
+
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.homepage, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+        drawer.closeDrawer(GravityCompat.START);
     }
 
 }

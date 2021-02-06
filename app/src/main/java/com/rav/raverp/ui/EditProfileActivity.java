@@ -190,7 +190,7 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
                             binding.setmobile.setText(mobile.toString());
                             String name = login.get(0).getStrDisplayName();
                             String profile = login.get(0).getStrProfilePic();
-                            Glide.with(binding.profileImageView.getContext()).load("http://ravbiz.in" + profile)
+                            Glide.with(binding.profileImageView.getContext()).load("https://ravgroup.org" + profile)
                                     .placeholder(R.drawable.account)
                                     .into(binding.profileImageView);
 
