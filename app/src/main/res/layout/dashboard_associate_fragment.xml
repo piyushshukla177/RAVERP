@@ -103,7 +103,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/googlesans_regular"
-                                    android:text="Left"
+                                    android:text="L"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Menu"
                                     android:textColor="@color/white" />
 
@@ -163,7 +163,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/googlesans_regular"
-                                    android:text="Right"
+                                    android:text="R"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Menu"
                                     android:textColor="@color/white" />
 
@@ -449,7 +449,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/googlesans_regular"
-                                android:text="Net Worth (Rs)"
+                                android:text="Net Worth (Rs.)"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Menu"
                                 android:textColor="@color/white" />
 

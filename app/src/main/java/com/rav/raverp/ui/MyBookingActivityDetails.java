@@ -49,7 +49,7 @@ public class MyBookingActivityDetails extends BaseActivity implements ArrowBackP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = putContentView(R.layout.activity_my_booking_details);
-        setToolbarTitle("Associate Plot Booking Receipts");
+        setToolbarTitle("Booking Detail");
         showBackArrow();
         setArrowBackPressed(this);
 

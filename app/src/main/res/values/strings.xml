@@ -165,6 +165,9 @@
     <string name="password">Password:<font color='#FF0000'>*</font></string>
     <string name="confirmPassword">Confirm Password:<font color='#FF0000'>*</font></string>
     <string name="FatherHusband">Father/Husband:<font color='#FF0000'>*</font></string>
+    <string name="subject">Subject<font color='#FF0000'>*</font></string>
+    <string name="claimType">Claim Type<font color='#FF0000'>*</font></string>
+    <string name="query">Query<font color='#FF0000'>*</font></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

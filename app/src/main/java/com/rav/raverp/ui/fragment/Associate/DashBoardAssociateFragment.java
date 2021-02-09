@@ -142,10 +142,10 @@ public class DashBoardAssociateFragment extends Fragment {
                         tvRank.setText(dashBoardModal.getBody().get(0).getRank());
                         tvAchieved.setText(dashBoardModal.getBody().get(0).getAchievedrewardscount());
                         tvNetWorth.setText(dashBoardModal.getBody().get(0).getNetworth());
-                        tvFounderClubLyStatus.setText(dashBoardModal.getBody().get(0).getFounderclublastyear() + " " + dashBoardModal.getBody().get(0).getFounderclublastyearfp() + "/" + dashBoardModal.getBody().get(0).getFounderclublastyeartarget());
-                        tvFounderClubCyStatus.setText(dashBoardModal.getBody().get(0).getFounderclubcurrentyear() + " " + dashBoardModal.getBody().get(0).getFounderclubcurrentyearfp() + "/" + dashBoardModal.getBody().get(0).getFounderclubcurrentyeartarget());
-                        tvEliteClubLyStatus.setText(dashBoardModal.getBody().get(0).getEliteclublastyear() + " " + dashBoardModal.getBody().get(0).getEliteclublastyearfp() + "/" + dashBoardModal.getBody().get(0).getEliteclublastyeartarget());
-                        tvEliteClubCyStatus.setText(dashBoardModal.getBody().get(0).getEliteclubcurrentyear() + " " + dashBoardModal.getBody().get(0).getEliteclubcurrentyearfp() + "/" + dashBoardModal.getBody().get(0).getEliteclubcurrentyeartarget());
+                        tvFounderClubLyStatus.setText(dashBoardModal.getBody().get(0).getFounderclublastyear() + " " + "  " + " " + dashBoardModal.getBody().get(0).getFounderclublastyearfp() + "/" + dashBoardModal.getBody().get(0).getFounderclublastyeartarget());
+                        tvFounderClubCyStatus.setText(dashBoardModal.getBody().get(0).getFounderclubcurrentyear() + " " + "  " + " " + dashBoardModal.getBody().get(0).getFounderclubcurrentyearfp() + "/" + dashBoardModal.getBody().get(0).getFounderclubcurrentyeartarget());
+                        tvEliteClubLyStatus.setText(dashBoardModal.getBody().get(0).getEliteclublastyear() + " " + "  " + " " + dashBoardModal.getBody().get(0).getEliteclublastyearfp() + "/" + dashBoardModal.getBody().get(0).getEliteclublastyeartarget());
+                        tvEliteClubCyStatus.setText(dashBoardModal.getBody().get(0).getEliteclubcurrentyear() + " " + "  " + " " + dashBoardModal.getBody().get(0).getEliteclubcurrentyearfp() + "/" + dashBoardModal.getBody().get(0).getEliteclubcurrentyeartarget());
                     }
                 }
             }

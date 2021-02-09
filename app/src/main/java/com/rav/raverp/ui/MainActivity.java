@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -41,7 +40,6 @@ import com.rav.raverp.network.ApiHelper;
 
 import com.rav.raverp.ui.fragment.Associate.AddAssociateFragment;
 import com.rav.raverp.ui.fragment.Associate.ComplaintFragment;
-import com.rav.raverp.ui.fragment.Associate.CustomerListFragment;
 import com.rav.raverp.ui.fragment.Associate.DashBoardAssociateFragment;
 import com.rav.raverp.ui.fragment.Associate.FollowUpLeadListFragment;
 import com.rav.raverp.ui.fragment.Associate.LeadListFragment;
@@ -89,8 +87,7 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Dashboard");
+
         toolbar.setTitleTextColor(this.getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         setStoragePermissionListener(this);
@@ -119,7 +116,8 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
 
 
         apiHelper = ApiClient.getClient().create(ApiHelper.class);
-        GetProfileApi();
+
+
 
         LoginModel login = MyApplication.getLoginModel();
         if (login.getStrRole().equalsIgnoreCase("Associate")) {
@@ -145,6 +143,12 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
                 lastExpandedPosition = groupPosition;
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GetProfileApi();
     }
 
     private void GetProfileApi() {
@@ -228,9 +232,9 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
                 /* .addHeaderModel(
                          new HeaderModel("Customer Management", R.drawable.ic_baseline_my_location_24, true)
                                  .addChildModel(new ChildModel("View Customer", R.drawable.ic_baseline_arrow_forward_24)))*/
-                .addHeaderModel(new HeaderModel("Supports", R.drawable.ic_baseline_my_location_24, true)
-                        .addChildModel(new ChildModel("Complaint", R.drawable.ic_baseline_arrow_forward_24))
-                        .addChildModel(new ChildModel("Feedback", R.drawable.ic_baseline_arrow_forward_24)))
+                .addHeaderModel(new HeaderModel("Support", R.drawable.ic_baseline_my_location_24, true)
+                                .addChildModel(new ChildModel("Complaint", R.drawable.ic_baseline_arrow_forward_24))
+                        /*  .addChildModel(new ChildModel("Feedback", R.drawable.ic_baseline_arrow_forward_24))*/)
 
                 .build()
 

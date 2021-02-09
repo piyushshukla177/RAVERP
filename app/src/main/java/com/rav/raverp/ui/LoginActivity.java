@@ -69,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
        binding.forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,8 +130,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             Gson gson=new Gson();
                             String json=gson.toJson(login.get(0), LoginModel.class);
-                            PrefsHelper.putString(mContext, AppConstants.LOGIN,
-                                    json);
+                            PrefsHelper.putString(mContext, AppConstants.LOGIN, json);
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -204,10 +204,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
     private boolean validateLoginId() {
         LoginId = binding.loginid.getText().toString().trim();
         if (CommonUtils.isNullOrEmpty(LoginId)) {
@@ -218,6 +214,7 @@ public class LoginActivity extends AppCompatActivity {
 
             return true;
     }
+
     private boolean validatePassword() {
         Password = binding.password.getText().toString().trim();
         if (CommonUtils.isNullOrEmpty(Password)) {
@@ -228,6 +225,7 @@ public class LoginActivity extends AppCompatActivity {
 
             return true;
     }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

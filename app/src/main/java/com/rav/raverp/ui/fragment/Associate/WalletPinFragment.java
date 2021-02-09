@@ -305,6 +305,7 @@ public class WalletPinFragment extends Fragment {
                 }
             }
         });
+
         btnsubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

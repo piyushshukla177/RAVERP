@@ -173,6 +173,13 @@ public class PlotBookActivityDetails<plotAvailable> extends BaseActivity impleme
                                     @Override
                                     public void okAction() {
                                         plot_booking_plan_name_spinner.setSelection(0);
+                                        llBookingPlan.setVisibility(View.GONE);
+                                        viewBookingPlan.setVisibility(View.GONE);
+                                        llDays.setVisibility(View.GONE);
+                                        viewDays.setVisibility(View.GONE);
+
+                                        llInstallment.setVisibility(View.GONE);
+                                        viewInstallment.setVisibility(View.GONE);
                                     }
                                 });
 
@@ -187,7 +194,7 @@ public class PlotBookActivityDetails<plotAvailable> extends BaseActivity impleme
                         viewDays.setVisibility(View.GONE);
                     }
                 } else {
-                    if (Double.parseDouble(binding.txtWalletAmount.getText().toString()) < Double.parseDouble(binding.txtPlotBookingAmount.getText().toString())) {
+                 /*   if (Double.parseDouble(binding.txtWalletAmount.getText().toString()) < Double.parseDouble(binding.txtPlotBookingAmount.getText().toString())) {
                         ViewUtils.showErrorDialog(mContext, "Insufficient wallet amount",
                                 new DialogActionCallback() {
                                     @Override
@@ -195,7 +202,7 @@ public class PlotBookActivityDetails<plotAvailable> extends BaseActivity impleme
                                         plot_booking_plan_name_spinner.setSelection(0);
                                     }
                                 });
-                    } else {
+                    } else {*/
                         llBookingPlan.setVisibility(View.GONE);
                         viewBookingPlan.setVisibility(View.GONE);
 
@@ -211,7 +218,7 @@ public class PlotBookActivityDetails<plotAvailable> extends BaseActivity impleme
                         a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spDays.setAdapter(a);
                     }
-                }
+               // }
 
             }
 
@@ -288,7 +295,6 @@ public class PlotBookActivityDetails<plotAvailable> extends BaseActivity impleme
                 }
                 installmentMonth = "0";
                 getPlotCost(installmentMonth);
-
             }
 
             @Override
@@ -366,7 +372,7 @@ public class PlotBookActivityDetails<plotAvailable> extends BaseActivity impleme
                                     Toast.makeText(mContext, "Please Enter Minimum Hold Amount 5000", Toast.LENGTH_SHORT).show();
                                 }
                             } else if (spDays.getSelectedItemPosition() == 2) {
-                                if (book >= 1000 - 0) {
+                                if (book >= 10000) {
                                     if (NetworkUtils.isNetworkConnected()) {
                                         // BookPlot();
                                         getOtp();
@@ -819,7 +825,7 @@ public class PlotBookActivityDetails<plotAvailable> extends BaseActivity impleme
                     if (response.body() != null) {
                         if (response.body().getResponse().equalsIgnoreCase("Success")) {
 
-                          //  Double amount = response.body().getAssociateWalletAmounts();
+                            //  Double amount = response.body().getAssociateWalletAmounts();
                             binding.txtWalletAmount.setText(response.body().getAssociateWalletAmounts());
                         }
                     }
