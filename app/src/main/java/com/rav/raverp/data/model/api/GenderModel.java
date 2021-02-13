@@ -13,6 +13,7 @@ public class GenderModel implements Serializable {
     @SerializedName("strGender")
     @Expose
     private String strGender;
+
     private final static long serialVersionUID = -2678967743025114647L;
 
     public Integer getIntGenderId() {

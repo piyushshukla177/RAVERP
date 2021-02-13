@@ -9,6 +9,15 @@ public class PlotAvailableModel implements Serializable {
     @SerializedName("Code")
     @Expose
     private Integer code;
+
+    @SerializedName("SNo")
+    @Expose
+    private Integer SNo;
+
+    @SerializedName("TotalRecords")
+    @Expose
+    private Integer TotalRecords;
+
     @SerializedName("Remark")
     @Expose
     private String remark;
@@ -52,6 +61,22 @@ public class PlotAvailableModel implements Serializable {
     @Expose
     private Double floatBookingAmtPercent;
     private final static long serialVersionUID = 921806064254640392L;
+
+    public Integer getSNo() {
+        return SNo;
+    }
+
+    public void setSNo(Integer SNo) {
+        this.SNo = SNo;
+    }
+
+    public Integer getTotalRecords() {
+        return TotalRecords;
+    }
+
+    public void setTotalRecords(Integer totalRecords) {
+        TotalRecords = totalRecords;
+    }
 
     public Integer getCode() {
         return code;

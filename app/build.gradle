@@ -9,9 +9,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -24,7 +22,11 @@ android {
     dataBinding {
         enabled = true
     }
-        applicationVariants.all { variant ->
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    applicationVariants.all { variant ->
             variant.outputs.all { output ->
                 def project = "Rav"
                 def SEP = "_"
@@ -49,6 +51,9 @@ android {
 
     }
 dependencies {
+
+
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
    /* implementation('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
@@ -71,6 +76,7 @@ dependencies {
 
     //image download
     implementation 'com.github.bumptech.glide:glide:4.10.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
@@ -97,4 +103,8 @@ dependencies {
     //pinview
     implementation 'com.github.GoodieBag:Pinview:v1.3'
     implementation 'com.android.volley:volley:1.1.1'
+
+
+
+
 }

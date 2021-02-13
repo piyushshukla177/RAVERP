@@ -7,6 +7,8 @@ import com.rav.raverp.data.model.api.ApiResponse;
 import com.rav.raverp.data.model.api.ApiUploadImageResponse;
 import com.rav.raverp.data.model.api.AssociateWalletAmount;
 import com.rav.raverp.data.model.api.BookingPlotListModal;
+import com.rav.raverp.data.model.api.ClaimTypeModel;
+import com.rav.raverp.data.model.api.CommonModel;
 import com.rav.raverp.data.model.api.CustomerAmount;
 import com.rav.raverp.data.model.api.CustomerListModel;
 import com.rav.raverp.data.model.api.CustomerPlotBookModel;
@@ -15,6 +17,7 @@ import com.rav.raverp.data.model.api.CustomerPlotDetails;
 import com.rav.raverp.data.model.api.CustomerPlotDetailsModel;
 import com.rav.raverp.data.model.api.DashBoardModal;
 import com.rav.raverp.data.model.api.DeleteCustomerModel;
+import com.rav.raverp.data.model.api.DocumentTypeModel;
 import com.rav.raverp.data.model.api.EditEmailModel;
 import com.rav.raverp.data.model.api.EditMobileModel;
 import com.rav.raverp.data.model.api.FollowUpListModel;
@@ -25,11 +28,13 @@ import com.rav.raverp.data.model.api.GetBlockModel;
 import com.rav.raverp.data.model.api.GetProfileModel;
 import com.rav.raverp.data.model.api.GetProjectModel;
 import com.rav.raverp.data.model.api.GetWalletListModel;
+import com.rav.raverp.data.model.api.IFSCCodeModel;
 import com.rav.raverp.data.model.api.IsActiveStatusModel;
 import com.rav.raverp.data.model.api.LeadListModel;
 import com.rav.raverp.data.model.api.LoginModel;
 import com.rav.raverp.data.model.api.MyGoalListModel;
 import com.rav.raverp.data.model.api.PaymentGatewayModel;
+import com.rav.raverp.data.model.api.PaymentModeTypeModel;
 import com.rav.raverp.data.model.api.PlotAvailableModel;
 import com.rav.raverp.data.model.api.PlotBooking;
 import com.rav.raverp.data.model.api.PlotBookingPlan;
@@ -41,6 +46,7 @@ import com.rav.raverp.data.model.api.SendOtpForPlotBookingModel;
 import com.rav.raverp.data.model.api.SiteVisitRequestModel;
 import com.rav.raverp.data.model.api.SiteVisitRequestName;
 import com.rav.raverp.data.model.api.SiteVisitRequestStatusModel;
+import com.rav.raverp.data.model.api.SubjectModel;
 import com.rav.raverp.data.model.api.WalletAccessResponse;
 import com.rav.raverp.data.model.api.WalletAmountListModel;
 import com.rav.raverp.data.model.local.ChangePasswordModel;
@@ -49,11 +55,14 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 
@@ -92,8 +101,10 @@ public interface ApiHelper {
     //PlotAvailability
     @Headers({"Content-Type: application/json"})
     @POST(ApiEndPoint.PlotAvailability)
-    Call<ApiResponse<List<PlotAvailableModel>>> getPlotAvailabilitylistfilter(@Query("projectId") String projectId,
-                                                                              @Query("blockId") String blockId);
+    Call<ApiResponse<List<PlotAvailableModel>>> getPlotAvailabilitylistfilter(@Query("projectId") int projectId,
+                                                                              @Query("blockId") int blockId,
+                                                                              @Query("Start") int Start,
+                                                                              @Query("End") int End);
 
     //ChangeMobileNo
     @Headers({"Content-Type: application/json"})
@@ -460,4 +471,47 @@ public interface ApiHelper {
     Call<AddCustomerEditCustomer> verifyLoginWalletOtp(@Query("AssociateLoginId") String AssociateLoginId,
                                                        @Query("OTP") String OTP,
                                                        @Query("RoleId") int RoleId);
+
+    //GetSubject
+    @Headers({"Content-Type: application/json"})
+    @GET(ApiEndPoint.Subject)
+    Call<ApiResponse<List<SubjectModel>>> getSubject();
+
+    //GetClaimType
+    @Headers({"Content-Type: application/json"})
+    @GET(ApiEndPoint.ClaimType)
+    Call<ApiResponse<List<ClaimTypeModel>>> getClaim();
+
+    //GetDocumentType
+    @Headers({"Content-Type:application/json"})
+    @GET(ApiEndPoint.Documents)
+    Call<ApiResponse<List<DocumentTypeModel>>> getDocument();
+
+    //GetPaymentMode Type
+    @Headers({"Content-Type:application/json"})
+    @GET(ApiEndPoint.PaymentModeType)
+    Call<ApiResponse<List<PaymentModeTypeModel>>> getPaymentMode();
+
+    //GetIFSC Code
+    @GET(ApiEndPoint.IFSCCode + "{ifsccode}")
+    Call<IFSCCodeModel> getIFSCCode(@Path("ifsccode") String ifsccode);
+
+
+    //WalletPayment
+    @Multipart
+    @POST(ApiEndPoint.CreateTicket)
+    Call<CommonModel> createTicket(@Query("AssociateLoginId") String AssociateLoginId,
+                                   @Query("RoleId") int RoleId,
+                                   @Query("SubjectId") int SubjectId,
+                                   @Query("ClaimType") int ClaimType,
+                                   @Query("intDocumentTypeId") int intDocumentTypeId,
+                                   @Query("strPaymentType") String strPaymentType,
+                                   @Query("strTransactionNo") String strTransactionNo,
+                                   @Query("dcAmount") String dcAmount,
+                                   @Query("dtTransDate") String dtTransDate,
+                                   @Query("IFSC") String IFSC,
+                                   @Query("strBranchName") String strBranchName,
+                                   @Query("strBankName") String strBankName,
+                                   @Query("Query") String Query,
+                                   @Part MultipartBody.Part slip);
 }

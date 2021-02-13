@@ -165,11 +165,28 @@
     <string name="password">Password:<font color='#FF0000'>*</font></string>
     <string name="confirmPassword">Confirm Password:<font color='#FF0000'>*</font></string>
     <string name="FatherHusband">Father/Husband:<font color='#FF0000'>*</font></string>
-    <string name="subject">Subject<font color='#FF0000'>*</font></string>
+    <string name="subjectModel">Subject<font color='#FF0000'>*</font></string>
     <string name="claimType">Claim Type<font color='#FF0000'>*</font></string>
+    <string name="documentType">Document Type<font color='#FF0000'>*</font></string>
+    <string name="paymentModeType">PaymentMode Type<font color='#FF0000'>*</font></string>
+    <string name="allNo">Transaction /Check /NFT/RTGS/no<font color='#FF0000'>*</font></string>
+    <string name="amount">Amount<font color='#FF0000'>*</font></string>
+    <string name="date">Date<font color='#FF0000'>*</font></string>
+    <string name="IFSCCode">IFSC<font color='#FF0000'>*</font></string>
+    <string name="bankName">Bank Name<font color='#FF0000'>*</font></string>
+    <string name="branchName">Branch Name<font color='#FF0000'>*</font></string>
     <string name="query">Query<font color='#FF0000'>*</font></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+    <string name="my_api_key">ec01f8c2eb6ac402f2ca026dc2d9b8fd</string>
+    <string name="error_msg">Sorry! Couldn\'t fetch data.</string>
+    <string name="btn_retry">Retry</string>
+    <string name="error_msg_no_internet">Not connected to internet</string>
+    <string name="error_msg_timeout">The server took too long to respond</string>
+    <string name="error_msg_unknown">An unexpected error occurred</string>
+    <string name="tap_to_reload">Tap to reload</string>
+    <string name="menu_refresh">Refresh</string>
 
 </resources>

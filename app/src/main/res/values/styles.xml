@@ -127,4 +127,9 @@
         <item name="color">@android:color/black</item>
     </style>
 
+
+
+    <style name="CircularProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/background</item>
+    </style>
 </resources>

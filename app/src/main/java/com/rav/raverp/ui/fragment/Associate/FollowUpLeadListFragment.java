@@ -142,15 +142,10 @@ public class FollowUpLeadListFragment extends Fragment {
                         if (response.body() != null) {
                             if (response.body().getResponse().equalsIgnoreCase("Success")) {
                                 followUpListModelList = response.body().getBody();
-
-
-
                                 Gson gson=new Gson();
                                 String json=gson.toJson(followUpListModelList.get(0), FollowUpListModel.class);
                                 PrefsHelper.putString(getActivity(), AppConstants.GetAllLeadFollowUP,
                                         json);
-
-
                                 followUPLeadListAdapter = new FollowUPLeadListAdapter(getActivity(), listItemClickListener,
                                         response.body().getBody());
                                 recyclerFollowUPLeadList.setAdapter(followUPLeadListAdapter);

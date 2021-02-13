@@ -3,24 +3,19 @@ package com.rav.raverp.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rav.raverp.MyApplication;
 import com.rav.raverp.R;
 import com.rav.raverp.data.adapter.ActivityLogAdapter;
-import com.rav.raverp.data.adapter.FollowUPLeadListAdapter;
 import com.rav.raverp.data.interfaces.ArrowBackPressed;
 import com.rav.raverp.data.interfaces.DialogActionCallback;
 import com.rav.raverp.data.model.api.ActivityLogModel;
 import com.rav.raverp.data.model.api.ApiResponse;
-import com.rav.raverp.data.model.api.FollowUpListModel;
 import com.rav.raverp.data.model.api.LoginModel;
-import com.rav.raverp.databinding.ActivityChangePasswordBinding;
 import com.rav.raverp.databinding.ActivityLogBinding;
 import com.rav.raverp.network.ApiClient;
 import com.rav.raverp.network.ApiHelper;
@@ -42,7 +37,7 @@ public class ActivityLogActivity  extends BaseActivity implements ArrowBackPress
     private LoginModel login;
     private RecyclerView recyclerViewActivityLog;
     private ActivityLogAdapter activityLogAdapter;
-    public static List<ActivityLogModel> activityLogModelList ;
+    public static List<ActivityLogModel> activityLogModelList;
 
 
     @Override

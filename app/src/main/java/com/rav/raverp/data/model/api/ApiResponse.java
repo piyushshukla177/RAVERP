@@ -16,6 +16,7 @@ public class ApiResponse<T> implements Serializable
     @SerializedName("Message")
     @Expose
     private String message;
+
     @SerializedName("body")
     @Expose
     private T body = null;

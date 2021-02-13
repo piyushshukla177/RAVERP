@@ -6,6 +6,18 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,20 +29,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.MenuItemCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.rav.raverp.R;
+import com.rav.raverp.data.adapter.PaginationAdapter;
 import com.rav.raverp.data.adapter.PlotAvailableListAdapter;
 import com.rav.raverp.data.interfaces.DialogActionCallback;
 import com.rav.raverp.data.interfaces.ListItemClickListener;
@@ -41,25 +48,52 @@ import com.rav.raverp.data.model.api.PlotAvailableModel;
 import com.rav.raverp.databinding.DialogPlotFilterBinding;
 import com.rav.raverp.network.ApiClient;
 import com.rav.raverp.network.ApiHelper;
-import com.rav.raverp.ui.MainActivity;
 import com.rav.raverp.ui.PlotAvailabilityActivityDetails;
 import com.rav.raverp.utils.NetworkUtils;
+import com.rav.raverp.utils.PaginationAdapterCallback;
+import com.rav.raverp.utils.PaginationScrollListener;
 import com.rav.raverp.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
+ */
+public class AvailablePlotFragment extends Fragment implements PaginationAdapterCallback {
 
-public class PlotAvailabilityFragment extends Fragment {
+    private static final String TAG = "AvailablePlotFragment";
 
-    private ApiHelper apiHelper, apiHelperlocal;
-    private View view;
-    private RecyclerView recyclerPloatList;
-    private PlotAvailableListAdapter plotAvailableListAdapter;
+    PaginationAdapter adapter;
+    LinearLayoutManager linearLayoutManager;
+
+    RecyclerView rv;
+    ProgressBar progressBar;
+    LinearLayout errorLayout;
+    Button btnRetry;
+    TextView txtError;
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    private static final int PAGE_START = 0;
+
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    // limiting to 5 for this tutorial, since total pages in actual API is very large. Feel free to modify.
+    private static final int TOTAL_PAGES = 10;
+    private int currentPage = PAGE_START;
+
+
+    private ApiHelper apiHelper;
+
+    PaginationAdapterCallback paginationAdapterCallback;
+
+
     private boolean isDialogHided;
     private Dialog filterDialog;
     private Spinner project_name_spinner, block_name_spinner;
@@ -67,17 +101,24 @@ public class PlotAvailabilityFragment extends Fragment {
     TextView txt1, txt2;
     TextView textTotalItemCount;
     int mTotalItemCount;
-    List<PlotAvailableModel> plotAvailableList = new ArrayList<>();
-    List<PlotAvailableModel> plotAvailableList1 = new ArrayList<>();
+    int ProjectId, BlockId;
 
-    int ProjectId, BlockId, start, end = 10;
-    LinearLayoutManager mLayoutManager;
+
+    public AvailablePlotFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     private ListItemClickListener listItemClickListener = new ListItemClickListener() {
         @Override
         public void onItemClicked(int itemPosition) {
             PlotAvailableModel plotAvailable =
-                    plotAvailableListAdapter.getPlotAvailables().get(itemPosition);
+                    adapter.getPlots().get(itemPosition);
 
             Intent intent = new Intent(getActivity(), PlotAvailabilityActivityDetails.class);
             intent.putExtra("ploatData", plotAvailable);
@@ -88,84 +129,143 @@ public class PlotAvailabilityFragment extends Fragment {
 
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_available_plot, container, false);
+        paginationAdapterCallback = this;
+        rv = v.findViewById(R.id.main_recycler);
+        no_records_text_view = v.findViewById(R.id.no_records_text_view);
+        progressBar = v.findViewById(R.id.main_progress);
+        errorLayout = v.findViewById(R.id.error_layout);
+        btnRetry = v.findViewById(R.id.error_btn_retry);
+        txtError = v.findViewById(R.id.error_txt_cause);
+        swipeRefreshLayout = v.findViewById(R.id.main_swiperefresh);
 
-        MainActivity.toolbar.setTitle("Plot Available");
-        view = inflater.inflate(R.layout.activity_recycler_view_plot_availability, container, false);
+        adapter = new PaginationAdapter(getActivity(), paginationAdapterCallback, listItemClickListener);
+
+        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setItemAnimator(new DefaultItemAnimator());
+
+        rv.setAdapter(adapter);
+
+
+        //init service and load data
+
         apiHelper = ApiClient.getClient().create(ApiHelper.class);
-        recyclerPloatList = view.findViewById(R.id.recycler_view);
-        txt1 = (TextView) view.findViewById(R.id.txt1);
-        txt2 = (TextView) view.findViewById(R.id.txt2);
-        no_records_text_view = (TextView) view.findViewById(R.id.no_records_text_view);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerPloatList.setLayoutManager(mLayoutManager);
-        recyclerPloatList.getRecycledViewPool().clear();
+
+        loadFirstPage();
+
+        btnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFirstPage();
+            }
+        });
+
+        // btnRetry.setOnClickListener(view -> loadFirstPage());
+
+        //  swipeRefreshLayout.setOnRefreshListener(this::doRefresh);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doRefresh();
+                    }
+                }, 2000);
+
+            }
+        });
 
         if (isDialogHided) {
             isDialogHided = false;
             filterDialog.dismiss();
         }
-        checkNetwork();
 
-
-        return view;
+        return v;
     }
 
-
-    private void Getblockproject() {
-
-        ViewUtils.startProgressDialog(getActivity());
-
-        Call<ApiResponse<List<PlotAvailableModel>>> getPlotAvailabilitylistfilterCall =
-                apiHelper.getPlotAvailabilitylistfilter(ProjectId, BlockId, start, end);
-        getPlotAvailabilitylistfilterCall.enqueue(new Callback<ApiResponse<List<PlotAvailableModel>>>() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        rv.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
-            public void onResponse(Call<ApiResponse<List<PlotAvailableModel>>> call,
-                                   Response<ApiResponse<List<PlotAvailableModel>>> response) {
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage += TOTAL_PAGES;
+                //   Toast.makeText(getActivity(), currentPage + "", Toast.LENGTH_SHORT).show();
+                loadNextPage();
+            }
 
-                ViewUtils.endProgressDialog();
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES;
+            }
 
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponse().equalsIgnoreCase("Success")) {
-                            plotAvailableList = response.body().getBody();
-                            plotAvailableListAdapter = new PlotAvailableListAdapter(getActivity(), listItemClickListener, plotAvailableList);
-                            recyclerPloatList.setAdapter(plotAvailableListAdapter);
-                            mTotalItemCount = plotAvailableList.get(0).getTotalRecords();
-                            setupBadge();
-                            no_records_text_view.setVisibility(View.GONE);
-                        } else {
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
 
-                            recyclerPloatList.removeAllViewsInLayout();
-                            no_records_text_view.setVisibility(View.VISIBLE);
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
 
-/*
-                            ViewUtils.showErrorDialog(getContext(), response.body().getMessage(),
-                                    new DialogActionCallback() {
-                                        @Override
-                                        public void okAction() {
+    }
 
+    /**
+     * Triggers the actual background refresh via the {@link SwipeRefreshLayout}
+     */
+    private void doRefresh() {
+        progressBar.setVisibility(View.VISIBLE);
+        if (callTopRatedMoviesApi().isExecuted())
+            callTopRatedMoviesApi().cancel();
+        // TODO: Check if data is stale.
+        //  Execute network request if cache is expired; otherwise do not update data.
+        adapter.getPlots().clear();
+        adapter.notifyDataSetChanged();
+        currentPage = 0;
+        loadFirstPage();
+        swipeRefreshLayout.setRefreshing(false);
+    }
 
-                                        }
-                                    });
-*/
-                            mTotalItemCount = 0;
-                            setupBadge();
+    private void loadFirstPage() {
+        Log.d(TAG, "loadFirstPage: ");
 
-                        }
+        // To ensure list is visible when retry button in error view is clicked
+        hideErrorView();
+        currentPage = PAGE_START;
 
-                    } else {
-                        mTotalItemCount = 0;
-                        setupBadge();
-                    }
+        callTopRatedMoviesApi().enqueue(new Callback<ApiResponse<List<PlotAvailableModel>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<PlotAvailableModel>>> call, Response<ApiResponse<List<PlotAvailableModel>>> response) {
+                hideErrorView();
+
+//                Log.i(TAG, "onResponse: " + (response.raw().cacheResponse() != null ? "Cache" : "Network"));
+
+                // Got data. Send it to adapter
+                if (response.body().getResponse().equalsIgnoreCase("Success")) {
+                    List<PlotAvailableModel> results = fetchResults(response);
+                    progressBar.setVisibility(View.GONE);
+                    adapter.addAll(results);
+                    mTotalItemCount = results.get(0).getTotalRecords();
+                    setupBadge();
+                    no_records_text_view.setVisibility(View.GONE);
+
+                    /*if (currentPage <= currentPage + TOTAL_PAGES - 1) adapter.addLoadingFooter();
+                    else isLastPage = true;*/
+
                 } else {
+                    // isLastPage=true;
+                    // rv.removeAllViewsInLayout();
+                    no_records_text_view.setVisibility(View.VISIBLE);
                     mTotalItemCount = 0;
                     setupBadge();
                 }
@@ -173,19 +273,112 @@ public class PlotAvailabilityFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ApiResponse<List<PlotAvailableModel>>> call, Throwable t) {
-                if (!call.isCanceled()) {
-
-                    ViewUtils.endProgressDialog();
-
-                }
                 t.printStackTrace();
-
-                mTotalItemCount = 0;
-                setupBadge();
+                showErrorView(t);
             }
         });
     }
 
+
+    /**
+     * @return
+     */
+    private List<PlotAvailableModel> fetchResults(Response<ApiResponse<List<PlotAvailableModel>>> response) {
+        return response.body().getBody();
+        //TopRatedMovies topRatedMovies = response.body();
+        //return topRatedMovies.getResults();
+    }
+
+    private void loadNextPage() {
+        adapter.addLoadingFooter();
+        Log.d(TAG, "loadNextPage: " + currentPage);
+
+        callTopRatedMoviesApi().enqueue(new Callback<ApiResponse<List<PlotAvailableModel>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<PlotAvailableModel>>> call, Response<ApiResponse<List<PlotAvailableModel>>> response) {
+//                Log.i(TAG, "onResponse: " + currentPage
+//                        + (response.raw().cacheResponse() != null ? "Cache" : "Network"));
+                adapter.removeLoadingFooter();
+                if (response.body().getResponse().equalsIgnoreCase("Success")) {
+                    isLoading = false;
+                    List<PlotAvailableModel> results = fetchResults(response);
+                    adapter.addAll(results);
+                    mTotalItemCount = results.get(0).getTotalRecords();
+                    setupBadge();
+                  /*  if (currentPage <= currentPage + TOTAL_PAGES - 1) adapter.addLoadingFooter();
+                    else isLastPage = true;*/
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<PlotAvailableModel>>> call, Throwable t) {
+                t.printStackTrace();
+                adapter.showRetry(true, fetchErrorMessage(t));
+            }
+        });
+    }
+
+    /**
+     * Performs a Retrofit call to the top rated movies API.
+     * Same API call for Pagination.
+     * As {@link #currentPage} will be incremented automatically
+     * by @{@link PaginationScrollListener} to load next page.
+     */
+    private Call<ApiResponse<List<PlotAvailableModel>>> callTopRatedMoviesApi() {
+        return apiHelper.getPlotAvailabilitylistfilter(ProjectId, BlockId, currentPage, TOTAL_PAGES);
+    }
+
+
+    @Override
+    public void retryPageLoad() {
+        loadNextPage();
+    }
+
+
+    /**
+     * @param throwable required for {@link #fetchErrorMessage(Throwable)}
+     * @return
+     */
+    private void showErrorView(Throwable throwable) {
+
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+
+            txtError.setText(fetchErrorMessage(throwable));
+        }
+    }
+
+    /**
+     * @param throwable to identify the type of error
+     * @return appropriate error message
+     */
+    private String fetchErrorMessage(Throwable throwable) {
+        String errorMsg = getResources().getString(R.string.error_msg_unknown);
+
+        if (!NetworkUtils.isNetworkConnected()) {
+            ViewUtils.showOfflineDialog(getActivity(), new DialogActionCallback() {
+                @Override
+                public void okAction() {
+                    loadFirstPage();
+                }
+            });
+            //errorMsg = getResources().getString(R.string.error_msg_no_internet);
+        } else if (throwable instanceof TimeoutException) {
+            errorMsg = getResources().getString(R.string.error_msg_timeout);
+        }
+
+        return errorMsg;
+    }
+
+    // Helpers -------------------------------------------------------------------------------------
+
+    private void hideErrorView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void GetProject() {
         Call<ApiResponse<List<GetProjectModel>>> getProjectlistCall =
@@ -237,6 +430,7 @@ public class PlotAvailabilityFragment extends Fragment {
         });
     }
 
+
     private void GetBlock(String ProjectId) {
 
         Call<ApiResponse<List<GetBlockModel>>> getBlocklistCall =
@@ -286,73 +480,6 @@ public class PlotAvailabilityFragment extends Fragment {
 
                 }
                 t.printStackTrace();
-            }
-        });
-    }
-
-    public void checkNetwork() {
-        if (NetworkUtils.isNetworkConnected()) {
-            Getblockproject();
-        } else {
-            ViewUtils.showOfflineDialog(getContext(), new DialogActionCallback() {
-                @Override
-                public void okAction() {
-                    Getblockproject();
-                }
-            });
-        }
-    }
-
-    private void execute() {
-
-        ViewUtils.startProgressDialog(getActivity());
-
-        Call<ApiResponse<List<PlotAvailableModel>>> getPlotAvailableCall =
-                apiHelper.getPlotAvailable();
-        getPlotAvailableCall.enqueue(new Callback<ApiResponse<List<PlotAvailableModel>>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<List<PlotAvailableModel>>> call,
-                                   Response<ApiResponse<List<PlotAvailableModel>>> response) {
-
-                ViewUtils.endProgressDialog();
-
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponse().equalsIgnoreCase("Success")) {
-                            List<PlotAvailableModel> plotAvailableList = response.body().getBody();
-
-                            plotAvailableListAdapter = new PlotAvailableListAdapter(getActivity(), listItemClickListener,
-                                    response.body().getBody());
-                            recyclerPloatList.setAdapter(plotAvailableListAdapter);
-                            mTotalItemCount = plotAvailableList.size();
-
-                            setupBadge();
-
-                        } else {
-                            mTotalItemCount = 0;
-                            setupBadge();
-
-                        }
-                    } else {
-                        mTotalItemCount = 0;
-                        setupBadge();
-
-                    }
-                } else {
-                    mTotalItemCount = 0;
-                    setupBadge();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<List<PlotAvailableModel>>> call, Throwable t) {
-                if (!call.isCanceled()) {
-                    ViewUtils.endProgressDialog();
-                }
-                t.printStackTrace();
-                mTotalItemCount = 0;
-
-                setupBadge();
             }
         });
     }
@@ -431,13 +558,12 @@ public class PlotAvailabilityFragment extends Fragment {
             public void onClick(View v) {
                 filterDialog.hide();
                 isDialogHided = true;
-                Getblockproject();
+                adapter.getPlots().clear();
+                adapter.notifyDataSetChanged();
+                currentPage = 0;
+                loadFirstPage();
             }
         });
     }
 
-
 }
-
-
-

@@ -50,18 +50,19 @@ public class PlotAvailableListAdapter extends RecyclerView.Adapter<PlotAvailable
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        if (null != plotAvailables && plotAvailables.size()+1 > position) {
+        if (null != plotAvailables && plotAvailables.size() + 1 > position) {
 
             PlotAvailableListAdapter.MyViewHolder rowViewHolder = (PlotAvailableListAdapter.MyViewHolder) holder;
             final int rowPos = rowViewHolder.getAdapterPosition();
-            if (rowPos==0){
+            if (rowPos == 0) {
                 holder.getBinding().headerLayout.setVisibility(View.GONE);
                 holder.getBinding().contentLayout.setVisibility(View.GONE);
-            }else{
+            } else {
                 holder.getBinding().headerLayout.setVisibility(View.GONE);
                 holder.getBinding().contentLayout.setVisibility(View.VISIBLE);
-                holder.getBinding().setPlotAvailable(plotAvailables.get(rowPos-1));
+                holder.getBinding().setPlotAvailable(plotAvailables.get(rowPos - 1));
                 holder.getBinding().sno.setText(String.valueOf(rowPos));
+                // holder.getBinding().sno.setText(plotAvailables.get(position).getSNo() + "");
                 holder.getBinding().showMoreTextView.setPaintFlags(
                         holder.getBinding().showMoreTextView.getPaintFlags() |
                                 Paint.UNDERLINE_TEXT_FLAG);
@@ -70,7 +71,7 @@ public class PlotAvailableListAdapter extends RecyclerView.Adapter<PlotAvailable
             holder.getBinding().showMoreTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listItemClickListener.onItemClicked(rowPos-1);
+                    listItemClickListener.onItemClicked(rowPos - 1);
                 }
             });
 
@@ -78,20 +79,19 @@ public class PlotAvailableListAdapter extends RecyclerView.Adapter<PlotAvailable
     }
 
 
-
-
-
     @Override
     public int getItemCount() {
         if (null != plotAvailables && plotAvailables.size() > 0) {
-            return plotAvailables.size()+1;
+            return plotAvailables.size() + 1;
         } else {
             return 1;
         }
     }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         private ItemPlotAvailableBinding binding;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);

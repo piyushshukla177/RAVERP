@@ -25,6 +25,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
+
     public static final String TAG = MyApplication.class.getSimpleName();
     private static Context context;
     private RequestQueue mRequestQueue;
@@ -48,6 +49,7 @@ public class MyApplication extends Application implements LifecycleObserver {
 
         return mRequestQueue;
     }
+
     public <T> void addToRequestQueue(Request<T> req) {
         req.setTag(TAG);
         getRequestQueue().add(req);
@@ -59,8 +61,6 @@ public class MyApplication extends Application implements LifecycleObserver {
     }
 
     public static boolean getAppOpenStatus() {
-
-
         return PrefsHelper.getBoolean(context, AppConstants.APP_FOREGROUNDED);
     }
 
@@ -74,6 +74,7 @@ public class MyApplication extends Application implements LifecycleObserver {
         }
         return null;
     }
+
     public static LoginModel getLoginModel() {
         String loggedInUserDetails = PrefsHelper.getString(context, AppConstants.LOGIN);
         if (loggedInUserDetails != null) {
@@ -122,8 +123,6 @@ public class MyApplication extends Application implements LifecycleObserver {
         PrefsHelper.putBoolean(context, AppConstants.APP_FOREGROUNDED, true);
     }
       //198159 operator 123
-     // 539907 associate 123456
-    // RAVC104703 Customer 410885
-
-
+      // 539907 associate 123456
+      // RAVC104703 Customer 410885
 }

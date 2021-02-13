@@ -39,6 +39,7 @@ import com.rav.raverp.network.ApiHelper;
 
 
 import com.rav.raverp.ui.fragment.Associate.AddAssociateFragment;
+import com.rav.raverp.ui.fragment.Associate.AvailablePlotFragment;
 import com.rav.raverp.ui.fragment.Associate.ComplaintFragment;
 import com.rav.raverp.ui.fragment.Associate.DashBoardAssociateFragment;
 import com.rav.raverp.ui.fragment.Associate.FollowUpLeadListFragment;
@@ -86,8 +87,8 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Dashboard");
         toolbar.setTitleTextColor(this.getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         setStoragePermissionListener(this);
@@ -116,7 +117,6 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
 
 
         apiHelper = ApiClient.getClient().create(ApiHelper.class);
-
 
 
         LoginModel login = MyApplication.getLoginModel();
@@ -270,7 +270,7 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
                         if (groupPosition == 1) {
                             if (id == 0) {
                                 toolbar.setTitle("Plot Available");
-                                loadFragment(new PlotAvailabilityFragment());
+                                loadFragment(new AvailablePlotFragment());
                          /*       Fragment fragment = new PlotAvailabilityFragment();
                                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.homepage, fragment);

@@ -27,8 +27,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
-
-
         handler = new Handler(Looper.getMainLooper());
         runnable = new Runnable() {
             @Override
