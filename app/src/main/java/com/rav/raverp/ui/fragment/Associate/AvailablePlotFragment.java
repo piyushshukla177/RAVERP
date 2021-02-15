@@ -66,6 +66,7 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
+
 public class AvailablePlotFragment extends Fragment implements PaginationAdapterCallback {
 
     private static final String TAG = "AvailablePlotFragment";
@@ -119,7 +120,6 @@ public class AvailablePlotFragment extends Fragment implements PaginationAdapter
         public void onItemClicked(int itemPosition) {
             PlotAvailableModel plotAvailable =
                     adapter.getPlots().get(itemPosition);
-
             Intent intent = new Intent(getActivity(), PlotAvailabilityActivityDetails.class);
             intent.putExtra("ploatData", plotAvailable);
             startActivity(intent);

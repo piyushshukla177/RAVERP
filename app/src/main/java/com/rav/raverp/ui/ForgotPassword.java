@@ -11,28 +11,18 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
 import com.rav.raverp.R;
 import com.rav.raverp.data.interfaces.DialogActionCallback;
-import com.rav.raverp.data.local.prefs.PrefsHelper;
-import com.rav.raverp.data.model.api.ApiResponse;
 import com.rav.raverp.data.model.api.ForgotApiResponse;
 import com.rav.raverp.data.model.api.ForgotpasswordModel;
-import com.rav.raverp.data.model.api.LoginModel;
 import com.rav.raverp.data.model.api.ResetPasswordModel;
 import com.rav.raverp.databinding.ActivityForgotPasswordBinding;
-import com.rav.raverp.databinding.ActivityLoginBinding;
 import com.rav.raverp.network.ApiClient;
 import com.rav.raverp.network.ApiHelper;
-import com.rav.raverp.utils.AppConstants;
 import com.rav.raverp.utils.CommonUtils;
 import com.rav.raverp.utils.NetworkUtils;
 import com.rav.raverp.utils.ViewUtils;
-
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 

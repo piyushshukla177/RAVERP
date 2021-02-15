@@ -37,7 +37,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -56,15 +55,10 @@ import com.rav.raverp.data.model.api.PaymentModeTypeModel;
 import com.rav.raverp.data.model.api.SubjectModel;
 import com.rav.raverp.network.ApiClient;
 import com.rav.raverp.network.ApiHelper;
-import com.rav.raverp.ui.AddWalletActivity;
-import com.rav.raverp.ui.MainActivity;
 import com.rav.raverp.utils.AppConstants;
-import com.rav.raverp.utils.CommonUtils;
 import com.rav.raverp.utils.Logger;
 import com.rav.raverp.utils.NetworkUtils;
 import com.rav.raverp.utils.ViewUtils;
-
-import org.w3c.dom.ls.LSException;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,8 +79,8 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 
 
-public class ComplaintFragment extends Fragment implements StoragePermissionListener {
-    private static final String TAG = ComplaintFragment.class.getSimpleName();
+public class AddTicketFragment extends Fragment implements StoragePermissionListener {
+    private static final String TAG = AddTicketFragment.class.getSimpleName();
 
     private StoragePermissionListener storagePermissionListener;
     //Static Int
@@ -108,7 +102,7 @@ public class ComplaintFragment extends Fragment implements StoragePermissionList
     List<DocumentTypeModel> getDocumentModelList = new ArrayList<>();
     List<PaymentModeTypeModel> getPaymentModeList = new ArrayList<>();
 
-    public ComplaintFragment() {
+    public AddTicketFragment() {
         // Required empty public constructor
     }
 
@@ -134,7 +128,7 @@ public class ComplaintFragment extends Fragment implements StoragePermissionList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_complaint, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_ticket, container, false);
         apiHelper = ApiClient.getClient().create(ApiHelper.class);
         loginModel = MyApplication.getLoginModel();
         loginId = loginModel.getStrLoginID();
@@ -362,9 +356,9 @@ public class ComplaintFragment extends Fragment implements StoragePermissionList
                         ViewUtils.showToast("Please select document");
                     } else if (etQuery.getText().toString().isEmpty()) {
                         ViewUtils.showToast("Please enter query");
-                    } else if (picturePath.equalsIgnoreCase("")) {
+                    } /*else if (picturePath.equalsIgnoreCase("")) {
                         ViewUtils.showToast("Please select attachment");
-                    } else {
+                    } */else {
                         if (NetworkUtils.isNetworkConnected()) {
                             createTicket();
                             // ViewUtils.showToast("Success");
@@ -473,9 +467,9 @@ public class ComplaintFragment extends Fragment implements StoragePermissionList
                     }
                 } else if (etQuery.getText().toString().isEmpty()) {
                     ViewUtils.showToast("Please enter query");
-                } else if (picturePath.equalsIgnoreCase("")) {
+                } /*else if (picturePath.equalsIgnoreCase("")) {
                     ViewUtils.showToast("Please select attachment");
-                } else {
+                }*/ else {
                     if (NetworkUtils.isNetworkConnected()) {
                         createTicket();
                         //  ViewUtils.showToast("Success");

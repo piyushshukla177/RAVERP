@@ -40,14 +40,15 @@ import com.rav.raverp.network.ApiHelper;
 
 import com.rav.raverp.ui.fragment.Associate.AddAssociateFragment;
 import com.rav.raverp.ui.fragment.Associate.AvailablePlotFragment;
-import com.rav.raverp.ui.fragment.Associate.ComplaintFragment;
+import com.rav.raverp.ui.fragment.Associate.AddTicketFragment;
+import com.rav.raverp.ui.fragment.Associate.ClosedTicketFragment;
 import com.rav.raverp.ui.fragment.Associate.DashBoardAssociateFragment;
 import com.rav.raverp.ui.fragment.Associate.FollowUpLeadListFragment;
 import com.rav.raverp.ui.fragment.Associate.LeadListFragment;
 import com.rav.raverp.ui.fragment.Associate.MyBookingFragment;
 import com.rav.raverp.ui.fragment.Associate.MyGoalListFragment;
-import com.rav.raverp.ui.fragment.Associate.PlotAvailabilityFragment;
 
+import com.rav.raverp.ui.fragment.Associate.PendingTicketFragment;
 import com.rav.raverp.ui.fragment.Associate.SiteVisitRequestFragment;
 import com.rav.raverp.ui.fragment.Associate.SiteVisitRequestStatusFragment;
 import com.rav.raverp.ui.fragment.Associate.WalletPinFragment;
@@ -233,8 +234,9 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
                          new HeaderModel("Customer Management", R.drawable.ic_baseline_my_location_24, true)
                                  .addChildModel(new ChildModel("View Customer", R.drawable.ic_baseline_arrow_forward_24)))*/
                 .addHeaderModel(new HeaderModel("Support", R.drawable.ic_baseline_my_location_24, true)
-                                .addChildModel(new ChildModel("Complaint", R.drawable.ic_baseline_arrow_forward_24))
-                        /*  .addChildModel(new ChildModel("Feedback", R.drawable.ic_baseline_arrow_forward_24))*/)
+                        .addChildModel(new ChildModel("Add Ticket", R.drawable.ic_baseline_arrow_forward_24))
+                        .addChildModel(new ChildModel("Pending Ticket", R.drawable.ic_baseline_arrow_forward_24))
+                        .addChildModel(new ChildModel("Closed Ticket", R.drawable.ic_baseline_arrow_forward_24)))
 
                 .build()
 
@@ -377,9 +379,15 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
 
                         }*/ else if (groupPosition == 7) {
                             if (id == 0) {
-                                toolbar.setTitle("Complaint");
-                                loadFragment(new ComplaintFragment());
+                                toolbar.setTitle("Add Ticket");
+                                loadFragment(new AddTicketFragment());
 
+                            }if(id==1){
+                                toolbar.setTitle("Pending Tickets");
+                                loadFragment(new PendingTicketFragment());
+                            }if(id==2){
+                                toolbar.setTitle("Closed Tickets");
+                                loadFragment(new ClosedTicketFragment());
                             }
                         }
 

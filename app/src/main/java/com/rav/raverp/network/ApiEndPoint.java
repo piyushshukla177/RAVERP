@@ -67,4 +67,8 @@ public class ApiEndPoint {
     public static final String Documents = "Documents";
     public static final String PaymentModeType = "PaymentModeType";
     public static final String IFSCCode = "https://ifsc.razorpay.com/";
+    public static final String PendingTickets = "PendingTickets";
+    public static final String ClosedTickets = "ClosedTickets";
+    public static final String ViewTickets = "ViewTickets";
+    public static final String MsgSend = "MsgSend";
 }

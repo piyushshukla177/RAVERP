@@ -7,6 +7,7 @@ import com.rav.raverp.data.model.api.ApiResponse;
 import com.rav.raverp.data.model.api.ApiUploadImageResponse;
 import com.rav.raverp.data.model.api.AssociateWalletAmount;
 import com.rav.raverp.data.model.api.BookingPlotListModal;
+import com.rav.raverp.data.model.api.ChatModel;
 import com.rav.raverp.data.model.api.ClaimTypeModel;
 import com.rav.raverp.data.model.api.CommonModel;
 import com.rav.raverp.data.model.api.CustomerAmount;
@@ -35,6 +36,7 @@ import com.rav.raverp.data.model.api.LoginModel;
 import com.rav.raverp.data.model.api.MyGoalListModel;
 import com.rav.raverp.data.model.api.PaymentGatewayModel;
 import com.rav.raverp.data.model.api.PaymentModeTypeModel;
+import com.rav.raverp.data.model.api.PendingClosedTicketModel;
 import com.rav.raverp.data.model.api.PlotAvailableModel;
 import com.rav.raverp.data.model.api.PlotBooking;
 import com.rav.raverp.data.model.api.PlotBookingPlan;
@@ -514,4 +516,36 @@ public interface ApiHelper {
                                    @Query("strBankName") String strBankName,
                                    @Query("Query") String Query,
                                    @Part MultipartBody.Part slip);
+
+    //GetPending Ticket List
+    @Headers({"Content-Type:application/json"})
+    @POST(ApiEndPoint.PendingTickets)
+    Call<PendingClosedTicketModel> getPendingTicket(@Query("AssociateLoginId") String AssociateLoginId,
+                                                    @Query("RoleId") int RoleId,
+                                                    @Query("TicketNo") String TicketNo,
+                                                    @Query("active") boolean active);
+
+    //Get Closed Ticket List
+    @Headers({"Content-Type:application/json"})
+    @POST(ApiEndPoint.ClosedTickets)
+    Call<PendingClosedTicketModel> getClosedTicket(@Query("AssociateLoginId") String AssociateLoginId,
+                                                   @Query("RoleId") int RoleId);
+
+
+    //Chat List
+    @Headers({"Content-Type:application/json"})
+    @POST(ApiEndPoint.ViewTickets)
+    Call<ChatModel> getChatList(@Query("AssociateLoginId") String AssociateLoginId,
+                                @Query("RoleId") int RoleId,
+                                @Query("TicketNo") String TicketNo,
+                                @Query("active") boolean active);
+
+
+    //Chat List
+    @Headers({"Content-Type:application/json"})
+    @POST(ApiEndPoint.MsgSend)
+    Call<ChatModel> sendMsg(@Query("AssociateLoginId") String AssociateLoginId,
+                                @Query("RoleId") int RoleId,
+                                @Query("TicketNo") String TicketNo,
+                                @Query("Msg") String Msg);
 }
