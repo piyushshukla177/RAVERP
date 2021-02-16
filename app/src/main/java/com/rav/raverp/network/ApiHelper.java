@@ -538,13 +538,13 @@ public interface ApiHelper {
     Call<ChatModel> getChatList(@Query("AssociateLoginId") String AssociateLoginId,
                                 @Query("RoleId") int RoleId,
                                 @Query("TicketNo") String TicketNo,
-                                @Query("active") boolean active);
+                                @Query("closed") String closed);
 
 
     //Chat List
     @Headers({"Content-Type:application/json"})
     @POST(ApiEndPoint.MsgSend)
-    Call<ChatModel> sendMsg(@Query("AssociateLoginId") String AssociateLoginId,
+    Call<CommonModel> sendMsg(@Query("AssociateLoginId") String AssociateLoginId,
                                 @Query("RoleId") int RoleId,
                                 @Query("TicketNo") String TicketNo,
                                 @Query("Msg") String Msg);

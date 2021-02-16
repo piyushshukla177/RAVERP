@@ -57,7 +57,7 @@ public class PendingClosedTicketAdapter extends RecyclerView.Adapter<PendingClos
         holder.tvViewTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, ConversationActivity.class));
+                context.startActivity(new Intent(context, ConversationActivity.class).putExtra("ticketNo",pendingClosedTicketModel.getBody().get(position).getPkTicketno()).putExtra("status",status));
             }
         });
 

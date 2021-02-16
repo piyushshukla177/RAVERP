@@ -83,13 +83,13 @@ public  class ChatModel {
 
         @Expose
         @SerializedName("MessageBy")
-        private int MessageBy;
+        private String MessageBy;
 
-        public int getMessageBy() {
+        public String getMessageBy() {
             return MessageBy;
         }
 
-        public void setMessageBy(int messageBy) {
+        public void setMessageBy(String messageBy) {
             MessageBy = messageBy;
         }
 

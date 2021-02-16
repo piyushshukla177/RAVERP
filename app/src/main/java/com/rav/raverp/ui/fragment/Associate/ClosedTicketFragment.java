@@ -67,7 +67,7 @@ public class ClosedTicketFragment extends Fragment {
                 ViewUtils.endProgressDialog();
                 PendingClosedTicketModel pendingClosedTicketModel = response.body();
                 if (pendingClosedTicketModel.getResponse().equalsIgnoreCase("Success")) {
-                    PendingClosedTicketAdapter pendingClosedTicketAdapter = new PendingClosedTicketAdapter(getActivity(), pendingClosedTicketModel, "Closed");
+                    PendingClosedTicketAdapter pendingClosedTicketAdapter = new PendingClosedTicketAdapter(getActivity(), pendingClosedTicketModel, "true");
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
                     rvClosedTicket.setLayoutManager(gridLayoutManager);
                     rvClosedTicket.setAdapter(pendingClosedTicketAdapter);

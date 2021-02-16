@@ -292,7 +292,6 @@ public class AddWalletActivity extends BaseActivity implements ArrowBackPressed,
 
         if (requestCode == PayUmoneyFlowManager.REQUEST_CODE_PAYMENT && resultCode == RESULT_OK && data != null) {
             TransactionResponse transactionResponse = data.getParcelableExtra(PayUmoneyFlowManager.INTENT_EXTRA_TRANSACTION_RESPONSE);
-
             if (transactionResponse != null && transactionResponse.getPayuResponse() != null) {
                 if (transactionResponse.getTransactionStatus().equals(TransactionResponse.TransactionStatus.SUCCESSFUL)) {
                     // Response from Payumoney
@@ -821,6 +820,7 @@ public class AddWalletActivity extends BaseActivity implements ArrowBackPressed,
                 }
             });
         }else {*/
+
         ViewUtils.startProgressDialog(mContext);
         File reportFile = new File(picturePath);
         RequestBody requestFile = RequestBody.create(reportFile,
