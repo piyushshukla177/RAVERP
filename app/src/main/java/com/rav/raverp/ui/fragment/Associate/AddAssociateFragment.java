@@ -574,17 +574,6 @@ public class AddAssociateFragment extends Fragment implements StoragePermissionL
         HashMap<String, RequestBody> map = new HashMap<>();
         map.put("filename", RequestBody.create(MediaType.parse("text/plain"), ""));
 
-        /*HashMap<String,> map = new HashMap<>();
-        if (filePan != null)
-            map.put("PanCardImage", MultipartBody.Part.createFormData("PanCardImage", filePan.getName(), RequestBody.create(MediaType.parse("image/*"), filePan)));
-        if (fileAadharFront != null)
-            map.put("AadharCardFrontImage", MultipartBody.Part.createFormData("AadharCardFrontImage", fileAadharFront.getName(), RequestBody.create(MediaType.parse("image/*"), fileAadharFront)));
-        if (fileAadharBack != null)
-            map.put("AadharCardBackImage", MultipartBody.Part.createFormData("AadharCardBackImage", fileAadharBack.getName(), RequestBody.create(MediaType.parse("image/*"), fileAadharBack)));
-        if (fileProfile != null)
-            map.put("ProfilePic", MultipartBody.Part.createFormData("ProfilePic", fileAadharBack.getName(), RequestBody.create(MediaType.parse("image/*"), fileProfile)));*/
-
-
 
         if (filePan != null)
             pan = MultipartBody.Part.createFormData("PanCardImage", filePan.getName(), RequestBody.create(MediaType.parse("image/*"), filePan));
@@ -595,13 +584,10 @@ public class AddAssociateFragment extends Fragment implements StoragePermissionL
         if (fileProfile != null)
             profile = MultipartBody.Part.createFormData("ProfilePic", fileAadharBack.getName(), RequestBody.create(MediaType.parse("image/*"), fileProfile));
 
-        /*if (reportFile != null)
-            profilePic = MultipartBody.Part.createFormData("avatar", reportFile.getName(), RequestBody.create(MediaType.parse("image/*"), reportFile));*/
-
 
         ViewUtils.startProgressDialog(getActivity());
         final Call<AddAssociateModal> getAddCustomerEditCustomerCall = apiHelper.getAssociate(id, id, txt_customer_name.getText().toString().trim(), leg, gender_spinner.getSelectedItem().toString().trim(), txt_contact_no.getText().toString().trim(), txt_email_id.getText().toString().trim(), etDob.getText().toString().trim(), acetPassword.getText().toString().trim(), relation, acetFatherOf.getText().toString().trim(), txt_pincode.getText().toString().trim(), txt_state.getText().toString().trim(), txt_city.getText().toString().trim(), txt_address.getText().toString().trim(), etAadharNo.getText().toString().trim(),
-                etPanNo.getText().toString().trim(),front,back,pan,profile, map);
+                etPanNo.getText().toString().trim(), front, back, pan, profile, map);
 
         getAddCustomerEditCustomerCall.enqueue(new Callback<AddAssociateModal>() {
             @Override
