@@ -2,7 +2,9 @@ package com.rav.raverp.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +25,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.InstallState;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.rav.raverp.BuildConfig;
 import com.rav.raverp.MyApplication;
 import com.rav.raverp.R;
@@ -66,7 +76,8 @@ import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements StoragePermissionListener, NavigationView.OnNavigationItemSelectedListener {
 
-
+    private AppUpdateManager mAppUpdateManager;
+    private static final int RC_APP_UPDATE = 11;
     public static String mobile = "mobile";
     public static String userid = "userid";
     public static Toolbar toolbar;
@@ -95,7 +106,8 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
         setStoragePermissionListener(this);
         login = MyApplication.getLoginModel();
         textView = (TextView) findViewById(R.id.txtversion);
-        textView.setText("Version : " + BuildConfig.VERSION_NAME + ", Date : " + CommonUtils.getCurrentDate());
+       // textView.setText("Version : " + BuildConfig.VERSION_NAME + ", Date : " + CommonUtils.getCurrentDate());
+        textView.setText("Version : " + BuildConfig.VERSION_NAME );
 
 
         navigationExpandableListView = (ExpandableNavigationListView) findViewById(R.id.expandable_navigation);
@@ -333,7 +345,6 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
                             }
 
                             if (id == 1) {
-
                                 toolbar.setTitle("Site Visit List");
                                 loadFragment(new SiteVisitRequestStatusFragment());
                                /* Fragment fragment = new SiteVisitRequestStatusFragment();
@@ -583,10 +594,6 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -620,5 +627,75 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
         transaction.commit();
         drawer.closeDrawer(GravityCompat.START);
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAppUpdateManager = AppUpdateManagerFactory.create(this);
 
+        mAppUpdateManager.registerListener(installStateUpdatedListener);
+
+        mAppUpdateManager.getAppUpdateInfo().addOnSuccessListener(appUpdateInfo -> {
+
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE /*AppUpdateType.IMMEDIATE*/)) {
+
+                try {
+                    mAppUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo, AppUpdateType.IMMEDIATE /*AppUpdateType.IMMEDIATE*/, MainActivity.this, RC_APP_UPDATE);
+
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                //CHECK THIS if AppUpdateType.FLEXIBLE, otherwise you can skip
+                popupSnackbarForCompleteUpdate();
+            } else {
+                Log.e(TAG, "checkForAppUpdateAvailability: something else");
+            }
+        });
+    }
+
+    InstallStateUpdatedListener installStateUpdatedListener = new
+            InstallStateUpdatedListener() {
+                @Override
+                public void onStateUpdate(InstallState state) {
+                    if (state.installStatus() == InstallStatus.DOWNLOADED) {
+                        //CHECK THIS if AppUpdateType.FLEXIBLE, otherwise you can skip
+                        popupSnackbarForCompleteUpdate();
+                    } else if (state.installStatus() == InstallStatus.INSTALLED) {
+                        if (mAppUpdateManager != null) {
+                            mAppUpdateManager.unregisterListener(installStateUpdatedListener);
+                        }
+
+                    } else {
+                        Log.i(TAG, "InstallStateUpdatedListener: state: " + state.installStatus());
+                    }
+                }
+            };
+
+    private void popupSnackbarForCompleteUpdate() {
+        View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+        Snackbar snackbar = Snackbar.make(rootView,
+                "An update has just been downloaded.",
+                Snackbar.LENGTH_INDEFINITE);
+
+
+        snackbar.setAction("Install", view -> {
+            if (mAppUpdateManager != null) {
+                mAppUpdateManager.completeUpdate();
+            }
+        });
+
+        snackbar.setActionTextColor(getResources().getColor(R.color.white));
+        snackbar.show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAppUpdateManager != null) {
+            mAppUpdateManager.unregisterListener(installStateUpdatedListener);
+        }
+    }
 }

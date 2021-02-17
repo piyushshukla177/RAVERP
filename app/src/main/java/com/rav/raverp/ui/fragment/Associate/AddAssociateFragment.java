@@ -1,16 +1,27 @@
 package com.rav.raverp.ui.fragment.Associate;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -34,15 +46,24 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.rav.raverp.MyApplication;
 import com.rav.raverp.R;
+import com.rav.raverp.data.interfaces.ArrowBackPressed;
 import com.rav.raverp.data.interfaces.DialogActionCallback;
+import com.rav.raverp.data.interfaces.ImageCompressTaskListener;
+import com.rav.raverp.data.interfaces.StoragePermissionListener;
 import com.rav.raverp.data.model.api.AddAssociateModal;
 import com.rav.raverp.data.model.api.ApiResponse;
 import com.rav.raverp.data.model.api.GenderModel;
 import com.rav.raverp.data.model.api.LoginModel;
+import com.rav.raverp.data.thread.ImageCompressTask;
 import com.rav.raverp.network.ApiClient;
 import com.rav.raverp.network.ApiHelper;
+import com.rav.raverp.ui.BaseActivity;
+import com.rav.raverp.ui.EditProfileActivity;
 import com.rav.raverp.ui.MainActivity;
+import com.rav.raverp.utils.AppConstants;
 import com.rav.raverp.utils.CommonUtils;
+import com.rav.raverp.utils.FileUtil;
+import com.rav.raverp.utils.Logger;
 import com.rav.raverp.utils.NetworkUtils;
 import com.rav.raverp.utils.ViewUtils;
 
@@ -50,22 +71,42 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Multipart;
 
 
-public class AddAssociateFragment extends Fragment {
+public class AddAssociateFragment extends Fragment implements StoragePermissionListener {
+
+    Pattern pattern = Pattern.compile("[A-Z]{5}[0-9]{4}[A-Z]{1}");
+
+    private static final String TAG = AddAssociateFragment.class.getSimpleName();
+    private StoragePermissionListener storagePermissionListener;
+    Uri cameraUri;
+    private boolean isPermissionGranted = false;
+    private boolean isFromPermissionSettings = false;
+    private ExecutorService mExecutorService = Executors.newFixedThreadPool(1);
 
     private ApiHelper apiHelper;
     View view;
     private Spinner gender_spinner;
     TextView txt_state, txt_city;
-    EditText txt_pincode, etDob;
+    EditText txt_pincode, etDob, etAadharNo, etPanNo;
     Button btnSubmit;
 
     RadioGroup rgPosition, rgRelation;
@@ -77,7 +118,14 @@ public class AddAssociateFragment extends Fragment {
     String id;
     int roleId;
 
+    ImageView ivAadharFront, ivAadharBack, ivPan;
+    CircleImageView civProfile;
+
     private DatePicker datepicker;
+
+    String fileType = "", aadharFront, aadharBack, pan, profile;
+
+    File fileAadharFront = null, fileAadharBack = null, filePan = null, fileProfile = null;
 
     public AddAssociateFragment() {
         // Required empty public constructor
@@ -91,8 +139,10 @@ public class AddAssociateFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_add_associate, container, false);
         login = MyApplication.getLoginModel();
         id = login.getStrLoginID();
+        setStoragePermissionListener(this);
         findViewById(view);
         GetGender();
+
         return view;
     }
 
@@ -117,6 +167,12 @@ public class AddAssociateFragment extends Fragment {
         acetPassword = view.findViewById(R.id.acetPassword);
         acetConfirmPassword = view.findViewById(R.id.acetConfirmPassword);
         txt_address = view.findViewById(R.id.txt_address);
+        etAadharNo = view.findViewById(R.id.etAadharNo);
+        etPanNo = view.findViewById(R.id.etPanNo);
+        ivAadharFront = view.findViewById(R.id.ivAadharFront);
+        ivAadharBack = view.findViewById(R.id.ivAadharBack);
+        ivPan = view.findViewById(R.id.ivPan);
+        civProfile = view.findViewById(R.id.civProfile);
 
         btnSubmit = view.findViewById(R.id.btnsubmit);
 
@@ -185,9 +241,66 @@ public class AddAssociateFragment extends Fragment {
             }
         });
 
+
+        ivAadharFront.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileType = "1";
+                if (isPermissionGranted) {
+                    selectImageOption();
+                } else {
+                    checkStoragePermission();
+                }
+            }
+        });
+
+        ivAadharBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileType = "2";
+                if (isPermissionGranted) {
+                    selectImageOption();
+                } else {
+                    checkStoragePermission();
+                }
+            }
+        });
+
+        ivPan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileType = "3";
+                if (isPermissionGranted) {
+                    selectImageOption();
+                } else {
+                    checkStoragePermission();
+                }
+            }
+        });
+
+        civProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileType = "4";
+                if (isPermissionGranted) {
+                    selectImageOption();
+                } else {
+                    checkStoragePermission();
+                }
+
+            }
+        });
+
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String Pan = etPanNo.getText().toString().trim();
+
+                Pattern pattern = Pattern.compile("[A-Z]{5}[0-9]{4}[A-Z]{1}");
+
+                Matcher matcher = pattern.matcher(Pan);
+
                 if (leg.equalsIgnoreCase("")) {
                     ViewUtils.showToast("Please Check Position");
                 } else if (txt_customer_name.getText().toString().isEmpty()) {
@@ -227,6 +340,12 @@ public class AddAssociateFragment extends Fragment {
                 } else if (txt_address.getText().toString().isEmpty()) {
                     txt_address.setError(getString(R.string.error_field_required));
                     requestFocus(txt_address);
+                } else if (!etAadharNo.getText().toString().isEmpty() && etAadharNo.getText().length() != 12) {
+                    etAadharNo.setError("please enter valid aadhar card no.");
+                    requestFocus(etAadharNo);
+                } else if (!etPanNo.getText().toString().isEmpty() && !matcher.matches()) {
+                    etPanNo.setError("please enter valid pan card no.");
+                    requestFocus(etPanNo);
                 } else if (NetworkUtils.isNetworkConnected()) {
                     addAssociate();
                 } else {
@@ -446,8 +565,43 @@ public class AddAssociateFragment extends Fragment {
     }
 
     private void addAssociate() {
+
+        MultipartBody.Part pan = null;
+        MultipartBody.Part front = null;
+        MultipartBody.Part back = null;
+        MultipartBody.Part profile = null;
+
+        HashMap<String, RequestBody> map = new HashMap<>();
+        map.put("filename", RequestBody.create(MediaType.parse("text/plain"), ""));
+
+        /*HashMap<String,> map = new HashMap<>();
+        if (filePan != null)
+            map.put("PanCardImage", MultipartBody.Part.createFormData("PanCardImage", filePan.getName(), RequestBody.create(MediaType.parse("image/*"), filePan)));
+        if (fileAadharFront != null)
+            map.put("AadharCardFrontImage", MultipartBody.Part.createFormData("AadharCardFrontImage", fileAadharFront.getName(), RequestBody.create(MediaType.parse("image/*"), fileAadharFront)));
+        if (fileAadharBack != null)
+            map.put("AadharCardBackImage", MultipartBody.Part.createFormData("AadharCardBackImage", fileAadharBack.getName(), RequestBody.create(MediaType.parse("image/*"), fileAadharBack)));
+        if (fileProfile != null)
+            map.put("ProfilePic", MultipartBody.Part.createFormData("ProfilePic", fileAadharBack.getName(), RequestBody.create(MediaType.parse("image/*"), fileProfile)));*/
+
+
+
+        if (filePan != null)
+            pan = MultipartBody.Part.createFormData("PanCardImage", filePan.getName(), RequestBody.create(MediaType.parse("image/*"), filePan));
+        if (fileAadharFront != null)
+            front = MultipartBody.Part.createFormData("AadharCardFrontImage", fileAadharFront.getName(), RequestBody.create(MediaType.parse("image/*"), fileAadharFront));
+        if (fileAadharBack != null)
+            back = MultipartBody.Part.createFormData("AadharCardBackImage", fileAadharBack.getName(), RequestBody.create(MediaType.parse("image/*"), fileAadharBack));
+        if (fileProfile != null)
+            profile = MultipartBody.Part.createFormData("ProfilePic", fileAadharBack.getName(), RequestBody.create(MediaType.parse("image/*"), fileProfile));
+
+        /*if (reportFile != null)
+            profilePic = MultipartBody.Part.createFormData("avatar", reportFile.getName(), RequestBody.create(MediaType.parse("image/*"), reportFile));*/
+
+
         ViewUtils.startProgressDialog(getActivity());
-        final Call<AddAssociateModal> getAddCustomerEditCustomerCall = apiHelper.getAssociate(id, id, txt_customer_name.getText().toString().trim(), leg, gender_spinner.getSelectedItem().toString().trim(), txt_contact_no.getText().toString().trim(), txt_email_id.getText().toString().trim(), etDob.getText().toString().trim(), acetPassword.getText().toString().trim(), relation, acetFatherOf.getText().toString().trim(), txt_pincode.getText().toString().trim(), txt_state.getText().toString().trim(), txt_city.getText().toString().trim(), txt_address.getText().toString().trim());
+        final Call<AddAssociateModal> getAddCustomerEditCustomerCall = apiHelper.getAssociate(id, id, txt_customer_name.getText().toString().trim(), leg, gender_spinner.getSelectedItem().toString().trim(), txt_contact_no.getText().toString().trim(), txt_email_id.getText().toString().trim(), etDob.getText().toString().trim(), acetPassword.getText().toString().trim(), relation, acetFatherOf.getText().toString().trim(), txt_pincode.getText().toString().trim(), txt_state.getText().toString().trim(), txt_city.getText().toString().trim(), txt_address.getText().toString().trim(), etAadharNo.getText().toString().trim(),
+                etPanNo.getText().toString().trim(),front,back,pan,profile, map);
 
         getAddCustomerEditCustomerCall.enqueue(new Callback<AddAssociateModal>() {
             @Override
@@ -523,7 +677,237 @@ public class AddAssociateFragment extends Fragment {
             }
         });
 
+    }
 
+    public void selectImageOption() {
+        final String[] mimeTypes = {"image/*", "application/pdf"};
+        final CharSequence[] items = {getString(R.string.action_take_from_camera),
+                getString(R.string.action_choose_from_gallery), getString(R.string.action_cancel)};
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.title_add_document));
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals(getString(R.string.action_take_from_camera))) {
+                    dialog.dismiss();
+                    cameraUri = FileUtil.getInstance(getActivity()).createImageUri();
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
+                    startActivityForResult(intent, AppConstants.FEASIBILITY_REPORT_CAMERA);
+                } else if (items[item].equals(getString(R.string.action_choose_from_gallery))) {
+                    dialog.dismiss();
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        StringBuilder mimeTypesStr = new StringBuilder();
+                        for (String mimeType : mimeTypes) {
+                            mimeTypesStr.append(mimeType).append("|");
+                        }
+                        intent.setType(mimeTypesStr.substring(0, mimeTypesStr.length() - 1));
+                        startActivityForResult(Intent.createChooser(intent,
+                                getString(R.string.hint_select_picture)),
+                                AppConstants.FEASIBILITY_REPORT_BELOW_KITKAT_GALLERY);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("*/*");
+                        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+                        startActivityForResult(intent, AppConstants.FEASIBILITY_REPORT_ABOVE_KITKAT_GALLERY);
+                    }
+                } else if (items[item].equals(getString(R.string.action_cancel))) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == AppConstants.BELOW_KITKAT_GALLERY && data != null) {
+                Uri originalUri = data.getData();
+                getImagePath(originalUri);
+            } else if (requestCode == AppConstants.ABOVE_KITKAT_GALLERY && data != null) {
+                Uri originalUri = data.getData();
+                final int takeFlags = data.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                if (originalUri != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        getActivity().getContentResolver().takePersistableUriPermission(originalUri, takeFlags);
+                        getImagePath(originalUri);
+                    }
+                }
+            } else if (requestCode == AppConstants.CAMERA) {
+                if (cameraUri != null) {
+                    getImagePath(cameraUri);
+                }
+            }
+        }
+
+    }
+
+    public void getImagePath(Uri originalUri) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            String path = FileUtil.getRealPathFromURI_API11to18(getActivity(), originalUri);
+            Logger.d(TAG, "File path === " + path);
+            compressFile(path);
+        } else {
+            String path = FileUtil.getRealPathFromURI(getActivity(), originalUri);
+            Logger.d(TAG, "File path === " + path);
+            compressFile(path);
+        }
+    }
+
+    private void compressFile(String path) {
+        if (path != null) {
+            String ext = CommonUtils.getExt(path);
+            Logger.d(TAG, "File path extension === " + ext);
+            if (ext != null) {
+                ImageCompressTask imageCompressTask = new ImageCompressTask(getActivity(), path, imageCompressTaskListener);
+                mExecutorService.execute(imageCompressTask);
+                Logger.d(TAG, "File path === " + path);
+            }
+        } else {
+            ViewUtils.showErrorDialog(getActivity(), getString(R.string.error_choose_another_file),
+                    new DialogActionCallback() {
+                        @Override
+                        public void okAction() {
+
+                        }
+                    });
+        }
+    }
+
+    private ImageCompressTaskListener imageCompressTaskListener = new ImageCompressTaskListener() {
+        @Override
+        public void onComplete(List<File> compressed) {
+
+            //   Log.d("ImageCompressor2", "New photo size ==> " + file.length()); //log new file size.
+            if (fileType.equals("1")) {
+                fileAadharFront = compressed.get(0);
+                //aadharFront = fileAadharFront.getAbsolutePath();
+                ivAadharFront.setImageURI(Uri.fromFile(fileAadharFront));
+
+            }
+            if (fileType.equals("2")) {
+                fileAadharBack = compressed.get(0);
+                // aadharBack = fileAadharBack.getAbsolutePath();
+                ivAadharBack.setImageURI(Uri.fromFile(fileAadharBack));
+
+            }
+            if (fileType.equals("3")) {
+                filePan = compressed.get(0);
+                //pan = filePan.getAbsolutePath();
+                ivPan.setImageURI(Uri.fromFile(filePan));
+            }
+            if (fileType.equals("4")) {
+                fileProfile = compressed.get(0);
+                //profile = fileProfile.getAbsolutePath();
+                civProfile.setImageURI(Uri.fromFile(fileProfile));
+            }
+
+
+            //  profilePicPath = file.getAbsolutePath();
+            //  Logger.d(TAG, "File path === " + profilePicPath);
+            //showMessage("Profile pic added successfully");
+            // binding.profileImageView.setImageURI(Uri.fromFile(file));
+            // updateProfile();
+            //binding.profileImageView.setImageBitmap(BitmapFactory.decodeFile(profilePicPath));
+        }
+
+        @Override
+        public void onError(Throwable error) {
+            Logger.wtf("ImageCompressor2 ", "Error occurred == " + error);
+        }
+    };
+
+    @Override
+    public void isStoragePermissionGranted(boolean granted) {
+        isPermissionGranted = granted;
+    }
+
+    @Override
+    public void isUserPressedSetting(boolean pressed) {
+        isFromPermissionSettings = pressed;
+    }
+
+    protected void checkStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String[] PERMISSIONS = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE};
+            if (!hasPermissions(getActivity(), PERMISSIONS)) {
+                ActivityCompat.requestPermissions((Activity) getActivity(), PERMISSIONS,
+                        AppConstants.STORAGE_PERMISSION_REQUEST);
+            } else {
+                storagePermissionListener.isStoragePermissionGranted(true);
+            }
+        } else {
+            storagePermissionListener.isStoragePermissionGranted(true);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == AppConstants.STORAGE_PERMISSION_REQUEST) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permissions[0])) {
+                ViewUtils.showStoragePermissionDialog(getActivity(),
+                        getString(R.string.allow_storage_permission),
+                        getString(R.string.msg_storage_permission_denied_explanation),
+                        new DialogActionCallback() {
+                            @Override
+                            public void okAction() {
+                                //checkStoragePermission();
+                            }
+                        });
+            } else {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    storagePermissionListener.isStoragePermissionGranted(true);
+                } else {
+                    // User selected the Never Ask Again Option
+                    ViewUtils.showAlertDialog(getActivity(), getString(R.string.need_permission),
+                            getString(R.string.go_to_settings_give_permissions),
+                            getString(R.string.goto_settings),
+                            getString(R.string.action_cancel), new DialogActionCallback() {
+                                @Override
+                                public void okAction() {
+                                    storagePermissionListener.isUserPressedSetting(true);
+                                    Intent intent = new Intent();
+                                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package",
+                                            getActivity().getPackageName(), null);
+                                    intent.setData(uri);
+                                    getActivity().startActivity(intent);
+                                }
+                            });
+                }
+            }
+        }
+    }
+
+    private boolean hasPermissions(Context context, String... permissions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null
+                && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void setStoragePermissionListener(StoragePermissionListener storagePermissionListener) {
+        this.storagePermissionListener = storagePermissionListener;
     }
 
 }

@@ -57,13 +57,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 
 
 public class EditProfileActivity extends BaseActivity implements ArrowBackPressed,
@@ -82,7 +82,7 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
     private String profilePicPath;
     private LoginModel login;
     private GetProfileModel getProfile;
-    String EditMobileChange,EditEmailChange;
+    String EditMobileChange, EditEmailChange;
     String msg = "";
     private Uri cameraUri = null;
 
@@ -107,8 +107,6 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
 
         binding.setLogin(login);
         binding.setGetProfile(getProfile);
-
-
 
 
         apiHelper = ApiClient.getClient().create(ApiHelper.class);
@@ -136,19 +134,18 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (isFromPermissionSettings){
+        if (isFromPermissionSettings) {
             checkStoragePermission();
         }
 
     }
 
 
-
     private void GetProfileApi() {
 
-        String loginid=login.getStrLoginID();
-        Integer role=login.getIntRoleID();
-        Call<ApiResponse<List<GetProfileModel>>> GetProfileCall = apiHelper.getProfile(loginid,role);
+        String loginid = login.getStrLoginID();
+        Integer role = login.getIntRoleID();
+        Call<ApiResponse<List<GetProfileModel>>> GetProfileCall = apiHelper.getProfile(loginid, role);
         GetProfileCall.enqueue(new Callback<ApiResponse<List<GetProfileModel>>>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponse<List<GetProfileModel>>> call,
@@ -159,7 +156,7 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
                     if (response != null) {
                         if (response.body().getResponse().equalsIgnoreCase("Success")) {
                             List<GetProfileModel> login = response.body().getBody();
-                            getProfile=login.get(0);
+                            getProfile = login.get(0);
                             String email = login.get(0).getStrEmail().toString();
                             binding.setemail.setText(email.toString());
                             String mobile = login.get(0).getStrPhone();
@@ -190,8 +187,6 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
             }
         });
     }
-
-
 
 
     private void showFilterDialogEmail() {
@@ -231,24 +226,23 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
         binding.btnsubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditEmailChange=  binding.editemailnochange.getText().toString();
+                EditEmailChange = binding.editemailnochange.getText().toString();
 
                 submitFormEmailId();
             }
         });
 
 
-
-
     }
 
     public void onClickEditProfilePic(View view) {
-        if (isPermissionGranted){
+        if (isPermissionGranted) {
             selectImageOption();
-        }else {
+        } else {
             checkStoragePermission();
         }
     }
+
     private void updateProfile() {
         isUpdateProfile = false;
 
@@ -263,14 +257,14 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
             e.printStackTrace();
         }
         Call<ApiUploadImageResponse> updateProfileCall = apiHelper.getChangeProfile(getProfile.getStrDisplayName(),
-                String.valueOf(MyApplication.getLoginId()),profilePic);
+                String.valueOf(MyApplication.getLoginId()), profilePic);
         updateProfileCall.enqueue(new Callback<ApiUploadImageResponse>() {
             @Override
             public void onResponse(Call<ApiUploadImageResponse> call, final Response<ApiUploadImageResponse> response) {
                 showProgress(false);
                 if (response.isSuccessful()) {
-                    if (response!=null){
-                        if (response.body().getResponse().equalsIgnoreCase("Success")){
+                    if (response != null) {
+                        if (response.body().getResponse().equalsIgnoreCase("Success")) {
                             ViewUtils.showSuccessDialog(mContext, response.body().getMessage(),
                                     new DialogActionCallback() {
                                         @Override
@@ -294,7 +288,6 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
             }
         });
     }
-
 
 
     public void selectImageOption() {
@@ -343,10 +336,10 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
 
 
     private void GetEmailChange() {
-        String id=login.getStrLoginID();
-        Integer role=login.getIntRoleID();
+        String id = login.getStrLoginID();
+        Integer role = login.getIntRoleID();
         showProgress(true);
-        Call<EditEmailModel>getEditEmailCall = apiHelper.getEditEmail(id,EditEmailChange,role);
+        Call<EditEmailModel> getEditEmailCall = apiHelper.getEditEmail(id, EditEmailChange, role);
         getEditEmailCall.enqueue(new Callback<EditEmailModel>() {
             @Override
             public void onResponse(@NonNull Call<EditEmailModel> call,
@@ -363,15 +356,13 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
                                     }
                                 });
 
-                    }else{
+                    } else {
 
                     }
 
                 }
 
             }
-
-
 
 
             @Override
@@ -396,7 +387,6 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
         filterDialog.setCancelable(true);
         filterDialog.setCanceledOnTouchOutside(true);
         binding.setGetProfile(getProfile);
-
 
 
         ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
@@ -428,7 +418,7 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
         binding.btnsubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditMobileChange=  binding.editmobilenochange.getText().toString();
+                EditMobileChange = binding.editmobilenochange.getText().toString();
                 submitFormMobile();
 
             }
@@ -448,8 +438,8 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
     }
 
     private boolean validateMobileNo() {
-        if (!CommonUtils.isValidMobile(EditMobileChange)){
-            Toast.makeText(mContext, ""+getString(R.string.Please_Enter_Valid_Mobile_No), Toast.LENGTH_SHORT).show();
+        if (!CommonUtils.isValidMobile(EditMobileChange)) {
+            Toast.makeText(mContext, "" + getString(R.string.Please_Enter_Valid_Mobile_No), Toast.LENGTH_SHORT).show();
             msg = getString(R.string.Please_Enter_Valid_Mobile_No);
             return false;
         }
@@ -468,8 +458,8 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
     }
 
     private boolean validateEmailId() {
-        if (!CommonUtils.isValidEmail(EditEmailChange)){
-            Toast.makeText(mContext, ""+getString(R.string.Please_Enter_Valid_Email_ID), Toast.LENGTH_SHORT).show();
+        if (!CommonUtils.isValidEmail(EditEmailChange)) {
+            Toast.makeText(mContext, "" + getString(R.string.Please_Enter_Valid_Email_ID), Toast.LENGTH_SHORT).show();
             msg = getString(R.string.Please_Enter_Valid_Email_ID);
             return false;
         }
@@ -490,13 +480,12 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
     }
 
 
-
     private void GetMobileChange() {
 
-        String id=login.getStrLoginID();
-        Integer role=login.getIntRoleID();
+        String id = login.getStrLoginID();
+        Integer role = login.getIntRoleID();
         showProgress(true);
-        Call<EditMobileModel>getEditEmailCall = apiHelper.getEditMobile(id,EditMobileChange,role);
+        Call<EditMobileModel> getEditEmailCall = apiHelper.getEditMobile(id, EditMobileChange, role);
         getEditEmailCall.enqueue(new Callback<EditMobileModel>() {
             @Override
             public void onResponse(@NonNull Call<EditMobileModel> call,
@@ -516,15 +505,13 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
                                     }
                                 });
 
-                    }else{
+                    } else {
 
                     }
 
                 }
 
             }
-
-
 
 
             @Override
@@ -582,12 +569,12 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
     public void getImagePath(Uri originalUri) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             String path = FileUtil.getRealPathFromURI_API11to18(mContext, originalUri);
-            Logger.d(TAG, "File path === "+ path);
+            Logger.d(TAG, "File path === " + path);
             compressFile(path);
 
         } else {
             String path = FileUtil.getRealPathFromURI(mContext, originalUri);
-            Logger.d(TAG, "File path === "+ path);
+            Logger.d(TAG, "File path === " + path);
             compressFile(path);
 
         }
@@ -596,11 +583,11 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
     private void compressFile(String path) {
         if (path != null) {
             String ext = CommonUtils.getExt(path);
-            Logger.d(TAG, "File path extension === "+ ext);
-            if(ext != null) {
+            Logger.d(TAG, "File path extension === " + ext);
+            if (ext != null) {
                 ImageCompressTask imageCompressTask = new ImageCompressTask(mContext, path, imageCompressTaskListener);
                 mExecutorService.execute(imageCompressTask);
-                Logger.d(TAG, "File path === "+ path);
+                Logger.d(TAG, "File path === " + path);
 
 
             }
@@ -621,15 +608,16 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
             File file = compressed.get(0);
             Log.d("ImageCompressor2", "New photo size ==> " + file.length()); //log new file size.
             profilePicPath = file.getAbsolutePath();
-            Logger.d(TAG, "File path === "+ profilePicPath);
+            Logger.d(TAG, "File path === " + profilePicPath);
             //showMessage("Profile pic added successfully");
             binding.profileImageView.setImageURI(Uri.fromFile(file));
             updateProfile();
             //binding.profileImageView.setImageBitmap(BitmapFactory.decodeFile(profilePicPath));
         }
+
         @Override
         public void onError(Throwable error) {
-            Logger.wtf("ImageCompressor2 ", "Error occurred == "+ error);
+            Logger.wtf("ImageCompressor2 ", "Error occurred == " + error);
         }
     };
 
@@ -648,6 +636,8 @@ public class EditProfileActivity extends BaseActivity implements ArrowBackPresse
     public void isUserPressedSetting(boolean pressed) {
         isFromPermissionSettings = pressed;
     }
+
+
 }
 
 

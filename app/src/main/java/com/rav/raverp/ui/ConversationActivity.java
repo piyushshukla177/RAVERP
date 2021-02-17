@@ -98,7 +98,16 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
         if (isClosed.equalsIgnoreCase("true")) {
             rlSendMsg.setVisibility(View.GONE);
         } else {
-            handler = new Handler();
+
+            final Handler someHandler = new Handler(getMainLooper());
+            someHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getChatData();
+                    someHandler.postDelayed(this, 5000);
+                }
+            }, 5000);
+          /*  handler = new Handler();
             runnable = new Runnable() {
                 public void run() {
                     getChatData();
@@ -106,7 +115,7 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
                     handler.postDelayed(runnable, 5000);
                 }
 
-            };
+            };*/
 
             rlSendMsg.setVisibility(View.VISIBLE);
         }
@@ -150,7 +159,7 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
     }
 
     void getChatData() {
-       // ViewUtils.startProgressDialog(ConversationActivity.this);
+        //ViewUtils.startProgressDialog(ConversationActivity.this);
         Call<ChatModel> chatModelCall = apiHelper.getChatList(loginId, roleId, ticketNo, isClosed);
         chatModelCall.enqueue(new Callback<ChatModel>() {
             @Override
@@ -164,7 +173,6 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
                 rvChat.setLayoutManager(gridLayoutManager);
                 rvChat.setAdapter(chatListAdapter);
                 rvChat.setHasFixedSize(true);
-
             }
 
             @Override

@@ -1012,7 +1012,7 @@ public class AddWalletActivity extends BaseActivity implements ArrowBackPressed,
                 .setUdf8("")
                 .setUdf9("")
                 .setUdf10("")
-                .setIsDebug(true)                              // Integration environment - true (Debug)/ false(Production)
+                .setIsDebug(false)                              // Integration environment - true (Debug)/ false(Production)
                 .setKey(paymentGatewayModel.getMerchanteKey())                        // Merchant key
                 .setMerchantId(paymentGatewayModel.getSaltKey());
         try {

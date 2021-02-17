@@ -66,6 +66,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -123,6 +124,8 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
     public void setStoragePermissionListener(StoragePermissionListener storagePermissionListener) {
         this.storagePermissionListener = storagePermissionListener;
     }
+
+    File reportFile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -358,7 +361,7 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
                         ViewUtils.showToast("Please enter query");
                     } /*else if (picturePath.equalsIgnoreCase("")) {
                         ViewUtils.showToast("Please select attachment");
-                    } */else {
+                    } */ else {
                         if (NetworkUtils.isNetworkConnected()) {
                             createTicket();
                             // ViewUtils.showToast("Success");
@@ -644,6 +647,7 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
                 picturePath = fileUri.getPath();
                 filename = picturePath.substring(picturePath.lastIndexOf("/") + 1);
                 no_file_chosen_text_view.setText(filename);
+                reportFile = new File(picturePath);
                 Bitmap bitmap = null;
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), fileUri);
@@ -669,6 +673,7 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
                     filename = picturePath.substring(picturePath.lastIndexOf("/") + 1);
                     no_file_chosen_text_view.setText(filename);
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), picUri);
+                    reportFile = new File(picturePath);
                     ivAttachment.setImageBitmap(bitmap);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -870,23 +875,32 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
     }
 
     void createTicket() {
-        File reportFile = new File(picturePath);
-        RequestBody requestFile = RequestBody.create(reportFile,
-                MediaType.parse(reportFile.getAbsolutePath()));
-        MultipartBody.Part profilePic = MultipartBody.Part.createFormData("",
-                reportFile.getName(), requestFile);
-        try {
-            Logger.i(TAG, profilePic.body().contentLength() + "");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        HashMap<String, RequestBody> map = new HashMap<>();
+        map.put("filename", RequestBody.create(MediaType.parse("text/plain"), ""));
 
+        MultipartBody.Part profilePic = null;
+        if (reportFile != null)
+            profilePic = MultipartBody.Part.createFormData("avatar", reportFile.getName(), RequestBody.create(MediaType.parse("image/*"), reportFile));
+
+/*
+        if (picturePath != null || !picturePath.equalsIgnoreCase("")) {
+            RequestBody requestFile = RequestBody.create(reportFile,
+                    MediaType.parse(reportFile.getAbsolutePath()));
+             profilePic = MultipartBody.Part.createFormData("",
+                    reportFile.getName(), requestFile);
+            try {
+                Logger.i(TAG, profilePic.body().contentLength() + "");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+*/
         ViewUtils.startProgressDialog(getActivity());
         Call<CommonModel> commonModelCall = apiHelper.createTicket(loginId, roleId, subjectId, claimId, documentId,
                 paymentType, etTransactionNo.getText().toString().trim(), etAmount.getText().toString().trim(),
                 etDate.getText().toString().trim(), etIFSCCode.getText().toString().trim(),
                 etBranchName.getText().toString().trim(), etBankName.getText().toString().trim(),
-                etQuery.getText().toString().trim(), profilePic);
+                etQuery.getText().toString().trim(), profilePic, map);
         commonModelCall.enqueue(new Callback<CommonModel>() {
             @Override
             public void onResponse(Call<CommonModel> call, Response<CommonModel> response) {
