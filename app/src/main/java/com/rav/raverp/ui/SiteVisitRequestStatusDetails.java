@@ -1,21 +1,17 @@
 package com.rav.raverp.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
+
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
+
 
 import com.rav.raverp.R;
 import com.rav.raverp.data.interfaces.ArrowBackPressed;
-import com.rav.raverp.data.model.api.LeadListModel;
-import com.rav.raverp.data.model.api.SiteVisitRequestModel;
 import com.rav.raverp.data.model.api.SiteVisitRequestStatusModel;
-import com.rav.raverp.databinding.ActivityLeadListDetailsBinding;
-import com.rav.raverp.databinding.ActivitySiteVisitRequestDetailsBinding;
 import com.rav.raverp.databinding.ActivitySiteVisitRequestStatusDetailsBinding;
 
 public class SiteVisitRequestStatusDetails extends BaseActivity  implements ArrowBackPressed {
@@ -48,7 +44,6 @@ public class SiteVisitRequestStatusDetails extends BaseActivity  implements Arro
             if (siteVisitRequestStatusModel.getIntSiteVisitRequestStatus() == 1) {
                 binding.status.setText("Request Success");
                 binding.status.setTextColor(Color.parseColor("#008000"));
-
             }
         }
 

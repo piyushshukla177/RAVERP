@@ -93,7 +93,6 @@ import retrofit2.http.Multipart;
 
 public class AddAssociateFragment extends Fragment implements StoragePermissionListener {
 
-    Pattern pattern = Pattern.compile("[A-Z]{5}[0-9]{4}[A-Z]{1}");
 
     private static final String TAG = AddAssociateFragment.class.getSimpleName();
     private StoragePermissionListener storagePermissionListener;
@@ -173,7 +172,6 @@ public class AddAssociateFragment extends Fragment implements StoragePermissionL
         ivAadharBack = view.findViewById(R.id.ivAadharBack);
         ivPan = view.findViewById(R.id.ivPan);
         civProfile = view.findViewById(R.id.civProfile);
-
         btnSubmit = view.findViewById(R.id.btnsubmit);
 
         txt_pincode.addTextChangedListener(new TextWatcher() {
@@ -593,12 +591,7 @@ public class AddAssociateFragment extends Fragment implements StoragePermissionL
             @Override
             public void onResponse(Call<AddAssociateModal> call, Response<AddAssociateModal> response) {
                 ViewUtils.endProgressDialog();
-                /*try {
-                    JSONObject object = new JSONObject(new Gson().toJson(response.body()));
-                    Log.e("TAG", "onResponse: " + object);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
+
 
                 AddAssociateModal associateModal = response.body();
                 if (associateModal.getResponse().equalsIgnoreCase("Success")) {
@@ -622,35 +615,6 @@ public class AddAssociateFragment extends Fragment implements StoragePermissionL
                 }
 
 
-             /*   if (response.isSuccessful()) {
-                    if (response.body().getResponse().equalsIgnoreCase("Success")) {
-
-
-                        ViewUtils.showSuccessDialog(getActivity(), response.body().getMessage(),
-                                new DialogActionCallback() {
-                                    @Override
-                                    public void okAction() {
-
-                                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                                        startActivity(intent);
-                                    }
-                                });
-
-                    }
-                    else {
-
-                        if (response.body().getResponse().equalsIgnoreCase("Failure")) {
-                            ViewUtils.showErrorDialog(getActivity(), response.body().getMessage(),
-                                    new DialogActionCallback() {
-                                        @Override
-                                        public void okAction() {
-
-
-                                        }
-                                    });
-                        }
-                    }
-                }*/
             }
 
 
@@ -772,19 +736,15 @@ public class AddAssociateFragment extends Fragment implements StoragePermissionL
     private ImageCompressTaskListener imageCompressTaskListener = new ImageCompressTaskListener() {
         @Override
         public void onComplete(List<File> compressed) {
-
-            //   Log.d("ImageCompressor2", "New photo size ==> " + file.length()); //log new file size.
             if (fileType.equals("1")) {
                 fileAadharFront = compressed.get(0);
                 //aadharFront = fileAadharFront.getAbsolutePath();
                 ivAadharFront.setImageURI(Uri.fromFile(fileAadharFront));
-
             }
             if (fileType.equals("2")) {
                 fileAadharBack = compressed.get(0);
                 // aadharBack = fileAadharBack.getAbsolutePath();
                 ivAadharBack.setImageURI(Uri.fromFile(fileAadharBack));
-
             }
             if (fileType.equals("3")) {
                 filePan = compressed.get(0);
@@ -797,13 +757,6 @@ public class AddAssociateFragment extends Fragment implements StoragePermissionL
                 civProfile.setImageURI(Uri.fromFile(fileProfile));
             }
 
-
-            //  profilePicPath = file.getAbsolutePath();
-            //  Logger.d(TAG, "File path === " + profilePicPath);
-            //showMessage("Profile pic added successfully");
-            // binding.profileImageView.setImageURI(Uri.fromFile(file));
-            // updateProfile();
-            //binding.profileImageView.setImageBitmap(BitmapFactory.decodeFile(profilePicPath));
         }
 
         @Override

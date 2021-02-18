@@ -151,8 +151,7 @@ public class SiteVisitRequestFragment extends Fragment {
                             adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
 
                         }
-                    }
-                    else {
+                    } else {
                         mTotalItemCount = 0;
                         setupBadge();
                     }
@@ -225,17 +224,16 @@ public class SiteVisitRequestFragment extends Fragment {
 
                         }
 
+                    } else {
+                        mTotalItemCount = 0;
+                        setupBadge();
                     }
-
-                else {
+                } else {
                     mTotalItemCount = 0;
                     setupBadge();
                 }
-            } else {
-                mTotalItemCount = 0;
-                setupBadge();
             }
-        }
+
             @Override
             public void onFailure(Call<ApiResponse<List<SiteVisitRequestModel>>> call, Throwable t) {
                 if (!call.isCanceled()) {
@@ -279,6 +277,7 @@ public class SiteVisitRequestFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void setupBadge() {
         if (textTotalItemCount != null) {
             if (mTotalItemCount == 0) {

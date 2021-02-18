@@ -168,12 +168,12 @@ public class SiteVisitRequestStatusFragment extends Fragment {
 
         ViewUtils.startProgressDialog(getActivity());
 
-        if (RequestName.equalsIgnoreCase("--Select Requester Name--")){
-            RequestName="";
+        if (RequestName.equalsIgnoreCase("--Select Requester Name--")) {
+            RequestName = "";
         }
 
         Call<ApiResponse<List<SiteVisitRequestStatusModel>>> getSiteVisitRequestStatusModelCall =
-                apiHelper.getSiteVisitRequestStatusModel(RequestName,MobileNo);
+                apiHelper.getSiteVisitRequestStatusModel(RequestName, MobileNo);
 
         getSiteVisitRequestStatusModelCall.enqueue(new Callback<ApiResponse<List<SiteVisitRequestStatusModel>>>() {
             @Override
@@ -188,7 +188,7 @@ public class SiteVisitRequestStatusFragment extends Fragment {
                             List<SiteVisitRequestStatusModel> siteVisitRequestStatusModels = response.body().getBody();
                             siteVisitRequestStatusAdapter = new SiteVisitRequestStatusListAdapter(getActivity(), listItemClickListener, siteVisitRequestStatusModels);
                             recyclerSiteVisitRequestStatus.setAdapter(siteVisitRequestStatusAdapter);
-                            mTotalItemCount=siteVisitRequestStatusModels.size();
+                            mTotalItemCount = siteVisitRequestStatusModels.size();
                             setupBadge();
 
 
@@ -208,8 +208,7 @@ public class SiteVisitRequestStatusFragment extends Fragment {
 
                         }
 
-                    }
-                    else {
+                    } else {
                         mTotalItemCount = 0;
                         setupBadge();
                     }
@@ -263,6 +262,7 @@ public class SiteVisitRequestStatusFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void setupBadge() {
         if (textTotalItemCount != null) {
             if (mTotalItemCount == 0) {
@@ -278,7 +278,7 @@ public class SiteVisitRequestStatusFragment extends Fragment {
         }
     }
 
-    private void showFilterDialog()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   {
+    private void showFilterDialog() {
         filterDialog = new Dialog(getContext());
         final DialogSiteVisitRequestStatusFilterBinding binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.dialog_site_visit_request_status_filter, null, false);
@@ -303,7 +303,7 @@ public class SiteVisitRequestStatusFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 RequestName = binding.requestNameSpinner.getSelectedItem().toString();
-                MobileNo=binding.editMobileNo.getText().toString();
+                MobileNo = binding.editMobileNo.getText().toString();
             }
 
             @Override
@@ -323,6 +323,8 @@ public class SiteVisitRequestStatusFragment extends Fragment {
             }
         });
     }
+
+
 }
 
 
