@@ -44,6 +44,7 @@ import com.rav.raverp.BuildConfig;
 import com.rav.raverp.MyApplication;
 import com.rav.raverp.R;
 import com.rav.raverp.data.interfaces.DialogActionCallback;
+import com.rav.raverp.data.interfaces.ImageCompressTaskListener;
 import com.rav.raverp.data.interfaces.StoragePermissionListener;
 import com.rav.raverp.data.model.api.ApiResponse;
 import com.rav.raverp.data.model.api.ClaimTypeModel;
@@ -53,9 +54,12 @@ import com.rav.raverp.data.model.api.IFSCCodeModel;
 import com.rav.raverp.data.model.api.LoginModel;
 import com.rav.raverp.data.model.api.PaymentModeTypeModel;
 import com.rav.raverp.data.model.api.SubjectModel;
+import com.rav.raverp.data.thread.ImageCompressTask;
 import com.rav.raverp.network.ApiClient;
 import com.rav.raverp.network.ApiHelper;
 import com.rav.raverp.utils.AppConstants;
+import com.rav.raverp.utils.CommonUtils;
+import com.rav.raverp.utils.FileUtil;
 import com.rav.raverp.utils.Logger;
 import com.rav.raverp.utils.NetworkUtils;
 import com.rav.raverp.utils.ViewUtils;
@@ -69,6 +73,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -88,9 +94,10 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
     private static final int cameraRequest = 100, galleryRequest = 1001, mediaType = 1;
     String picturePath = "", filename = "", ext = "", encodedString = "";
     //Uri
-    Uri fileUri;
+    Uri cameraUri;
     private boolean isPermissionGranted = false;
     private boolean isFromPermissionSettings = false;
+    private ExecutorService mExecutorService = Executors.newFixedThreadPool(1);
 
     ApiHelper apiHelper;
 
@@ -495,32 +502,38 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
         final String[] mimeTypes = {"image/*", "application/pdf"};
         final CharSequence[] items = {getString(R.string.action_take_from_camera),
                 getString(R.string.action_choose_from_gallery), getString(R.string.action_cancel)};
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.title_add_document));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals(getString(R.string.action_take_from_camera))) {
                     dialog.dismiss();
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        fileUri = FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", getOutputMediaFile(mediaType));
-                        Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        it.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-                        startActivityForResult(it, cameraRequest);
-                    } else {
-                        // create Intent to take a picture and return control to the calling application
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        fileUri = getOutputMediaFileUri(mediaType); // create a file to save the image
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-                        // start the image capture Intent
-                        startActivityForResult(intent, cameraRequest);
-                    }
-
+                    cameraUri = FileUtil.getInstance(getActivity()).createImageUri();
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
+                    startActivityForResult(intent, AppConstants.FEASIBILITY_REPORT_CAMERA);
                 } else if (items[item].equals(getString(R.string.action_choose_from_gallery))) {
                     dialog.dismiss();
-                    Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(galleryIntent, galleryRequest);
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        StringBuilder mimeTypesStr = new StringBuilder();
+                        for (String mimeType : mimeTypes) {
+                            mimeTypesStr.append(mimeType).append("|");
+                        }
+                        intent.setType(mimeTypesStr.substring(0, mimeTypesStr.length() - 1));
+                        startActivityForResult(Intent.createChooser(intent,
+                                getString(R.string.hint_select_picture)),
+                                AppConstants.FEASIBILITY_REPORT_BELOW_KITKAT_GALLERY);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("*/*");
+                        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+                        startActivityForResult(intent, AppConstants.FEASIBILITY_REPORT_ABOVE_KITKAT_GALLERY);
+                    }
                 } else if (items[item].equals(getString(R.string.action_cancel))) {
                     dialog.dismiss();
                 }
@@ -642,51 +655,75 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
         super.onActivityResult(requestCode, resultCode, data);
         Log.e("StartPaymentActivity", "request code " + requestCode + " resultcode " + resultCode);
 
-        if (requestCode == cameraRequest) {
-            if (resultCode == RESULT_OK) {
-                picturePath = fileUri.getPath();
-                filename = picturePath.substring(picturePath.lastIndexOf("/") + 1);
-                no_file_chosen_text_view.setText(filename);
-                reportFile = new File(picturePath);
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), fileUri);
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == AppConstants.BELOW_KITKAT_GALLERY && data != null) {
+                Uri originalUri = data.getData();
+                getImagePath(originalUri);
+            } else if (requestCode == AppConstants.ABOVE_KITKAT_GALLERY && data != null) {
+                Uri originalUri = data.getData();
+                final int takeFlags = data.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                if (originalUri != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        getActivity().getContentResolver().takePersistableUriPermission(originalUri, takeFlags);
+                        getImagePath(originalUri);
+                    }
                 }
-                ivAttachment.setImageBitmap(bitmap);
-            }
-        } else if (requestCode == galleryRequest) {
-            if (data != null) {
-                try {
-                    Uri contentURI = data.getData();
-                    //get the Uri for the captured image
-                    Uri picUri = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getActivity().getContentResolver().query(contentURI, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    Log.v("pic", "pic");
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    picturePath = cursor.getString(columnIndex);
-                    System.out.println("Image Path : " + picturePath);
-                    cursor.close();
-                    filename = picturePath.substring(picturePath.lastIndexOf("/") + 1);
-                    no_file_chosen_text_view.setText(filename);
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), picUri);
-                    reportFile = new File(picturePath);
-                    ivAttachment.setImageBitmap(bitmap);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            } else if (requestCode == AppConstants.CAMERA) {
+                if (cameraUri != null) {
+                    getImagePath(cameraUri);
                 }
-
-            } else {
-                Toast.makeText(getActivity(), "unable to select image", Toast.LENGTH_LONG).show();
             }
-
-
         }
     }
 
+    public void getImagePath(Uri originalUri) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            String path = FileUtil.getRealPathFromURI_API11to18(getActivity(), originalUri);
+            Logger.d(TAG, "File path === " + path);
+            compressFile(path);
+        } else {
+            String path = FileUtil.getRealPathFromURI(getActivity(), originalUri);
+            Logger.d(TAG, "File path === " + path);
+            compressFile(path);
+        }
+    }
+
+    private void compressFile(String path) {
+        if (path != null) {
+            String ext = CommonUtils.getExt(path);
+            Logger.d(TAG, "File path extension === " + ext);
+            if (ext != null) {
+                ImageCompressTask imageCompressTask = new ImageCompressTask(getActivity(), path, imageCompressTaskListener);
+                mExecutorService.execute(imageCompressTask);
+                Logger.d(TAG, "File path === " + path);
+            }
+        } else {
+            ViewUtils.showErrorDialog(getActivity(), getString(R.string.error_choose_another_file),
+                    new DialogActionCallback() {
+                        @Override
+                        public void okAction() {
+
+                        }
+                    });
+        }
+    }
+
+    private ImageCompressTaskListener imageCompressTaskListener = new ImageCompressTaskListener() {
+        @Override
+        public void onComplete(List<File> compressed) {
+            reportFile = compressed.get(0);
+            Log.d("ImageCompressor2", "New photo size ==> " + reportFile.length()); //log new file size.
+            ivAttachment.setImageURI(Uri.fromFile(reportFile));
+
+        }
+
+        @Override
+        public void onError(Throwable error) {
+            Logger.wtf("ImageCompressor2 ", "Error occurred == " + error);
+        }
+    };
 
     void getSubject() {
         ViewUtils.startProgressDialog(getActivity());
