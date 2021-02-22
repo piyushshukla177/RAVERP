@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.Associate.AddTicketFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true">
@@ -22,7 +22,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:fontFamily="@font/googlesans_medium"
-                android:text="@string/subjectModel"
+                android:text="@string/supportType"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/black_900"
                 android:textSize="@dimen/_12sdp"
@@ -41,6 +41,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="@string/subject"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/black_900"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etSubject"
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:hint="Enter Subject"
+                android:singleLine="true" />
 
             <LinearLayout
                 android:id="@+id/llClaimType"
@@ -313,8 +335,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginVertical="@dimen/_5sdp"
-                android:background="@drawable/bg_edit_text"
-                android:minHeight="@dimen/_80sdp">
+                android:background="@drawable/bg_edit_text">
 
                 <EditText
                     android:id="@+id/etQuery"
@@ -322,7 +343,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
                     android:background="@null"
-                    android:hint="Type query here....." />
+                    android:gravity="left"
+                    android:hint="Type query here....."
+                    android:minHeight="@dimen/_80sdp" />
 
             </LinearLayout>
 
@@ -376,15 +399,23 @@
                         android:layout_marginRight="@dimen/_7sdp"
                         android:fontFamily="@font/googlesans_regular"
                         android:text="No file Chosen"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:visibility="gone" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAttachment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_10sdp" />
 
                 <ImageView
                     android:id="@+id/ivAttachment"
                     android:layout_width="@dimen/_100sdp"
                     android:layout_height="@dimen/_100sdp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_10sdp" />
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:visibility="gone" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatButton
@@ -402,5 +433,5 @@
                 android:textSize="@dimen/_12sdp" />
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </FrameLayout>

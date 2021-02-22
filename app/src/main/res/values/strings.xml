@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RAV</string>
+    <string name="app_name">RAV-Business</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
@@ -165,7 +165,8 @@
     <string name="password">Password:<font color='#FF0000'>*</font></string>
     <string name="confirmPassword">Confirm Password:<font color='#FF0000'>*</font></string>
     <string name="FatherHusband">Father/Husband:<font color='#FF0000'>*</font></string>
-    <string name="subjectModel">Subject<font color='#FF0000'>*</font></string>
+    <string name="supportType">Support Type<font color='#FF0000'>*</font></string>
+    <string name="subject">Subject<font color='#FF0000'>*</font></string>
     <string name="claimType">Claim Type<font color='#FF0000'>*</font></string>
     <string name="documentType">Document Type<font color='#FF0000'>*</font></string>
     <string name="paymentModeType">PaymentMode Type<font color='#FF0000'>*</font></string>
@@ -188,5 +189,7 @@
     <string name="error_msg_unknown">An unexpected error occurred</string>
     <string name="tap_to_reload">Tap to reload</string>
     <string name="menu_refresh">Refresh</string>
-
+    <string name="permissionMessage">Allow Permissions</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
 </resources>

@@ -99,6 +99,7 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ViewUtils.checkPermissions(this);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Dashboard");
         toolbar.setTitleTextColor(this.getResources().getColor(R.color.white));
@@ -106,8 +107,8 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
         setStoragePermissionListener(this);
         login = MyApplication.getLoginModel();
         textView = (TextView) findViewById(R.id.txtversion);
-       // textView.setText("Version : " + BuildConfig.VERSION_NAME + ", Date : " + CommonUtils.getCurrentDate());
-        textView.setText("Version : " + BuildConfig.VERSION_NAME );
+        // textView.setText("Version : " + BuildConfig.VERSION_NAME + ", Date : " + CommonUtils.getCurrentDate());
+        textView.setText("Version : " + BuildConfig.VERSION_NAME);
 
 
         navigationExpandableListView = (ExpandableNavigationListView) findViewById(R.id.expandable_navigation);
@@ -393,10 +394,12 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
                                 toolbar.setTitle("Add Ticket");
                                 loadFragment(new AddTicketFragment());
 
-                            }if(id==1){
+                            }
+                            if (id == 1) {
                                 toolbar.setTitle("Pending Tickets");
                                 loadFragment(new PendingTicketFragment());
-                            }if(id==2){
+                            }
+                            if (id == 2) {
                                 toolbar.setTitle("Closed Tickets");
                                 loadFragment(new ClosedTicketFragment());
                             }
@@ -627,6 +630,7 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
         transaction.commit();
         drawer.closeDrawer(GravityCompat.START);
     }
+
     @Override
     protected void onStart() {
         super.onStart();

@@ -54,7 +54,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private ListItemClickListener listItemClickListener;
 
-    public PaginationAdapter(Context context, PaginationAdapterCallback mCallback,  ListItemClickListener listItemClickListener) {
+    public PaginationAdapter(Context context, PaginationAdapterCallback mCallback, ListItemClickListener listItemClickListener) {
         this.context = context;
         this.mCallback = mCallback;
         plotAvailableModelList = new ArrayList<>();

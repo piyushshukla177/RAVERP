@@ -68,14 +68,11 @@ public class SiteVisitRequestStatusFragment extends Fragment {
     private ListItemClickListener listItemClickListener = new ListItemClickListener() {
         @Override
         public void onItemClicked(int itemPosition) {
-            siteVisitRequestStatusModel =
-                    siteVisitRequestStatusAdapter.getSiteVisitRequestStatusModel().get(itemPosition);
+            siteVisitRequestStatusModel = siteVisitRequestStatusAdapter.getSiteVisitRequestStatusModel().get(itemPosition);
 
             Intent intent = new Intent(getActivity(), SiteVisitRequestStatusDetails.class);
             intent.putExtra("sitevisitlist", siteVisitRequestStatusModel);
             startActivity(intent);
-
-
         }
     };
 
@@ -181,7 +178,6 @@ public class SiteVisitRequestStatusFragment extends Fragment {
                                    Response<ApiResponse<List<SiteVisitRequestStatusModel>>> response) {
 
                 ViewUtils.endProgressDialog();
-
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.body().getResponse().equalsIgnoreCase("Success")) {
@@ -190,8 +186,6 @@ public class SiteVisitRequestStatusFragment extends Fragment {
                             recyclerSiteVisitRequestStatus.setAdapter(siteVisitRequestStatusAdapter);
                             mTotalItemCount = siteVisitRequestStatusModels.size();
                             setupBadge();
-
-
                         } else {
                             recyclerSiteVisitRequestStatus.removeAllViewsInLayout();
                             mTotalItemCount = 0;
@@ -204,7 +198,6 @@ public class SiteVisitRequestStatusFragment extends Fragment {
 
                                         }
                                     });
-
 
                         }
 

@@ -20,6 +20,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -40,23 +42,31 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.jaiselrahman.filepicker.activity.FilePickerActivity;
+import com.jaiselrahman.filepicker.config.Configurations;
+import com.jaiselrahman.filepicker.model.MediaFile;
 import com.rav.raverp.BuildConfig;
 import com.rav.raverp.MyApplication;
 import com.rav.raverp.R;
+import com.rav.raverp.data.adapter.AttachmentAdapter;
+import com.rav.raverp.data.adapter.SendAttachmentAdapter;
 import com.rav.raverp.data.interfaces.DialogActionCallback;
 import com.rav.raverp.data.interfaces.ImageCompressTaskListener;
 import com.rav.raverp.data.interfaces.StoragePermissionListener;
 import com.rav.raverp.data.model.api.ApiResponse;
+import com.rav.raverp.data.model.api.AttachmentModel;
 import com.rav.raverp.data.model.api.ClaimTypeModel;
 import com.rav.raverp.data.model.api.CommonModel;
 import com.rav.raverp.data.model.api.DocumentTypeModel;
 import com.rav.raverp.data.model.api.IFSCCodeModel;
 import com.rav.raverp.data.model.api.LoginModel;
 import com.rav.raverp.data.model.api.PaymentModeTypeModel;
+import com.rav.raverp.data.model.api.SendAttachmentModel;
 import com.rav.raverp.data.model.api.SubjectModel;
 import com.rav.raverp.data.thread.ImageCompressTask;
 import com.rav.raverp.network.ApiClient;
 import com.rav.raverp.network.ApiHelper;
+import com.rav.raverp.ui.ConversationActivity;
 import com.rav.raverp.utils.AppConstants;
 import com.rav.raverp.utils.CommonUtils;
 import com.rav.raverp.utils.FileUtil;
@@ -87,6 +97,10 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class AddTicketFragment extends Fragment implements StoragePermissionListener {
+    //for file picker
+    private ArrayList<MediaFile> mediaFiles = new ArrayList<>();
+    private final static int FILE_REQUEST_CODE = 1;
+
     private static final String TAG = AddTicketFragment.class.getSimpleName();
 
     private StoragePermissionListener storagePermissionListener;
@@ -124,8 +138,9 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
 
     ImageView ivAttachment;
     AppCompatButton btnSubmit;
-    EditText etQuery, etTransactionNo, etAmount, etDate, etIFSCCode, etBankName, etBranchName;
+    EditText etSubject, etQuery, etTransactionNo, etAmount, etDate, etIFSCCode, etBankName, etBranchName;
     LinearLayout llClaimType, llDocumentType, llPaymentModeType, llCommon, llSecond;
+    RecyclerView rvAttachment;
 
 
     public void setStoragePermissionListener(StoragePermissionListener storagePermissionListener) {
@@ -133,6 +148,8 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
     }
 
     File reportFile;
+
+    ArrayList<AttachmentModel> spacecrafts = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -151,6 +168,7 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
 
     void findViewById(View view) {
         spSubject = view.findViewById(R.id.spSubject);
+        etSubject = view.findViewById(R.id.etSubject);
         spClaimType = view.findViewById(R.id.spClaimType);
         spDocumentType = view.findViewById(R.id.spDocumentType);
         spPaymentModeType = view.findViewById(R.id.spPaymentModeType);
@@ -169,14 +187,16 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
         choose_file = view.findViewById(R.id.choose_file);
         no_file_chosen_text_view = view.findViewById(R.id.no_file_chosen_text_view);
         ivAttachment = view.findViewById(R.id.ivAttachment);
+        rvAttachment = view.findViewById(R.id.rvAttachment);
         btnSubmit = view.findViewById(R.id.btnSubmit);
 
 
         choose_file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openFilePicker();
                 if (isPermissionGranted) {
-                    selectImageOption();
+                    // selectImageOption();
                 } else {
                     checkStoragePermission();
                 }
@@ -361,6 +381,8 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
             public void onClick(View v) {
                 if (spSubject.getSelectedItemPosition() == 0) {
                     ViewUtils.showToast("Please select subject");
+                } else if (etSubject.getText().toString().isEmpty()) {
+                    ViewUtils.showToast("Please enter subject");
                 } else if (spSubject.getSelectedItem().toString().equalsIgnoreCase("Delay in Documents")) {
                     if (spDocumentType.getSelectedItemPosition() == 0) {
                         ViewUtils.showToast("Please select document");
@@ -398,7 +420,7 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
                                 ViewUtils.showToast("Please enter date");
                             } else if (etQuery.getText().toString().isEmpty()) {
                                 ViewUtils.showToast("Please enter query");
-                            } else if (picturePath.equalsIgnoreCase("")) {
+                            } else if (mediaFiles.size() == 0) {
                                 ViewUtils.showToast("Please select attachment");
                             } else {
                                 if (NetworkUtils.isNetworkConnected()) {
@@ -430,7 +452,7 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
                                 ViewUtils.showToast("Invalid IFSC Code,Please enter valid IFSC code");
                             } else if (etQuery.getText().toString().isEmpty()) {
                                 ViewUtils.showToast("Please enter query");
-                            } else if (picturePath.equalsIgnoreCase("")) {
+                            } else if (mediaFiles.size() == 0) {
                                 ViewUtils.showToast("Please select attachment");
                             } else {
                                 if (NetworkUtils.isNetworkConnected()) {
@@ -457,7 +479,7 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
                             ViewUtils.showToast("Please enter date");
                         } else if (etQuery.getText().toString().isEmpty()) {
                             ViewUtils.showToast("Please enter query");
-                        } else if (picturePath.equalsIgnoreCase("")) {
+                        } else if (mediaFiles.size() == 0) {
                             ViewUtils.showToast("Please select attachment");
                         } else {
                             if (NetworkUtils.isNetworkConnected()) {
@@ -529,6 +551,7 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
                                 AppConstants.FEASIBILITY_REPORT_BELOW_KITKAT_GALLERY);
                     } else {
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
                         intent.setType("*/*");
                         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
@@ -676,6 +699,23 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
                 }
             }
         }
+        if (requestCode == FILE_REQUEST_CODE
+                && resultCode == RESULT_OK
+                && data != null) {
+            mediaFiles.clear();
+            mediaFiles.addAll(data.<MediaFile>getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES));
+
+            showUriList(mediaFiles);
+
+         /*   Log.d("mediaFiles", mediaFiles.get(0).getPath());
+
+            String filename = mediaFiles.get(0).getPath().substring(mediaFiles.get(0).getPath().lastIndexOf("/") + 1);
+
+            File imageFile = new File(mediaFiles.get(0).getPath());
+            Log.v("lqshqs", imageFile.toString());*/
+
+
+        }
     }
 
     public void getImagePath(Uri originalUri) {
@@ -715,8 +755,10 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
         public void onComplete(List<File> compressed) {
             reportFile = compressed.get(0);
             Log.d("ImageCompressor2", "New photo size ==> " + reportFile.length()); //log new file size.
+            String profilePicPath = reportFile.getAbsolutePath();
+            picturePath = profilePicPath.substring(profilePicPath.lastIndexOf("/") + 1);
             ivAttachment.setImageURI(Uri.fromFile(reportFile));
-
+            no_file_chosen_text_view.setText(picturePath);
         }
 
         @Override
@@ -911,41 +953,48 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
         });
     }
 
+    MultipartBody.Part prepareFilePart(String partName, MediaFile fileUri) {
+
+        File file = new File(fileUri.getPath());
+
+        RequestBody surveyBody = RequestBody.create(MediaType.parse("image/*"), file);
+        //RequestBody requestBody = RequestBody.create(MediaType.parse(getContentResolver().getType(fileUri)), file);
+
+        return MultipartBody.Part.createFormData(partName, file.getName(), surveyBody);
+    }
+
+
     void createTicket() {
+        List<MultipartBody.Part> parts = new ArrayList<>();
+
+        if (mediaFiles != null) {
+            for (int i = 0; i < mediaFiles.size(); i++) {
+                parts.add(prepareFilePart(i + "", mediaFiles.get(i)));
+
+            }
+        }
         HashMap<String, RequestBody> map = new HashMap<>();
         map.put("filename", RequestBody.create(MediaType.parse("text/plain"), ""));
 
         MultipartBody.Part profilePic = null;
         if (reportFile != null)
-            profilePic = MultipartBody.Part.createFormData("avatar", reportFile.getName(), RequestBody.create(MediaType.parse("image/*"), reportFile));
+            profilePic = MultipartBody.Part.createFormData("", reportFile.getName(), RequestBody.create(MediaType.parse("image/*"), reportFile));
 
-/*
-        if (picturePath != null || !picturePath.equalsIgnoreCase("")) {
-            RequestBody requestFile = RequestBody.create(reportFile,
-                    MediaType.parse(reportFile.getAbsolutePath()));
-             profilePic = MultipartBody.Part.createFormData("",
-                    reportFile.getName(), requestFile);
-            try {
-                Logger.i(TAG, profilePic.body().contentLength() + "");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-*/
         ViewUtils.startProgressDialog(getActivity());
-        Call<CommonModel> commonModelCall = apiHelper.createTicket(loginId, roleId, subjectId, claimId, documentId,
+        Call<CommonModel> commonModelCall = apiHelper.createTicket(loginId, roleId, subjectId, etSubject.getText().toString().trim(), claimId, documentId,
                 paymentType, etTransactionNo.getText().toString().trim(), etAmount.getText().toString().trim(),
                 etDate.getText().toString().trim(), etIFSCCode.getText().toString().trim(),
                 etBranchName.getText().toString().trim(), etBankName.getText().toString().trim(),
-                etQuery.getText().toString().trim(), profilePic, map);
+                etQuery.getText().toString().trim(), parts, map);
         commonModelCall.enqueue(new Callback<CommonModel>() {
             @Override
             public void onResponse(Call<CommonModel> call, Response<CommonModel> response) {
-                ViewUtils.endProgressDialog();
-                if (response.isSuccessful()) {
 
+                if (response.isSuccessful()) {
+                    ViewUtils.endProgressDialog();
                     if (response != null) {
                         if (response.body().getResponse().equalsIgnoreCase("Success")) {
+                            rvAttachment.removeAllViewsInLayout();
                             ViewUtils.showSuccessDialog(getActivity(), response.body().getMessage(),
                                     new DialogActionCallback() {
                                         @Override
@@ -980,4 +1029,46 @@ public class AddTicketFragment extends Fragment implements StoragePermissionList
             }
         });
     }
+
+    private void openFilePicker() {
+
+        mediaFiles.clear();
+
+        Intent intent = new Intent(getActivity(), FilePickerActivity.class);
+        intent.putExtra(FilePickerActivity.CONFIGS, new Configurations.Builder()
+                .setCheckPermission(true)
+                .setSelectedMediaFiles(mediaFiles)
+                .setShowFiles(true)
+                .setShowImages(true)
+                .setShowAudios(false)
+                .setShowVideos(false)
+                .setIgnoreNoMedia(false)
+                .enableVideoCapture(false)
+                .enableImageCapture(true)
+                .setIgnoreHiddenFile(true)
+                .setSkipZeroSizeFiles(true)
+                .setIgnoreNoMedia(true)
+                .setSuffixes("pdf", "doc", "docx")
+                .setMaxSelection(10)
+                .build());
+        startActivityForResult(intent, FILE_REQUEST_CODE);
+    }
+
+    private void showUriList(List<MediaFile> mediaFiles) {
+        AttachmentModel s;
+
+        for (MediaFile path : mediaFiles) {
+            s = new AttachmentModel();
+            s.setName(path.getPath().substring(path.getPath().lastIndexOf("/") + 1));
+
+            s.setFile(path);
+            spacecrafts.add(s);
+        }
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+        rvAttachment.setLayoutManager(gridLayoutManager);
+        rvAttachment.setAdapter(new AttachmentAdapter(getActivity(), spacecrafts));
+        rvAttachment.setHasFixedSize(true);
+    }
+
+
 }

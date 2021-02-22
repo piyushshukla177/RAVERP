@@ -53,17 +53,13 @@ import com.rav.raverp.data.model.api.WalletAccessResponse;
 import com.rav.raverp.data.model.api.WalletAmountListModel;
 import com.rav.raverp.data.model.local.ChangePasswordModel;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -399,7 +395,6 @@ public interface ApiHelper {
                                                    @Query("email") String email);
 
     //MemberRegistration
-    //@Headers({"Content-Type: application/json"})
     @Multipart
     @POST(ApiEndPoint.MemberRegistration)
     Call<AddAssociateModal> getAssociate(@Query("MemberLoginId") String MemberLoginId,
@@ -518,6 +513,7 @@ public interface ApiHelper {
     Call<CommonModel> createTicket(@Query("AssociateLoginId") String AssociateLoginId,
                                    @Query("RoleId") int RoleId,
                                    @Query("SubjectId") int SubjectId,
+                                   @Query("Subject") String Subject,
                                    @Query("ClaimType") int ClaimType,
                                    @Query("intDocumentTypeId") int intDocumentTypeId,
                                    @Query("strPaymentType") String strPaymentType,
@@ -528,7 +524,7 @@ public interface ApiHelper {
                                    @Query("strBranchName") String strBranchName,
                                    @Query("strBankName") String strBankName,
                                    @Query("Query") String Query,
-                                   @Part MultipartBody.Part slip,
+                                   @Part List<MultipartBody.Part> parts,
                                    @PartMap() Map<String, RequestBody> partMap);
 
     //GetPending Ticket List
@@ -555,11 +551,23 @@ public interface ApiHelper {
                                 @Query("closed") String closed);
 
 
-    //Chat List
-    @Headers({"Content-Type:application/json"})
+    //send msg
+    @Multipart
     @POST(ApiEndPoint.MsgSend)
     Call<CommonModel> sendMsg(@Query("AssociateLoginId") String AssociateLoginId,
                               @Query("RoleId") int RoleId,
                               @Query("TicketNo") String TicketNo,
-                              @Query("Msg") String Msg);
+                              @Query("Msg") String Msg,
+                              @Part MultipartBody.Part [] slip,
+                              @PartMap() Map<String, RequestBody> partMap);
+
+    //send msg
+    @Multipart
+    @POST(ApiEndPoint.MsgSend)
+    Call<CommonModel> sendMsg(@Query("AssociateLoginId") String AssociateLoginId,
+                              @Query("RoleId") int RoleId,
+                              @Query("TicketNo") String TicketNo,
+                              @Query("Msg") String Msg,
+                              @Part List<MultipartBody.Part> parts,
+                              @PartMap() Map<String, RequestBody> partMap);
 }

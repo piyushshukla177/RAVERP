@@ -7,12 +7,14 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -21,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
@@ -349,6 +352,30 @@ public class ViewUtils {
                 dialog.dismiss();
             }
         });
+    }
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static void checkPermissions(Activity activity) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            RuntimePermissionHelper runtimePermissionHelper = RuntimePermissionHelper.getInstance( activity );
+            if (RuntimePermissionHelper.isAllPermissionAvailable()) {
+                // All permissions available. Go with the flow
+            } else {
+                // Few permissions not granted. Ask for ungranted permissions
+                runtimePermissionHelper.setActivity( activity );
+                RuntimePermissionHelper.requestPermissionsIfDenied();
+            }
+        }
+
     }
 
 }
