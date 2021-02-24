@@ -87,12 +87,12 @@ public class ChatAttachmentAdapter extends RecyclerView.Adapter<ChatAttachmentAd
             @Override
             public void onClick(View v) {
                 if (type.equalsIgnoreCase("chat")) {
-                    //new GetImages("https://ravgroup.org/images/SupportAttachments/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"), ".jpg");
-                    new DownloadTask().execute(stringToURL("https://ravgroup.org/images/SupportAttachments/" + hashMapArrayList.get(position).get("attachment")));
+                    new GetImages("https://ravgroup.org/images/SupportAttachments/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"), ".jpg").execute();
+                    // new DownloadTask().execute(stringToURL("https://ravgroup.org/images/SupportAttachments/" + hashMapArrayList.get(position).get("attachment")));
                     // downloadByVolley("https://ravgroup.org/images/SupportAttachments/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"));
                 } else {
-                    //  new GetImages("https://ravgroup.org/images/SupportDocs/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"), ".jpg");
-                    new DownloadTask().execute(stringToURL("https://ravgroup.org/images/SupportDocs/" + hashMapArrayList.get(position).get("attachment")));
+                    new GetImages("https://ravgroup.org/images/SupportDocs/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"), ".jpg").execute();
+                    // new DownloadTask().execute(stringToURL("https://ravgroup.org/images/SupportDocs/" + hashMapArrayList.get(position).get("attachment")));
                     // downloadByVolley("https://ravgroup.org/images/SupportDocs/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"));
                 }
 
