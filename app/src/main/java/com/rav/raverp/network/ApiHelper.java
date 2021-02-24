@@ -3,6 +3,7 @@ package com.rav.raverp.network;
 import com.rav.raverp.data.model.api.ActivityLogModel;
 import com.rav.raverp.data.model.api.AddAssociateModal;
 import com.rav.raverp.data.model.api.AddCustomerEditCustomer;
+import com.rav.raverp.data.model.api.AllSupportTicketModel;
 import com.rav.raverp.data.model.api.ApiResponse;
 import com.rav.raverp.data.model.api.ApiUploadImageResponse;
 import com.rav.raverp.data.model.api.AssociateWalletAmount;
@@ -495,7 +496,7 @@ public interface ApiHelper {
     //GetDocumentType
     @Headers({"Content-Type:application/json"})
     @GET(ApiEndPoint.Documents)
-    Call<ApiResponse<List<DocumentTypeModel>>> getDocument();
+    Call<ApiResponse<List<DocumentTypeModel>>> getDocument(@Query("SupportSubjectId") int SupportSubjectId);
 
     //GetPaymentMode Type
     @Headers({"Content-Type:application/json"})
@@ -525,7 +526,8 @@ public interface ApiHelper {
                                    @Query("strBankName") String strBankName,
                                    @Query("Query") String Query,
                                    @Part List<MultipartBody.Part> parts,
-                                   @PartMap() Map<String, RequestBody> partMap);
+                                   @PartMap() Map<String, RequestBody> partMap,
+                                   @Query("Priority") String Priority);
 
     //GetPending Ticket List
     @Headers({"Content-Type:application/json"})
@@ -548,7 +550,7 @@ public interface ApiHelper {
     Call<ChatModel> getChatList(@Query("AssociateLoginId") String AssociateLoginId,
                                 @Query("RoleId") int RoleId,
                                 @Query("TicketNo") String TicketNo,
-                                @Query("closed") String closed);
+                                @Query("closed") boolean closed);
 
 
     //send msg
@@ -558,7 +560,7 @@ public interface ApiHelper {
                               @Query("RoleId") int RoleId,
                               @Query("TicketNo") String TicketNo,
                               @Query("Msg") String Msg,
-                              @Part MultipartBody.Part [] slip,
+                              @Part MultipartBody.Part[] slip,
                               @PartMap() Map<String, RequestBody> partMap);
 
     //send msg
@@ -570,4 +572,20 @@ public interface ApiHelper {
                               @Query("Msg") String Msg,
                               @Part List<MultipartBody.Part> parts,
                               @PartMap() Map<String, RequestBody> partMap);
+
+    //AllSupportTicket  List
+    @Headers({"Content-Type:application/json"})
+    @POST(ApiEndPoint.AllSupportTicket)
+    Call<ApiResponse<List<AllSupportTicketModel>>> getAllSupportTicket(@Query("AssociateLoginId") String AssociateLoginId,
+                                                                       @Query("RoleId") int RoleId,
+                                                                       @Query("Start") int Start,
+                                                                       @Query("End") int End);
+
+    //AllSupportTicket  List
+    @Headers({"Content-Type:application/json"})
+    @POST(ApiEndPoint.CloseSupportTicket)
+    Call<CommonModel> closedTickets(@Query("AssociateLoginId") String AssociateLoginId,
+                                    @Query("RoleId") int RoleId,
+                                    @Query("TicketNo") String TicketNo,
+                                    @Query("Feedback") String Feedback);
 }

@@ -2,46 +2,35 @@ package com.rav.raverp.data.adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.rav.raverp.R;
 import com.rav.raverp.data.interfaces.ListItemClickListener;
+import com.rav.raverp.data.model.api.AllSupportTicketModel;
 import com.rav.raverp.data.model.api.PlotAvailableModel;
-import com.rav.raverp.data.model.api.PlotCostModal;
 import com.rav.raverp.utils.PaginationAdapterCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Suleiman on 19/10/16.
- */
-
-public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+public class AllSupportTicketAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // View Types
     private static final int ITEM = 0;
     private static final int LOADING = 1;
 
 
-
-    private List<PlotAvailableModel> plotAvailableModelList;
+    private List<AllSupportTicketModel> allSupportTicketModelList;
     private Context context;
 
     private boolean isLoadingAdded = false;
@@ -53,21 +42,18 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private ListItemClickListener listItemClickListener;
 
-    public PaginationAdapter(Context context, PaginationAdapterCallback mCallback, ListItemClickListener listItemClickListener) {
+    public AllSupportTicketAdapter(Context context, PaginationAdapterCallback mCallback, ListItemClickListener listItemClickListener) {
         this.context = context;
         this.mCallback = mCallback;
-        plotAvailableModelList = new ArrayList<>();
+        allSupportTicketModelList = new ArrayList<>();
         this.listItemClickListener = listItemClickListener;
     }
 
-    public List<PlotAvailableModel> getPlots() {
-        return plotAvailableModelList;
+    public List<AllSupportTicketModel> getAllTickets() {
+        return allSupportTicketModelList;
     }
 
-    public void setMovies(List<PlotAvailableModel> movieResults) {
-        this.plotAvailableModelList = movieResults;
-    }
-
+    @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
@@ -75,8 +61,8 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         switch (viewType) {
             case ITEM:
-                View viewItem = inflater.inflate(R.layout.item_available_plot, parent, false);
-                viewHolder = new PlotVH(viewItem);
+                View viewItem = inflater.inflate(R.layout.item_closed_pending_ticket, parent, false);
+                viewHolder = new TicketVH(viewItem);
                 break;
             case LOADING:
                 View viewLoading = inflater.inflate(R.layout.item_progress, parent, false);
@@ -89,23 +75,31 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        PlotAvailableModel result = plotAvailableModelList.get(position); // Movie
+        AllSupportTicketModel result = allSupportTicketModelList.get(position); // Movie
 
         switch (getItemViewType(position)) {
 
             case ITEM:
-                final PlotVH movieVH = (PlotVH) holder;
+                final TicketVH ticketVH = (TicketVH) holder;
+                ticketVH.tvSupportFor.setText(result.getSupportfor());
+                ticketVH.tvSupportType.setText(result.getSupporttype());
+                ticketVH.tvStatus.setText(result.getStatus());
+                ticketVH.tvSubject.setText("#" + result.getTicketno() + "-" + result.getSubject());
+                ticketVH.tvLastUpdate.setText(result.getLastupdated());
 
-                movieVH.sno.setText(result.getSNo() + "");
-                movieVH.tvPlotNo.setText(result.getStrPlotNo());
-                movieVH.tvStatus.setText(result.getStrBookingPlotStatus());
+                if (result.getStatus().equalsIgnoreCase("Opened")) {
+                    ticketVH.tvStatus.setBackgroundColor(context.getResources().getColor(R.color.lightYellow));
+                    ticketVH.tvStatus.setTextColor(context.getResources().getColor(R.color.black));
+                } else if (result.getStatus().equalsIgnoreCase("Answered")) {
+                    ticketVH.tvStatus.setBackgroundColor(context.getResources().getColor(R.color.black));
+                    ticketVH.tvStatus.setTextColor(context.getResources().getColor(R.color.white));
 
+                } else if (result.getStatus().equalsIgnoreCase("Closed")) {
+                    ticketVH.tvStatus.setBackgroundColor(context.getResources().getColor(R.color.lightRed));
+                    ticketVH.tvStatus.setTextColor(context.getResources().getColor(R.color.white));
+                }
 
-                movieVH.show_more_text_view.setPaintFlags(
-                        movieVH.show_more_text_view.getPaintFlags() |
-                                Paint.UNDERLINE_TEXT_FLAG);
-
-                movieVH.show_more_text_view.setOnClickListener(new View.OnClickListener() {
+                ticketVH.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         listItemClickListener.onItemClicked(position);
@@ -136,12 +130,12 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return plotAvailableModelList == null ? 0 : plotAvailableModelList.size();
+        return allSupportTicketModelList == null ? 0 : allSupportTicketModelList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position == plotAvailableModelList.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
+        return (position == allSupportTicketModelList.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
     }
 
     /*
@@ -169,21 +163,21 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         Helpers - Pagination
    _________________________________________________________________________________________________
     */
-    public void add(PlotAvailableModel r) {
-        plotAvailableModelList.add(r);
-        notifyItemInserted(plotAvailableModelList.size() - 1);
+    public void add(AllSupportTicketModel r) {
+        allSupportTicketModelList.add(r);
+        notifyItemInserted(allSupportTicketModelList.size() - 1);
     }
 
-    public void addAll(List<PlotAvailableModel> moveResults) {
-        for (PlotAvailableModel result : moveResults) {
+    public void addAll(List<AllSupportTicketModel> moveResults) {
+        for (AllSupportTicketModel result : moveResults) {
             add(result);
         }
     }
 
-    public void remove(PlotAvailableModel r) {
-        int position = plotAvailableModelList.indexOf(r);
+    public void remove(AllSupportTicketModel r) {
+        int position = allSupportTicketModelList.indexOf(r);
         if (position > -1) {
-            plotAvailableModelList.remove(position);
+            allSupportTicketModelList.remove(position);
             notifyItemRemoved(position);
         }
     }
@@ -202,23 +196,23 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void addLoadingFooter() {
         isLoadingAdded = true;
-        add(new PlotAvailableModel());
+        add(new AllSupportTicketModel());
     }
 
     public void removeLoadingFooter() {
         isLoadingAdded = false;
 
-        int position = plotAvailableModelList.size() - 1;
-        PlotAvailableModel result = getItem(position);
+        int position = allSupportTicketModelList.size() - 1;
+        AllSupportTicketModel result = getItem(position);
 
         if (result != null) {
-            plotAvailableModelList.remove(position);
+            allSupportTicketModelList.remove(position);
             notifyItemRemoved(position);
         }
     }
 
-    public PlotAvailableModel getItem(int position) {
-        return plotAvailableModelList.get(position);
+    public AllSupportTicketModel getItem(int position) {
+        return allSupportTicketModelList.get(position);
     }
 
     /**
@@ -229,7 +223,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     public void showRetry(boolean show, @Nullable String errorMsg) {
         retryPageLoad = show;
-        notifyItemChanged(plotAvailableModelList.size() - 1);
+        notifyItemChanged(allSupportTicketModelList.size() - 1);
 
         if (errorMsg != null) this.errorMsg = errorMsg;
     }
@@ -240,36 +234,20 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
    _________________________________________________________________________________________________
     */
 
-    /**
-     * Header ViewHolder
-     */
-    protected class HeroVH extends RecyclerView.ViewHolder {
-
-        TextView sno, tvPlotNo, tvStatus, show_more_text_view;
-
-        public HeroVH(View itemView) {
-            super(itemView);
-
-            sno = itemView.findViewById(R.id.sno);
-            tvPlotNo = itemView.findViewById(R.id.tvPlotNo);
-            tvStatus = itemView.findViewById(R.id.tvStatus);
-            show_more_text_view = itemView.findViewById(R.id.show_more_text_view);
-        }
-    }
 
     /**
      * Main list's content ViewHolder
      */
-    protected class PlotVH extends RecyclerView.ViewHolder {
-        TextView sno, tvPlotNo, tvStatus, show_more_text_view;
+    protected class TicketVH extends RecyclerView.ViewHolder {
+        TextView tvSupportFor, tvSupportType, tvSubject, tvStatus, tvLastUpdate;
 
-        public PlotVH(View itemView) {
+        public TicketVH(View itemView) {
             super(itemView);
-
-            sno = itemView.findViewById(R.id.sno);
-            tvPlotNo = itemView.findViewById(R.id.tvPlotNo);
+            tvSupportFor = itemView.findViewById(R.id.tvSupportFor);
+            tvSupportType = itemView.findViewById(R.id.tvSupportType);
+            tvSubject = itemView.findViewById(R.id.tvSubject);
             tvStatus = itemView.findViewById(R.id.tvStatus);
-            show_more_text_view = itemView.findViewById(R.id.show_more_text_view);
+            tvLastUpdate = itemView.findViewById(R.id.tvLastUpdate);
         }
     }
 
@@ -304,5 +282,4 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
         }
     }
-
 }

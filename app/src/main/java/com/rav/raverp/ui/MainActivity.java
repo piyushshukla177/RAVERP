@@ -243,13 +243,9 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
                 .addHeaderModel(
                         new HeaderModel("Goal", R.drawable.ic_baseline_my_location_24, true)
                                 .addChildModel(new ChildModel("My Goal", R.drawable.ic_baseline_arrow_forward_24)))
-                /* .addHeaderModel(
-                         new HeaderModel("Customer Management", R.drawable.ic_baseline_my_location_24, true)
-                                 .addChildModel(new ChildModel("View Customer", R.drawable.ic_baseline_arrow_forward_24)))*/
                 .addHeaderModel(new HeaderModel("Support", R.drawable.ic_baseline_my_location_24, true)
-                        .addChildModel(new ChildModel("Add Ticket", R.drawable.ic_baseline_arrow_forward_24))
-                        .addChildModel(new ChildModel("Pending Ticket", R.drawable.ic_baseline_arrow_forward_24))
-                        .addChildModel(new ChildModel("Closed Ticket", R.drawable.ic_baseline_arrow_forward_24)))
+                        .addChildModel(new ChildModel("Create New Ticket", R.drawable.ic_baseline_arrow_forward_24))
+                        .addChildModel(new ChildModel("Ticket List", R.drawable.ic_baseline_arrow_forward_24)))
 
                 .build()
 
@@ -286,50 +282,24 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
                             if (id == 0) {
                                 toolbar.setTitle("Plot Available");
                                 loadFragment(new AvailablePlotFragment());
-                         /*       Fragment fragment = new PlotAvailabilityFragment();
-                                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.homepage, fragment);
-                                transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);*/
                             }
                             if (id == 1) {
                                 toolbar.setTitle("My Booking");
                                 loadFragment(new MyBookingFragment());
-                                /*Fragment fragment = new MyBookingFragment();
-                                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.homepage, fragment);
-                                transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);*/
                             }
                         } else if (groupPosition == 2) {
                             if (id == 0) {
                                 PinAccess();
-                                /*toolbar.setTitle("Wallet");
-                                Fragment fragment = new WalletPinFragment();
-                                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.homepage, fragment);
-                                transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);*/
 
                             }
                         } else if (groupPosition == 3) {
                             if (id == 0) {
                                 toolbar.setTitle("Lead List");
                                 loadFragment(new LeadListFragment());
-                              /*  Fragment fragment = new LeadListFragment();
-                                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.homepage, fragment);
-                                transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);*/
                             }
                             if (id == 1) {
                                 toolbar.setTitle("Follow UP List");
                                 loadFragment(new FollowUpLeadListFragment());
-                               /* Fragment fragment = new FollowUpLeadListFragment();
-                                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.homepage, fragment);
-                                transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);*/
 
 
                             }
@@ -337,72 +307,37 @@ public class MainActivity extends BaseActivity implements StoragePermissionListe
                             if (id == 0) {
                                 toolbar.setTitle("Site Visit");
                                 loadFragment(new SiteVisitRequestFragment());
-                               /* Fragment fragment = new SiteVisitRequestFragment();
-                                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.homepage, fragment);
-                                transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);*/
 
                             }
 
                             if (id == 1) {
                                 toolbar.setTitle("Site Visit List");
                                 loadFragment(new SiteVisitRequestStatusFragment());
-                               /* Fragment fragment = new SiteVisitRequestStatusFragment();
-                                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.homepage, fragment);
-                                transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);*/
 
                             }
                         } else if (groupPosition == 5) {
                             if (id == 0) {
                                 toolbar.setTitle("Associate Registration...!");
                                 loadFragment(new AddAssociateFragment());
-                              /*  Fragment fragment = new AddAssociateFragment();
-                                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.homepage, fragment);
-                                transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);*/
 
                             }
                         } else if (groupPosition == 6) {
                             if (id == 0) {
                                 toolbar.setTitle("Goal List");
                                 loadFragment(new MyGoalListFragment());
-                              /*  Fragment fragment = new MyGoalListFragment();
-                                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.homepage, fragment);
-                                transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);
-*/
                             }
 
-                        }/*else if (groupPosition == 7) {
+                        } else if (groupPosition == 7) {
                             if (id == 0) {
-                                toolbar.setTitle("Customer List");
-                                Fragment fragment = new CustomerListFragment();
-                                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.homepage, fragment);
-                                transaction.addToBackStack(null).commit();
-                                drawer.closeDrawer(GravityCompat.START);
-
-                            }
-
-                        }*/ else if (groupPosition == 7) {
-                            if (id == 0) {
-                                toolbar.setTitle("Add Ticket");
+                                toolbar.setTitle("Create New Ticket");
                                 loadFragment(new AddTicketFragment());
 
                             }
                             if (id == 1) {
-                                toolbar.setTitle("Pending Tickets");
+                                toolbar.setTitle("Ticket List");
                                 loadFragment(new PendingTicketFragment());
                             }
-                            if (id == 2) {
-                                toolbar.setTitle("Closed Tickets");
-                                loadFragment(new ClosedTicketFragment());
-                            }
+
                         }
 
 

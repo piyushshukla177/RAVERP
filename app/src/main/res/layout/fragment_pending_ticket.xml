@@ -6,24 +6,41 @@
     android:background="#E4E2F4"
     tools:context=".ui.fragment.Associate.PendingTicketFragment">
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/main_swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPendingTicket"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <androidx.appcompat.widget.AppCompatTextView
-            android:visibility="gone"
-            android:id="@+id/no_records_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/googlesans_regular"
-            android:text="No record found....."
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/main_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/activity_margin_content" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/no_records_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:fontFamily="@font/googlesans_regular"
+                android:gravity="center"
+                android:text="No record found....."
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:visibility="gone" />
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/main_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <include layout="@layout/error_layout" />
 </FrameLayout>

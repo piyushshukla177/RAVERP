@@ -71,4 +71,6 @@ public class ApiEndPoint {
     public static final String ClosedTickets = "ClosedTickets";
     public static final String ViewTickets = "ViewTickets";
     public static final String MsgSend = "MsgSend";
+    public static final String AllSupportTicket = "AllSupportTicket";
+    public static final String CloseSupportTicket = "CloseSupportTicket";
 }

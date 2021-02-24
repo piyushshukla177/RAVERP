@@ -11,15 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rav.raverp.R;
+import com.rav.raverp.data.model.api.ChatAttachmentModel;
 import com.rav.raverp.data.model.api.PlotAvailableModel;
 import com.rav.raverp.data.model.api.SendAttachmentModel;
 import com.rav.raverp.ui.ConversationActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SendAttachmentAdapter extends RecyclerView.Adapter<SendAttachmentAdapter.ViewHolder> {
     Context context;
     ArrayList<SendAttachmentModel> sendAttachmentModels;
+
 
     public SendAttachmentAdapter(ConversationActivity conversationActivity, ArrayList<SendAttachmentModel> spacecrafts) {
         this.context = conversationActivity;
@@ -36,6 +39,7 @@ public class SendAttachmentAdapter extends RecyclerView.Adapter<SendAttachmentAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SendAttachmentModel s = sendAttachmentModels.get(position);
         holder.tvAttachmentName.setText(s.getName());
+
 
         holder.ivRemoveAttachment.setOnClickListener(new View.OnClickListener() {
             @Override

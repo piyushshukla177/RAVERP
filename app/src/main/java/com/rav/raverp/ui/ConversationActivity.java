@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -31,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rav.raverp.MyApplication;
 import com.rav.raverp.R;
+import com.rav.raverp.data.adapter.ChatAttachmentAdapter;
 import com.rav.raverp.data.adapter.ChatListAdapter;
 import com.rav.raverp.data.adapter.SendAttachmentAdapter;
 import com.rav.raverp.data.interfaces.ArrowBackPressed;
@@ -41,6 +43,8 @@ import com.rav.raverp.data.model.api.LoginModel;
 import com.rav.raverp.data.model.api.SendAttachmentModel;
 import com.rav.raverp.databinding.ActivityConversationBinding;
 
+import com.rav.raverp.databinding.DialofFeedbackBinding;
+import com.rav.raverp.databinding.DialogEditMobileNoProfileBinding;
 import com.rav.raverp.databinding.DialogViewTicketBinding;
 import com.rav.raverp.network.ApiClient;
 import com.rav.raverp.network.ApiHelper;
@@ -50,6 +54,7 @@ import com.rav.raverp.utils.ViewUtils;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,30 +70,36 @@ import retrofit2.Response;
 
 
 public class ConversationActivity extends BaseActivity implements ArrowBackPressed {
+
     LoginModel loginModel;
     String loginId;
     int roleId;
     ActivityConversationBinding conversationBinding;
     ApiHelper apiHelper;
-    TextView tvTicketNo, tvSubject, tvDetails;
-    RecyclerView rvChat;
-    RelativeLayout rlSendMsg;
+    LinearLayout llSendMsg, llClosed, llAttachment;
     EditText etSendMsg;
-    Button btnSend;
-    String ticketNo, isClosed;
+    Button btnSubmit, btnChooseFile, btnReply, btnClosed;
+    String ticketNo, status;
     ChatListAdapter chatListAdapter;
     GridLayoutManager gridLayoutManager;
     ChatModel chatModel;
     private Dialog filterDialog;
     public Handler handler = null;
     public static Runnable runnable = null;
-    ImageView ivAttachment;
     List<Uri> uriPath;
     List<File> file;
     ArrayList<String> filePaths = new ArrayList<String>();
 
-    RecyclerView rvSendAttachment;
+    RecyclerView rvChat, rvSendAttachment, rvAttachment;
     ArrayList<SendAttachmentModel> spacecrafts = new ArrayList<>();
+
+
+    TextView tvTicketNo, tvSubject, tvStatus, tvSupportFor,
+            tvSupportType, tvSubmitted, tvLastUpdated, tvPriority;
+    boolean s = false;
+
+    ArrayList<HashMap<String, String>> hashMapArrayList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +108,11 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
         //setContentView(R.layout.activity_conversation);
         if (getIntent() != null) {
             ticketNo = getIntent().getStringExtra("ticketNo");
-            isClosed = getIntent().getStringExtra("status");
+            status = getIntent().getStringExtra("status");
         }
+
         apiHelper = ApiClient.getClient().create(ApiHelper.class);
-        setToolbarTitle("Conversation");
+        setToolbarTitle("View Ticket");
         showBackArrow();
         setArrowBackPressed(this);
         loginModel = MyApplication.getLoginModel();
@@ -108,22 +120,55 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
         roleId = loginModel.getIntRoleID();
         checkPermissions();
         findViewById();
+
+        if (status.equalsIgnoreCase("closed")) {
+            s = true;
+            llClosed.setVisibility(View.VISIBLE);
+            btnClosed.setEnabled(false);
+            btnClosed.setClickable(false);
+            btnClosed.setText("Closed");
+        } else {
+            s = false;
+            llClosed.setVisibility(View.GONE);
+            btnClosed.setEnabled(true);
+            btnClosed.setClickable(true);
+            btnClosed.setText("Close");
+        }
     }
 
     void findViewById() {
+        rvChat = findViewById(R.id.rvChat);
+        llSendMsg = findViewById(R.id.llSendMsg);
+        etSendMsg = findViewById(R.id.etSendMsg);
+        btnSubmit = findViewById(R.id.btnSubmit);
+        btnChooseFile = findViewById(R.id.btnChooseFile);
+        rvSendAttachment = findViewById(R.id.rvSendAttachment);
         tvTicketNo = findViewById(R.id.tvTicketNo);
         tvSubject = findViewById(R.id.tvSubject);
-        rvChat = findViewById(R.id.rvChat);
-        rlSendMsg = findViewById(R.id.rlSendMsg);
-        etSendMsg = findViewById(R.id.etSendMsg);
-        btnSend = findViewById(R.id.btnSend);
-        tvDetails = findViewById(R.id.tvDetails);
-        ivAttachment = findViewById(R.id.ivAttachment);
-        rvSendAttachment = findViewById(R.id.rvSendAttachment);
+        tvStatus = findViewById(R.id.tvStatus);
+        tvSupportFor = findViewById(R.id.tvSupportFor);
+        tvSupportType = findViewById(R.id.tvSupportType);
+        tvSubmitted = findViewById(R.id.tvSubmitted);
+        tvLastUpdated = findViewById(R.id.tvLastUpdated);
+        tvPriority = findViewById(R.id.tvPriority);
+        btnReply = findViewById(R.id.btnReply);
+        btnClosed = findViewById(R.id.btnClosed);
+        llClosed = findViewById(R.id.llClosed);
+        llAttachment = findViewById(R.id.llAttachment);
+        rvAttachment = findViewById(R.id.rvAttachment);
 
-        getChatData();
+        if (NetworkUtils.isNetworkConnected()) {
+            getChatData();
+        } else {
+            ViewUtils.showOfflineDialog(ConversationActivity.this, new DialogActionCallback() {
+                @Override
+                public void okAction() {
 
-        if (isClosed.equalsIgnoreCase("true")) {
+                }
+            });
+        }
+
+     /*   if (isClosed.equalsIgnoreCase("true")) {
             rlSendMsg.setVisibility(View.GONE);
         } else {
 
@@ -137,9 +182,9 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
             }, 5000);
 
             rlSendMsg.setVisibility(View.VISIBLE);
-        }
+        }*/
 
-        btnSend.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (etSendMsg.getText().toString().isEmpty()) {
@@ -160,15 +205,7 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
         });
 
 
-        tvDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFilterDialogEmail();
-            }
-        });
-
-
-        ivAttachment.setOnClickListener(new View.OnClickListener() {
+        btnChooseFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 filePaths.clear();
@@ -191,18 +228,106 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
             }
         });
 
+        btnClosed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (NetworkUtils.isNetworkConnected()) {
+                    closedTicket();
+                } else {
+                    ViewUtils.showOfflineDialog(ConversationActivity.this, new DialogActionCallback() {
+                        @Override
+                        public void okAction() {
+
+                        }
+                    });
+                }
+            }
+        });
+
+
+        btnReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                llSendMsg.setVisibility(View.VISIBLE);
+            }
+        });
+
 
     }
 
     void getChatData() {
-        Call<ChatModel> chatModelCall = apiHelper.getChatList(loginId, roleId, ticketNo, isClosed);
+        Call<ChatModel> chatModelCall = apiHelper.getChatList(loginId, roleId, ticketNo, s);
         chatModelCall.enqueue(new Callback<ChatModel>() {
             @Override
             public void onResponse(Call<ChatModel> call, Response<ChatModel> response) {
                 ViewUtils.endProgressDialog();
+
                 chatModel = response.body();
-                tvTicketNo.setText(chatModel.getObj().getPkTicketno());
-                tvSubject.setText(chatModel.getObj().getSubject());
+
+                tvTicketNo.setText("#" + chatModel.getObj().getPkTicketno());
+                tvSubject.setText("- " + chatModel.getObj().getSubject());
+                tvStatus.setText(chatModel.getObj().getStatus());
+                tvSupportFor.setText(chatModel.getObj().getSupportfor());
+                tvSupportType.setText(chatModel.getObj().getDocumenttype());
+                tvSubmitted.setText(chatModel.getObj().getSubmitted());
+                tvLastUpdated.setText(chatModel.getObj().getLastupdated());
+                tvPriority.setText(chatModel.getObj().getPriority());
+
+             /*   status = chatModel.getObj().getStatus();
+                if (status.equalsIgnoreCase("closed")) {
+                    s = true;
+                    llClosed.setVisibility(View.VISIBLE);
+                } else {
+                    s = false;
+                    llClosed.setVisibility(View.GONE);
+                }*/
+
+                if (chatModel.getObj().getStrattachment().equalsIgnoreCase("")) {
+                    llAttachment.setVisibility(View.GONE);
+                    rvAttachment.setVisibility(View.GONE);
+                } else {
+
+                    llAttachment.setVisibility(View.VISIBLE);
+                    rvAttachment.setVisibility(View.VISIBLE);
+                    String attachment = chatModel.getObj().getStrattachment();
+                    List<String> as = Arrays.asList(attachment.split(":"));
+
+                    for (int i = 0; i < as.size(); i++) {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("attachment", as.get(i));
+                        hashMapArrayList.add(hashMap);
+
+                        Log.v("ListAttach", as.get(i));
+                    }
+                    GridLayoutManager gridLayoutManager1 = new GridLayoutManager(ConversationActivity.this, 5);
+                    ChatAttachmentAdapter chatAttachmentAdapter = new ChatAttachmentAdapter(ConversationActivity.this, hashMapArrayList, "create");
+                    rvAttachment.setLayoutManager(gridLayoutManager1);
+                    rvAttachment.setAdapter(chatAttachmentAdapter);
+                }
+
+                if (chatModel.getObj().getStatus().equalsIgnoreCase("Opened")) {
+                    btnClosed.setEnabled(true);
+                    btnClosed.setClickable(true);
+                    btnClosed.setText("Close");
+                    llClosed.setVisibility(View.GONE);
+                    tvStatus.setBackgroundColor(ConversationActivity.this.getResources().getColor(R.color.lightYellow));
+                    tvStatus.setTextColor(ConversationActivity.this.getResources().getColor(R.color.black));
+                } else if (chatModel.getObj().getStatus().equalsIgnoreCase("Answered")) {
+                    btnClosed.setEnabled(true);
+                    btnClosed.setClickable(true);
+                    btnClosed.setText("Close");
+                    llClosed.setVisibility(View.GONE);
+                    tvStatus.setBackgroundColor(ConversationActivity.this.getResources().getColor(R.color.black));
+                    tvStatus.setTextColor(ConversationActivity.this.getResources().getColor(R.color.white));
+                } else if (chatModel.getObj().getStatus().equalsIgnoreCase("Closed")) {
+                    btnClosed.setEnabled(false);
+                    btnClosed.setClickable(false);
+                    btnClosed.setText("Closed");
+                    llClosed.setVisibility(View.VISIBLE);
+                    tvStatus.setBackgroundColor(ConversationActivity.this.getResources().getColor(R.color.lightRed));
+                    tvStatus.setTextColor(ConversationActivity.this.getResources().getColor(R.color.white));
+                }
+
                 chatListAdapter = new ChatListAdapter(ConversationActivity.this, chatModel);
                 gridLayoutManager = new GridLayoutManager(ConversationActivity.this, 1);
                 rvChat.setLayoutManager(gridLayoutManager);
@@ -212,7 +337,7 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
 
             @Override
             public void onFailure(Call<ChatModel> call, Throwable t) {
-
+                ViewUtils.endProgressDialog();
             }
         });
 
@@ -244,27 +369,16 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
         HashMap<String, RequestBody> map = new HashMap<>();
         map.put("filename", RequestBody.create(MediaType.parse("text/plain"), ""));
 
-      /*  MultipartBody.Part[] profilePic = new MultipartBody.Part[uriPath.size()];
-
-        if (uriPath != null) {
-            for (int i = 0; i < uriPath.size(); i++) {
-                File file = new File(uriPath.get(i).getPath());
-                RequestBody surveyBody = RequestBody.create(MediaType.parse("image/*"), file);
-
-                profilePic[i] = MultipartBody.Part.createFormData(i + "", file.getName(), RequestBody.create(MediaType.parse("image/*"), uriPath.get(i).getPath()));
-                //  profilePic = MultipartBody.Part.createFormData("", new File(uriPath.get(i).getPath()).getName(), RequestBody.create(MediaType.parse("image/*"), uriPath.get(i).getPath()));
-            }
-        }*/
-
         ViewUtils.startProgressDialog(ConversationActivity.this);
         Call<CommonModel> commonModelCall = apiHelper.sendMsg(loginId, roleId, ticketNo, etSendMsg.getText().toString().trim(), parts, map);
         commonModelCall.enqueue(new Callback<CommonModel>() {
             @Override
             public void onResponse(Call<CommonModel> call, Response<CommonModel> response) {
                 CommonModel commonModel = response.body();
-
                 if (commonModel.getResponse().equalsIgnoreCase("Success")) {
-                    uriPath.clear();
+                    llSendMsg.setVisibility(View.GONE);
+                    if (uriPath != null)
+                        uriPath.clear();
                     rvSendAttachment.removeAllViewsInLayout();
                     spacecrafts.clear();
                     getChatData();
@@ -282,55 +396,6 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
             }
         });
     }
-
-
-    private void showFilterDialogEmail() {
-        filterDialog = new Dialog(this);
-        final DialogViewTicketBinding binding = DataBindingUtil.inflate(LayoutInflater.from((this)),
-                R.layout.dialog_view_ticket, null, false);
-        filterDialog.setContentView(binding.getRoot());
-        filterDialog.setCancelable(true);
-        filterDialog.setCanceledOnTouchOutside(true);
-
-
-        ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-        InsetDrawable inset = new InsetDrawable(back, 70);
-        Window window = filterDialog.getWindow();
-        if (window != null) {
-            window.setBackgroundDrawable(inset);
-            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-        }
-
-        TextView tvSubject = filterDialog.findViewById(R.id.tvSubject);
-        TextView tvQuery = filterDialog.findViewById(R.id.tvQuery);
-        TextView tvIFSC = filterDialog.findViewById(R.id.tvIFSC);
-        TextView tvBranchName = filterDialog.findViewById(R.id.tvBranchName);
-        TextView tvBankName = filterDialog.findViewById(R.id.tvBankName);
-        TextView tvPaymentType = filterDialog.findViewById(R.id.tvPaymentType);
-        TextView tvClaimType = filterDialog.findViewById(R.id.tvClaimType);
-        TextView tvTransactionDate = filterDialog.findViewById(R.id.tvTransactionDate);
-        tvSubject.setText(chatModel.getObj().getSubject());
-        tvQuery.setText(chatModel.getObj().getQuery());
-        tvIFSC.setText(chatModel.getObj().getIfsc());
-        tvBranchName.setText(chatModel.getObj().getStrbranchname());
-        tvBankName.setText(chatModel.getObj().getStrbankname());
-        tvPaymentType.setText(chatModel.getObj().getStrpaymenttype());
-        tvClaimType.setText(chatModel.getObj().getClaimtypename());
-        tvTransactionDate.setText(chatModel.getObj().getStrTransactionNo());
-
-        ImageView ivClose = filterDialog.findViewById(R.id.ivClose);
-
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterDialog.dismiss();
-            }
-        });
-        filterDialog.show();
-    }
-
 
     private void showUriList(List<Uri> uriList) {
         SendAttachmentModel s;
@@ -371,8 +436,101 @@ public class ConversationActivity extends BaseActivity implements ArrowBackPress
             ActivityCompat.requestPermissions(this, lsitPermissionsNeeded.toArray(new String[lsitPermissionsNeeded.size()]), PERMISSION_CODE);
             return false;
         }
-        //app ha all permissions proceed ahead
+        //app has all permissions proceed ahead
         return true;
+    }
+
+    void closedTicket() {
+        ViewUtils.startProgressDialog(ConversationActivity.this);
+        Call<CommonModel> commonModelCall = apiHelper.closedTickets(loginId, roleId, ticketNo, "");
+        commonModelCall.enqueue(new Callback<CommonModel>() {
+            @Override
+            public void onResponse(Call<CommonModel> call, Response<CommonModel> response) {
+                ViewUtils.endProgressDialog();
+                CommonModel commonModel = response.body();
+                if (commonModel.getResponse().equalsIgnoreCase("Success")) {
+                    llClosed.setVisibility(View.VISIBLE);
+                    llSendMsg.setVisibility(View.GONE);
+                    getChatData();
+                    showFilterDialogMobile();
+                }
+
+
+                // onBackPressed();
+            }
+
+            @Override
+            public void onFailure(Call<CommonModel> call, Throwable t) {
+                ViewUtils.endProgressDialog();
+
+            }
+        });
+    }
+
+
+    private void showFilterDialogMobile() {
+        filterDialog = new Dialog(this);
+        final DialofFeedbackBinding binding = DataBindingUtil.inflate(LayoutInflater.from((this)),
+                R.layout.dialof_feedback, null, false);
+        filterDialog.setContentView(binding.getRoot());
+        filterDialog.setCancelable(true);
+        filterDialog.setCanceledOnTouchOutside(true);
+
+
+        ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
+        InsetDrawable inset = new InsetDrawable(back, 70);
+        Window window = filterDialog.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawable(inset);
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+        }
+        filterDialog.show();
+
+
+        binding.btnsubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterDialog.dismiss();
+            }
+        });
+
+        binding.imgcross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterDialog.dismiss();
+            }
+        });
+
+        binding.btnsubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                feedback(binding.note.getText().toString());
+            }
+        });
+
+
+    }
+
+    void feedback(String feedback) {
+        ViewUtils.startProgressDialog(ConversationActivity.this);
+        Call<CommonModel> commonModelCall = apiHelper.closedTickets(loginId, roleId, ticketNo, feedback);
+        commonModelCall.enqueue(new Callback<CommonModel>() {
+            @Override
+            public void onResponse(Call<CommonModel> call, Response<CommonModel> response) {
+                ViewUtils.endProgressDialog();
+                CommonModel commonModel = response.body();
+
+                onBackPressed();
+            }
+
+            @Override
+            public void onFailure(Call<CommonModel> call, Throwable t) {
+                ViewUtils.endProgressDialog();
+
+            }
+        });
     }
 
 }

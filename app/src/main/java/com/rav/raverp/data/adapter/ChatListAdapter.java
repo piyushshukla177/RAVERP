@@ -1,22 +1,36 @@
 package com.rav.raverp.data.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rav.raverp.R;
+import com.rav.raverp.data.model.api.ChatAttachmentModel;
 import com.rav.raverp.data.model.api.ChatModel;
 import com.rav.raverp.ui.ConversationActivity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHlder> {
     Context context;
     ChatModel chatModel;
+
+    ArrayList<HashMap<String, String>> hashMapArrayList = new ArrayList<>();
+
 
     public ChatListAdapter(ConversationActivity conversationActivity, ChatModel chatModel) {
         this.context = conversationActivity;
@@ -26,25 +40,45 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHl
     @NonNull
     @Override
     public ViewHlder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHlder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_list, parent, false));
+        return new ViewHlder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHlder holder, int position) {
+        holder.tvName.setText(chatModel.getBody().get(position).getName());
+        holder.tvDateTime.setText(chatModel.getBody().get(position).getCreateddate());
+        holder.tvMessage.setText(chatModel.getBody().get(position).getMessage());
 
-        if (chatModel.getBody().get(position).getMessageBy().equalsIgnoreCase("associate")) {
-            holder.llAdmin.setVisibility(View.GONE);
-            holder.llAssociate.setVisibility(View.VISIBLE);
-            holder.tvAssociateMsg.setText(chatModel.getBody().get(position).getMessage());
-            holder.tvAssociateDateTime.setText(chatModel.getBody().get(position).getCreateddate());
+        if (chatModel.getBody().get(position).getMessageby().equalsIgnoreCase("Admin")) {
+            holder.tvType.setText("Staff");
+            holder.rlMain.setBackgroundColor(context.getResources().getColor(R.color.light));
         } else {
-
-            holder.llAdmin.setVisibility(View.VISIBLE);
-            holder.llAssociate.setVisibility(View.GONE);
-            holder.tvAdminMsg.setText(chatModel.getBody().get(position).getMessage());
-            holder.tvAdminDateTime.setText(chatModel.getBody().get(position).getCreateddate());
+            holder.rlMain.setBackgroundColor(context.getResources().getColor(R.color.silver));
+            holder.tvType.setText("Client");
         }
 
+        if (chatModel.getBody().get(position).getAttachment().equalsIgnoreCase("")) {
+            holder.tvAttachment.setVisibility(View.GONE);
+        } else {
+
+            holder.tvAttachment.setVisibility(View.VISIBLE);
+            holder.rvAttachment.setVisibility(View.VISIBLE);
+            String attachment = chatModel.getBody().get(position).getAttachment();
+
+            List<String> as = Arrays.asList(attachment.split(":"));
+
+            for (int i = 0; i < as.size(); i++) {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("attachment", as.get(i));
+                hashMapArrayList.add(hashMap);
+
+                Log.v("ListAttach", as.get(i));
+            }
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 5);
+            ChatAttachmentAdapter chatAttachmentAdapter = new ChatAttachmentAdapter(context, hashMapArrayList,"chat");
+            holder.rvAttachment.setLayoutManager(gridLayoutManager);
+            holder.rvAttachment.setAdapter(chatAttachmentAdapter);
+        }
     }
 
     @Override
@@ -53,18 +87,24 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHl
     }
 
     public class ViewHlder extends RecyclerView.ViewHolder {
-        LinearLayout llAdmin, llAssociate;
-        TextView tvAdminMsg, tvAdminDateTime, tvAssociateMsg, tvAssociateDateTime;
+        RelativeLayout rlMain;
+        CircleImageView civUserIcon;
+        TextView tvDateTime, tvName, tvType, tvMessage, tvAttachment;
+
+        RecyclerView rvAttachment;
 
         public ViewHlder(@NonNull View itemView) {
             super(itemView);
-            llAdmin = itemView.findViewById(R.id.llAdmin);
-            llAssociate = itemView.findViewById(R.id.llAssociate);
-            tvAdminMsg = itemView.findViewById(R.id.tvAdminMsg);
-            tvAdminDateTime = itemView.findViewById(R.id.tvAdminDateTime);
-            tvAssociateMsg = itemView.findViewById(R.id.tvAssociateMsg);
-            tvAssociateDateTime = itemView.findViewById(R.id.tvAssociateDateTime);
-
+            rlMain = itemView.findViewById(R.id.rlMain);
+            civUserIcon = itemView.findViewById(R.id.civUserIcon);
+            tvDateTime = itemView.findViewById(R.id.tvDateTime);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvType = itemView.findViewById(R.id.tvType);
+            tvMessage = itemView.findViewById(R.id.tvMessage);
+            tvAttachment = itemView.findViewById(R.id.tvAttachment);
+            rvAttachment = itemView.findViewById(R.id.rvAttachment);
         }
     }
+
+
 }

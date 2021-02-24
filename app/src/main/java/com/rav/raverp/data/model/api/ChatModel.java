@@ -6,19 +6,18 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public  class ChatModel {
-
     @Expose
     @SerializedName("body")
     private List<Body> body;
+    @Expose
+    @SerializedName("Response")
+    private String response;
     @Expose
     @SerializedName("obj")
     private Obj obj;
     @Expose
     @SerializedName("Message")
     private String message;
-    @Expose
-    @SerializedName("Response")
-    private String response;
 
     public List<Body> getBody() {
         return body;
@@ -26,6 +25,14 @@ public  class ChatModel {
 
     public void setBody(List<Body> body) {
         this.body = body;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
     }
 
     public Obj getObj() {
@@ -44,30 +51,22 @@ public  class ChatModel {
         this.message = message;
     }
 
-    public String getResponse() {
-        return response;
-    }
-
-    public void setResponse(String response) {
-        this.response = response;
-    }
-
     public static class Body {
+        @Expose
+        @SerializedName("Name")
+        private String name;
+        @Expose
+        @SerializedName("CreatedDate")
+        private String createddate;
+        @Expose
+        @SerializedName("MessageBy")
+        private String messageby;
         @Expose
         @SerializedName("ProfilePic")
         private String profilepic;
         @Expose
-        @SerializedName("IsDeleted")
-        private boolean isdeleted;
-        @Expose
-        @SerializedName("DeletedBy")
-        private int deletedby;
-        @Expose
-        @SerializedName("UpdatedBy")
-        private int updatedby;
-        @Expose
-        @SerializedName("CreatedDate")
-        private String createddate;
+        @SerializedName("Attachment")
+        private String attachment;
         @Expose
         @SerializedName("CreatedBy")
         private int createdby;
@@ -81,16 +80,28 @@ public  class ChatModel {
         @SerializedName("Pk_MsgId")
         private int pkMsgid;
 
-        @Expose
-        @SerializedName("MessageBy")
-        private String MessageBy;
-
-        public String getMessageBy() {
-            return MessageBy;
+        public String getName() {
+            return name;
         }
 
-        public void setMessageBy(String messageBy) {
-            MessageBy = messageBy;
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getCreateddate() {
+            return createddate;
+        }
+
+        public void setCreateddate(String createddate) {
+            this.createddate = createddate;
+        }
+
+        public String getMessageby() {
+            return messageby;
+        }
+
+        public void setMessageby(String messageby) {
+            this.messageby = messageby;
         }
 
         public String getProfilepic() {
@@ -101,36 +112,12 @@ public  class ChatModel {
             this.profilepic = profilepic;
         }
 
-        public boolean getIsdeleted() {
-            return isdeleted;
+        public String getAttachment() {
+            return attachment;
         }
 
-        public void setIsdeleted(boolean isdeleted) {
-            this.isdeleted = isdeleted;
-        }
-
-        public int getDeletedby() {
-            return deletedby;
-        }
-
-        public void setDeletedby(int deletedby) {
-            this.deletedby = deletedby;
-        }
-
-        public int getUpdatedby() {
-            return updatedby;
-        }
-
-        public void setUpdatedby(int updatedby) {
-            this.updatedby = updatedby;
-        }
-
-        public String getCreateddate() {
-            return createddate;
-        }
-
-        public void setCreateddate(String createddate) {
-            this.createddate = createddate;
+        public void setAttachment(String attachment) {
+            this.attachment = attachment;
         }
 
         public int getCreatedby() {
@@ -168,6 +155,18 @@ public  class ChatModel {
 
     public static class Obj {
         @Expose
+        @SerializedName("LastUpdated")
+        private String lastupdated;
+        @Expose
+        @SerializedName("Submitted")
+        private String submitted;
+        @Expose
+        @SerializedName("Status")
+        private String status;
+        @Expose
+        @SerializedName("Priority")
+        private String priority;
+        @Expose
         @SerializedName("ProfilePic")
         private String profilepic;
         @Expose
@@ -201,6 +200,12 @@ public  class ChatModel {
         @SerializedName("dcAmount")
         private int dcamount;
         @Expose
+        @SerializedName("strTransactionNo")
+        private String strtransactionno;
+        @Expose
+        @SerializedName("strAttachment")
+        private String strattachment;
+        @Expose
         @SerializedName("IsDeleted")
         private boolean isdeleted;
         @Expose
@@ -231,6 +236,9 @@ public  class ChatModel {
         @SerializedName("strDocument")
         private int strdocument;
         @Expose
+        @SerializedName("DocumentType")
+        private String documenttype;
+        @Expose
         @SerializedName("intDocumentTypeId")
         private int intdocumenttypeid;
         @Expose
@@ -240,99 +248,42 @@ public  class ChatModel {
         @SerializedName("Subject")
         private String subject;
         @Expose
+        @SerializedName("SupportFor")
+        private String supportfor;
+        @Expose
         @SerializedName("Pk_TicketNo")
         private String pkTicketno;
 
-        @Expose
-        @SerializedName("UpdatedDate")
-        private String UpdatedDate;
-
-        @Expose
-        @SerializedName("DeletedDate")
-        private String DeletedDate;
-
-        @Expose
-        @SerializedName("ResolvedDate")
-        private String ResolvedDate;
-
-        @Expose
-        @SerializedName("SupportMsgModels")
-        private String SupportMsgModels;
-
-        @Expose
-        @SerializedName("strAttachment")
-        private String strAttachment;
-
-        @Expose
-        @SerializedName("strTransactionNo")
-        private String strTransactionNo;
-
-        @Expose
-        @SerializedName("ImageFile")
-        private String ImageFile;
-
-        public boolean isIsdeleted() {
-            return isdeleted;
+        public String getLastupdated() {
+            return lastupdated;
         }
 
-        public boolean isIsactive() {
-            return isactive;
+        public void setLastupdated(String lastupdated) {
+            this.lastupdated = lastupdated;
         }
 
-        public String getUpdatedDate() {
-            return UpdatedDate;
+        public String getSubmitted() {
+            return submitted;
         }
 
-        public void setUpdatedDate(String updatedDate) {
-            UpdatedDate = updatedDate;
+        public void setSubmitted(String submitted) {
+            this.submitted = submitted;
         }
 
-        public String getDeletedDate() {
-            return DeletedDate;
+        public String getStatus() {
+            return status;
         }
 
-        public void setDeletedDate(String deletedDate) {
-            DeletedDate = deletedDate;
+        public void setStatus(String status) {
+            this.status = status;
         }
 
-        public String getResolvedDate() {
-            return ResolvedDate;
+        public String getPriority() {
+            return priority;
         }
 
-        public void setResolvedDate(String resolvedDate) {
-            ResolvedDate = resolvedDate;
-        }
-
-        public String getSupportMsgModels() {
-            return SupportMsgModels;
-        }
-
-        public void setSupportMsgModels(String supportMsgModels) {
-            SupportMsgModels = supportMsgModels;
-        }
-
-        public String getStrAttachment() {
-            return strAttachment;
-        }
-
-        public void setStrAttachment(String strAttachment) {
-            this.strAttachment = strAttachment;
-        }
-
-        public String getStrTransactionNo() {
-            return strTransactionNo;
-        }
-
-        public void setStrTransactionNo(String strTransactionNo) {
-            this.strTransactionNo = strTransactionNo;
-        }
-
-        public String getImageFile() {
-            return ImageFile;
-        }
-
-        public void setImageFile(String imageFile) {
-            ImageFile = imageFile;
+        public void setPriority(String priority) {
+            this.priority = priority;
         }
 
         public String getProfilepic() {
@@ -423,6 +374,22 @@ public  class ChatModel {
             this.dcamount = dcamount;
         }
 
+        public String getStrtransactionno() {
+            return strtransactionno;
+        }
+
+        public void setStrtransactionno(String strtransactionno) {
+            this.strtransactionno = strtransactionno;
+        }
+
+        public String getStrattachment() {
+            return strattachment;
+        }
+
+        public void setStrattachment(String strattachment) {
+            this.strattachment = strattachment;
+        }
+
         public boolean getIsdeleted() {
             return isdeleted;
         }
@@ -503,6 +470,14 @@ public  class ChatModel {
             this.strdocument = strdocument;
         }
 
+        public String getDocumenttype() {
+            return documenttype;
+        }
+
+        public void setDocumenttype(String documenttype) {
+            this.documenttype = documenttype;
+        }
+
         public int getIntdocumenttypeid() {
             return intdocumenttypeid;
         }
@@ -525,6 +500,14 @@ public  class ChatModel {
 
         public void setSubject(String subject) {
             this.subject = subject;
+        }
+
+        public String getSupportfor() {
+            return supportfor;
+        }
+
+        public void setSupportfor(String supportfor) {
+            this.supportfor = supportfor;
         }
 
         public String getPkTicketno() {

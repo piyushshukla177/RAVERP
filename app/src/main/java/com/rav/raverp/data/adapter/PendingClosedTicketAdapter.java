@@ -36,31 +36,6 @@ public class PendingClosedTicketAdapter extends RecyclerView.Adapter<PendingClos
 
     @Override
     public void onBindViewHolder(@NonNull PendingClosedTicketAdapter.ViewHolder holder, int position) {
-        holder.tvTicketNo.setText(pendingClosedTicketModel.getBody().get(position).getPkTicketno());
-        holder.tvDate.setText(pendingClosedTicketModel.getBody().get(position).getCreateddate());
-        holder.tvSubject.setText(pendingClosedTicketModel.getBody().get(position).getStrsubjectname());
-        String query = pendingClosedTicketModel.getBody().get(position).getQuery();
-        String query1;
-        if (query.length() >= 20) {
-            query1 = query.substring(0, 18) + "..";
-        } else {
-            query1 = query;
-        }
-        holder.tvQuery.setText(query1);
-
-        //   holder.tvQuery.setText(pendingClosedTicketModel.getBody().get(position).getQuery());
-
-        holder.tvViewTicket.setPaintFlags(
-                holder.tvViewTicket.getPaintFlags() |
-                        Paint.UNDERLINE_TEXT_FLAG);
-
-        holder.tvViewTicket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context, ConversationActivity.class).putExtra("ticketNo",pendingClosedTicketModel.getBody().get(position).getPkTicketno()).putExtra("status",status));
-            }
-        });
-
 
     }
 
@@ -70,15 +45,16 @@ public class PendingClosedTicketAdapter extends RecyclerView.Adapter<PendingClos
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTicketNo, tvDate, tvSubject, tvQuery, tvViewTicket;
+
+        TextView tvSupportFor, tvSupportType, tvSubject, tvStatus, tvLastUpdate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTicketNo = itemView.findViewById(R.id.tvTicketNo);
-            tvDate = itemView.findViewById(R.id.tvDate);
+            tvSupportFor = itemView.findViewById(R.id.tvSupportFor);
+            tvSupportType = itemView.findViewById(R.id.tvSupportType);
             tvSubject = itemView.findViewById(R.id.tvSubject);
-            tvQuery = itemView.findViewById(R.id.tvQuery);
-            tvViewTicket = itemView.findViewById(R.id.tvViewTicket);
+            tvStatus = itemView.findViewById(R.id.tvStatus);
+            tvLastUpdate = itemView.findViewById(R.id.tvLastUpdate);
         }
     }
 }

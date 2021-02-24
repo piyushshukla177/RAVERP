@@ -112,15 +112,17 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:paddingBottom="@dimen/activity_margin_content" />
+
             <androidx.appcompat.widget.AppCompatTextView
-                android:visibility="gone"
                 android:id="@+id/no_records_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:fontFamily="@font/googlesans_regular"
+                android:gravity="center"
                 android:text="No record found....."
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:visibility="gone" />
         </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

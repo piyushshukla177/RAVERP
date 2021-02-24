@@ -22,7 +22,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:fontFamily="@font/googlesans_medium"
-                android:text="@string/supportType"
+                android:text="@string/supportFor"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/black_900"
                 android:textSize="@dimen/_12sdp"
@@ -37,9 +37,44 @@
                 android:padding="@dimen/_5sdp">
 
                 <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spSubject"
+                    android:id="@+id/spSupportFor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llDocumentType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/googlesans_medium"
+                    android:text="@string/supportType"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/black_900"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/_5sdp"
+                    android:background="@drawable/bg_edit_text"
+                    android:padding="@dimen/_5sdp">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/spSupportType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <TextView
@@ -62,83 +97,15 @@
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginVertical="@dimen/_5sdp"
                 android:hint="Enter Subject"
+                android:maxLength="300"
                 android:singleLine="true" />
-
-            <LinearLayout
-                android:id="@+id/llClaimType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:text="@string/claimType"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:background="@drawable/bg_edit_text"
-                    android:padding="@dimen/_5sdp">
-
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/spClaimType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llDocumentType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:text="@string/documentType"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:background="@drawable/bg_edit_text"
-                    android:padding="@dimen/_5sdp">
-
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/spDocumentType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/llPaymentModeType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -146,7 +113,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="@string/paymentModeType"
+                    android:text="@string/priority"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@color/black_900"
                     android:textSize="@dimen/_12sdp"
@@ -160,163 +127,12 @@
                     android:padding="@dimen/_5sdp">
 
                     <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/spPaymentModeType"
+                        android:id="@+id/spPriority"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
 
-
-            <LinearLayout
-                android:id="@+id/llCommon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:text="@string/allNo"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/etTransactionNo"
-                    style="@style/TextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:hint="Transaction No"
-                    android:singleLine="true" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:text="@string/amount"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/etAmount"
-                    style="@style/TextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:hint="Enter Amount"
-                    android:inputType="number"
-                    android:singleLine="true" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:text="@string/date"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/etDate"
-                    style="@style/TextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:clickable="false"
-                    android:drawableRight="@drawable/ic_date_range"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="mm/dd/yyyy"
-                    android:singleLine="true" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llSecond"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:text="@string/IFSCCode"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/etIFSCCode"
-                    style="@style/TextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:hint="Enter IFSC code"
-                    android:singleLine="true" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:text="@string/bankName"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/etBankName"
-                    style="@style/TextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:enabled="false"
-                    android:focusable="false"
-                    android:hint="Bank Name"
-                    android:singleLine="true" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:text="@string/branchName"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/etBranchName"
-                    style="@style/TextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:enabled="false"
-                    android:focusable="false"
-                    android:hint="Branch Name"
-                    android:singleLine="true" />
-            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -345,6 +161,7 @@
                     android:background="@null"
                     android:gravity="left"
                     android:hint="Type query here....."
+                    android:maxLength="300"
                     android:minHeight="@dimen/_80sdp" />
 
             </LinearLayout>
@@ -390,17 +207,6 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/_11sdp" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/no_file_chosen_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_7sdp"
-                        android:layout_marginRight="@dimen/_7sdp"
-                        android:fontFamily="@font/googlesans_regular"
-                        android:text="No file Chosen"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:visibility="gone" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -409,13 +215,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_10sdp" />
 
-                <ImageView
-                    android:id="@+id/ivAttachment"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_100sdp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:visibility="gone" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatButton
