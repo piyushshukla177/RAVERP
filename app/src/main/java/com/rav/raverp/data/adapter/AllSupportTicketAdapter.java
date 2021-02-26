@@ -95,7 +95,7 @@ public class AllSupportTicketAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ticketVH.tvStatus.setTextColor(context.getResources().getColor(R.color.white));
 
                 } else if (result.getStatus().equalsIgnoreCase("Closed")) {
-                    ticketVH.tvStatus.setBackgroundColor(context.getResources().getColor(R.color.lightRed));
+                    ticketVH.tvStatus.setBackgroundColor(context.getResources().getColor(R.color.green));
                     ticketVH.tvStatus.setTextColor(context.getResources().getColor(R.color.white));
                 }
 

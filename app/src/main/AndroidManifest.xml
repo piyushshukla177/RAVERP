@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
     <supports-screens android:resizeable="true" />
@@ -136,7 +137,7 @@
         </activity>
         <activity android:name="com.gun0912.tedonactivityresult.ProxyActivity" />
 
-        <activity android:name="com.jaiselrahman.filepicker.activity.FilePickerActivity"/>
+        <activity android:name="com.jaiselrahman.filepicker.activity.FilePickerActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -156,6 +157,16 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/com_jaiselrahman_filepicker_provider_paths" />
+        </provider>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.freshdesk.helpdesk.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
         </provider>
     </application>
 </manifest>

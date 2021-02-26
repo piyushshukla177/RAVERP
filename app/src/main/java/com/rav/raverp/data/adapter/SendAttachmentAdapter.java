@@ -15,6 +15,7 @@ import com.rav.raverp.data.model.api.ChatAttachmentModel;
 import com.rav.raverp.data.model.api.PlotAvailableModel;
 import com.rav.raverp.data.model.api.SendAttachmentModel;
 import com.rav.raverp.ui.ConversationActivity;
+import com.rav.raverp.ui.fragment.Associate.AddTicketFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +23,13 @@ import java.util.List;
 public class SendAttachmentAdapter extends RecyclerView.Adapter<SendAttachmentAdapter.ViewHolder> {
     Context context;
     ArrayList<SendAttachmentModel> sendAttachmentModels;
+    String from;
 
 
-    public SendAttachmentAdapter(ConversationActivity conversationActivity, ArrayList<SendAttachmentModel> spacecrafts) {
+    public SendAttachmentAdapter(Context conversationActivity, ArrayList<SendAttachmentModel> spacecrafts, String from) {
         this.context = conversationActivity;
         this.sendAttachmentModels = spacecrafts;
+        this.from = from;
     }
 
     @NonNull
@@ -44,7 +47,10 @@ public class SendAttachmentAdapter extends RecyclerView.Adapter<SendAttachmentAd
         holder.ivRemoveAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 removeItem(position, holder);
+
+
              /*   int actualPosition = holder.getAdapterPosition();
                 sendAttachmentModels.remove(actualPosition);
                 notifyItemRemoved(actualPosition);
@@ -78,9 +84,16 @@ public class SendAttachmentAdapter extends RecyclerView.Adapter<SendAttachmentAd
     }
 
     private void removeItem(int position, ViewHolder holder) {
-        int actualPosition = holder.getAdapterPosition();
-        sendAttachmentModels.remove(actualPosition);
-        notifyItemRemoved(actualPosition);
-        notifyItemRangeChanged(actualPosition, sendAttachmentModels.size());
+        position = holder.getAdapterPosition();
+        sendAttachmentModels.remove(position);
+        if (from.equalsIgnoreCase("chat")) {
+            if (ConversationActivity.uriPath != null)
+                ConversationActivity.uriPath.remove(position);
+        } else {
+            if (AddTicketFragment.uriPath != null)
+                AddTicketFragment.uriPath.remove(position);
+        }
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, sendAttachmentModels.size());
     }
 }

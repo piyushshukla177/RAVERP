@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_5sdp"
-    android:background="@drawable/bg_edit_text"
+    android:background="@drawable/border"
     android:minHeight="@dimen/_80sdp"
     android:orientation="vertical">
 
@@ -66,13 +66,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:fontFamily="@font/googlesans_bold"
-        android:gravity="center"
-        android:text="Attachment"
+        android:fontFamily="@font/googlesans_regular"
+        android:text="Attachments"
         android:textColor="@color/black"
-        android:textSize="@dimen/_14sdp"
-        android:visibility="gone" />
+        android:textSize="@dimen/_14sdp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAttachment"

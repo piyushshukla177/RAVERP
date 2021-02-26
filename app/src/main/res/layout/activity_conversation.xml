@@ -1,370 +1,382 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/main_swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="match_parent">
 
-
-        <androidx.core.widget.NestedScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
-            <LinearLayout
+
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    android:background="@drawable/bg_edit_text"
-                    android:minHeight="@dimen/_100sdp"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_bg"
-                        android:fontFamily="@font/googlesans_bold"
-                        android:paddingVertical="@dimen/_10sdp"
-                        android:paddingLeft="@dimen/_10sdp"
-                        android:text="Ticket Information"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_14sdp" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/edit_bg_white"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/_7sdp">
+                        android:layout_margin="@dimen/_5sdp"
+                        android:background="@drawable/border"
+                        android:minHeight="@dimen/_100sdp"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tvTicketNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/card_bg_color"
+                            android:fontFamily="@font/googlesans_bold"
+                            android:paddingVertical="@dimen/_10sdp"
+                            android:paddingLeft="@dimen/_10sdp"
+                            android:text="Ticket Information"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/_7sdp">
+
+                            <TextView
+                                android:id="@+id/tvTicketNo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_3sdp"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="#rtrew"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tvSubject"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_3sdp"
+                                android:layout_toLeftOf="@+id/tvStatus"
+                                android:layout_toRightOf="@+id/tvTicketNo"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:text="nmnbnndnbknd jtjei nsdn jej ije ieijjrop oropko orooprg"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tvStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_margin="@dimen/_3sdp"
+                                android:background="@color/green"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:padding="@dimen/_3sdp"
+                                android:text="closed"
+                                android:textColor="@color/white" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/card_bg_color"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_bold"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:text="Support For"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tvSupportFor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_bold"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:text="Support Type"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tvSupportType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/card_bg_color"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_bold"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:text="Submitted"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tvSubmitted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_bold"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:text="Last Updated"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tvLastUpdated"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/card_bg_color"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_bold"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:text="Priority:"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tvPriority"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:text="Low"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llAttachment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvAttachment"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_bold"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:text="Attachment"
+                                android:textColor="@color/black" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rvAttachment"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/card_bg_color"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btnReply"
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/_25sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_weight="1"
+                                android:background="@color/lightBlue"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:shadowRadius="@integer/int_5"
+                                android:text="Reply"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white" />
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btnClosed"
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/_25sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_weight="1"
+                                android:background="@color/lightRed"
+                                android:fontFamily="@font/googlesans_regular"
+                                android:shadowRadius="@integer/int_5"
+                                android:text="Closed"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llClosed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/lightYellow"
+                        android:visibility="gone">
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_3sdp"
+                            android:layout_margin="@dimen/_10sdp"
                             android:fontFamily="@font/googlesans_regular"
-                            android:text="#rtrew"
+                            android:text="This ticket is closed. You may reply to this ticket to reopen it."
+                            android:textAlignment="center"
                             android:textColor="@color/black" />
 
-                        <TextView
-                            android:id="@+id/tvSubject"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_3sdp"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:text="nmnbng"
-                            android:textColor="@color/black" />
 
-                        <TextView
-                            android:id="@+id/tvStatus"
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/llSendMsg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_edit_text">
+
+                            <EditText
+                                android:id="@+id/etSendMsg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_5sdp"
+                                android:background="@null"
+                                android:gravity="left"
+                                android:hint="Type here....."
+                                android:maxHeight="@dimen/_80sdp"
+                                android:maxLength="500"
+                                android:minHeight="@dimen/_80sdp" />
+
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_3sdp"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:padding="@dimen/_3sdp"
-                            android:text="closed"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:fontFamily="@font/googlesans_medium"
+                            android:text="Attachment :"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="@color/black_900"
+                            android:textSize="@dimen/_12sdp" />
+
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnChooseFile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_30sdp"
+                            android:fontFamily="@font/googlesans_medium"
+                            android:text="Choose File "
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Button"
                             android:textColor="@color/white" />
-                    </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_bg"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_bold"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:text="Support For"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/tvSupportFor"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:textColor="@color/black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_bg_white"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_bold"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:text="Support Type"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/tvSupportType"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:textColor="@color/black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_bg"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_bold"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:text="Submitted"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/tvSubmitted"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:textColor="@color/black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_bg_white"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_bold"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:text="Last Updated"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/tvLastUpdated"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:textColor="@color/black" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_bg"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_bold"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:text="Priority:"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/tvPriority"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:text="Low"
-                            android:textColor="@color/black" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/llAttachment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_bg_white"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_bold"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:text="Attachment"
-                            android:textColor="@color/black" />
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rvAttachment"
+                            android:id="@+id/rvSendAttachment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:paddingVertical="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:textColor="@color/black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/edit_bg"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
+                            android:layout_alignParentRight="true"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:paddingTop="@dimen/_5sdp" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnReply"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_margin="@dimen/_10sdp"
-                            android:layout_weight="1"
-                            android:background="@color/lightBlue"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:shadowRadius="@integer/int_5"
-                            android:text="Reply"
+                            android:id="@+id/btnSubmit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_gravity="center"
+                            android:background="@color/green"
+                            android:fontFamily="@font/googlesans_medium"
+                            android:text="Submit"
                             android:textAllCaps="false"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Button"
                             android:textColor="@color/white" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnClosed"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_margin="@dimen/_10sdp"
-                            android:layout_weight="1"
-                            android:background="@color/lightRed"
-                            android:fontFamily="@font/googlesans_regular"
-                            android:shadowRadius="@integer/int_5"
-                            android:text="Closed"
-                            android:textAllCaps="false"
-                            android:textColor="@color/white" />
                     </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llClosed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/lightYellow"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_10sdp"
-                        android:fontFamily="@font/googlesans_regular"
-                        android:text="This ticket is closed. You may reply to this ticket to reopen it."
-                        android:textAlignment="center"
-                        android:textColor="@color/black" />
-
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/llSendMsg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_edit_text">
-
-                        <EditText
-                            android:id="@+id/etSendMsg"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@null"
-                            android:gravity="left"
-                            android:hint="Type here....."
-                            android:minHeight="@dimen/_80sdp" />
-
-                    </LinearLayout>
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:fontFamily="@font/googlesans_medium"
-                        android:text="Attachment :"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textColor="@color/black_900"
-                        android:textSize="@dimen/_12sdp" />
-
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnChooseFile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_30sdp"
-                        android:fontFamily="@font/googlesans_medium"
-                        android:text="Choose File "
-                        android:textAllCaps="false"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                        android:textColor="@color/white" />
 
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvSendAttachment"
+                        android:id="@+id/rvChat"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
                         android:paddingTop="@dimen/_5sdp" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnSubmit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_30sdp"
-                        android:layout_gravity="center"
-                        android:background="@color/green"
-                        android:fontFamily="@font/googlesans_medium"
-                        android:text="Submit"
-                        android:textAllCaps="false"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvChat"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:paddingTop="@dimen/_5sdp" />
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-    </RelativeLayout>
-
+            </androidx.core.widget.NestedScrollView>
+        </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

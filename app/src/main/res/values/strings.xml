@@ -192,4 +192,15 @@
     <string name="permissionMessage">Allow Permissions</string>
     <string name="ok">OK</string>
     <string name="cancel">CANCEL</string>
+    <string name="projectName">Project Name:<font color='#FF0000'>*</font></string>
+    <string name="blockName">Block Name:</string>
+    <string name="plotNo">PlotNo:</string>
+    <string name="requesterName">Requester Name:</string>
+    <string name="mobileNo">Mobile No:</string>
+    <string name="emailId">Email Id:</string>
+    <string name="assignTo">Assign To:<font color='#FF0000'>*</font></string>
+    <string name="visitStatus">Visit Status:<font color='#FF0000'>*</font></string>
+    <string name="requestedDate">Requested Date:<font color='#FF0000'>*</font></string>
+    <string name="status">Status:</string>
+    <string name="note">Note:</string>
 </resources>

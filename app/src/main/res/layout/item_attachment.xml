@@ -3,7 +3,6 @@
     android:id="@+id/llMain"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/_22sdp"
-    android:background="@color/lightRed"
     android:padding="@dimen/_5sdp">
 
     <TextView
@@ -11,12 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginHorizontal="@dimen/_5sdp"
+        android:drawableLeft="@drawable/ic_attachment"
+        android:drawableTint="@color/blue"
         android:fontFamily="@font/googlesans_regular"
         android:gravity="center"
         android:text="item"
-        android:textColor="@color/white"
-
-        />
+        android:textColor="@color/blue" />
 
 </LinearLayout>

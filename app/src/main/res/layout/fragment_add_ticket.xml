@@ -154,6 +154,7 @@
                 android:background="@drawable/bg_edit_text">
 
                 <EditText
+                    android:maxHeight="@dimen/_80sdp"
                     android:id="@+id/etQuery"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -161,7 +162,7 @@
                     android:background="@null"
                     android:gravity="left"
                     android:hint="Type query here....."
-                    android:maxLength="300"
+                    android:maxLength="500"
                     android:minHeight="@dimen/_80sdp" />
 
             </LinearLayout>

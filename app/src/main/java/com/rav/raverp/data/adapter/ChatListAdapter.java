@@ -30,7 +30,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHl
     ChatModel chatModel;
 
     ArrayList<HashMap<String, String>> hashMapArrayList = new ArrayList<>();
-
+    String attachment;
+    List<String> as;
 
     public ChatListAdapter(ConversationActivity conversationActivity, ChatModel chatModel) {
         this.context = conversationActivity;
@@ -53,19 +54,20 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHl
             holder.tvType.setText("Staff");
             holder.rlMain.setBackgroundColor(context.getResources().getColor(R.color.light));
         } else {
-            holder.rlMain.setBackgroundColor(context.getResources().getColor(R.color.silver));
-            holder.tvType.setText("Client");
+            holder.rlMain.setBackgroundColor(context.getResources().getColor(R.color.card_bg_color));
+            holder.tvType.setText("Customer");
         }
 
         if (chatModel.getBody().get(position).getAttachment().equalsIgnoreCase("")) {
             holder.tvAttachment.setVisibility(View.GONE);
         } else {
 
+            hashMapArrayList.clear();
             holder.tvAttachment.setVisibility(View.VISIBLE);
             holder.rvAttachment.setVisibility(View.VISIBLE);
-            String attachment = chatModel.getBody().get(position).getAttachment();
+            attachment = chatModel.getBody().get(position).getAttachment();
 
-            List<String> as = Arrays.asList(attachment.split(":"));
+            as = Arrays.asList(attachment.split(":"));
 
             for (int i = 0; i < as.size(); i++) {
                 HashMap<String, String> hashMap = new HashMap<>();
@@ -74,10 +76,12 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHl
 
                 Log.v("ListAttach", as.get(i));
             }
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 5);
-            ChatAttachmentAdapter chatAttachmentAdapter = new ChatAttachmentAdapter(context, hashMapArrayList,"chat");
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 1);
+            ChatAttachmentAdapter chatAttachmentAdapter = new ChatAttachmentAdapter(context, hashMapArrayList, "chat");
             holder.rvAttachment.setLayoutManager(gridLayoutManager);
             holder.rvAttachment.setAdapter(chatAttachmentAdapter);
+            holder.tvAttachment.setText("Attachments(" + as.size() + ")");
+
         }
     }
 

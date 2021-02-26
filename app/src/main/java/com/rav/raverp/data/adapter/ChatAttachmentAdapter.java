@@ -1,29 +1,39 @@
 package com.rav.raverp.data.adapter;
 
 
+import android.app.Activity;
+import android.app.DownloadManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.TaskStackBuilder;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.PowerManager;
 import android.os.StrictMode;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
@@ -33,6 +43,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.rav.raverp.R;
+import com.rav.raverp.ui.MainActivity;
 import com.rav.raverp.utils.ByteVolleyRequest;
 import com.rav.raverp.utils.ViewUtils;
 
@@ -44,6 +55,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -76,6 +88,7 @@ public class ChatAttachmentAdapter extends RecyclerView.Adapter<ChatAttachmentAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         holder.tvAttachment.setText("File" + (position + 1));
         //holder.tvAttachment.setText(hashMapArrayList.get(position).get("attachment"));
 
@@ -87,13 +100,11 @@ public class ChatAttachmentAdapter extends RecyclerView.Adapter<ChatAttachmentAd
             @Override
             public void onClick(View v) {
                 if (type.equalsIgnoreCase("chat")) {
-                    new GetImages("https://ravgroup.org/images/SupportAttachments/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"), ".jpg").execute();
-                    // new DownloadTask().execute(stringToURL("https://ravgroup.org/images/SupportAttachments/" + hashMapArrayList.get(position).get("attachment")));
-                    // downloadByVolley("https://ravgroup.org/images/SupportAttachments/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"));
-                } else {
-                    new GetImages("https://ravgroup.org/images/SupportDocs/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"), ".jpg").execute();
-                    // new DownloadTask().execute(stringToURL("https://ravgroup.org/images/SupportDocs/" + hashMapArrayList.get(position).get("attachment")));
-                    // downloadByVolley("https://ravgroup.org/images/SupportDocs/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"));
+                    downloadFile(context, "https://ravgroup.org/images/SupportAttachments/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"));
+                    // new GetImages("https://ravgroup.org/images/SupportAttachments/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"), "").execute();
+                } else if (type.equalsIgnoreCase("create")) {
+                    downloadFile(context, "https://ravgroup.org/images/SupportDocs/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"));
+                    // new GetImages("https://ravgroup.org/images/SupportDocs/" + hashMapArrayList.get(position).get("attachment"), hashMapArrayList.get(position).get("attachment"), "").execute();
                 }
 
             }
@@ -119,52 +130,6 @@ public class ChatAttachmentAdapter extends RecyclerView.Adapter<ChatAttachmentAd
         }
     }
 
-    private class DownloadTask extends AsyncTask<URL, Void, Bitmap> {
-        protected void onPreExecute() {
-            mProgressDialog.show();
-        }
-
-        protected Bitmap doInBackground(URL... urls) {
-
-            URL url = urls[0];
-            HttpURLConnection connection = null;
-            try {
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-                InputStream inputStream = connection.getInputStream();
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-                return BitmapFactory.decodeStream(bufferedInputStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        // When all async task done
-        protected void onPostExecute(Bitmap result) {
-            // Hide the progress dialog
-            mProgressDialog.dismiss();
-
-            if (result != null) {
-                Toast.makeText(context, "File Download Successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                // Notify user that an error occurred while downloading image
-                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-    }
-
-    protected URL stringToURL(String fileurl) {
-        try {
-            url = new URL(fileurl);
-            return url;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     private class GetImages extends AsyncTask<Object, Object, Object> {
         private String requestUrl, imagename_;
@@ -175,7 +140,8 @@ public class ChatAttachmentAdapter extends RecyclerView.Adapter<ChatAttachmentAd
 
         private GetImages(String requestUrl, String imagename, String ext) {
             this.requestUrl = requestUrl;
-            this.imagename_ = new Date().toString();
+            //  this.imagename_ = new Date().toString();
+            this.imagename_ = imagename;
             this.ext = ext;
             progressDialog = new ProgressDialog(context,
                     ProgressDialog.STYLE_SPINNER);
@@ -203,6 +169,27 @@ public class ChatAttachmentAdapter extends RecyclerView.Adapter<ChatAttachmentAd
         }
     }
 
+    void showNotification(String title, String message) {
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("YOUR_CHANNEL_ID",
+                    "YOUR_CHANNEL_NAME",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("YOUR_NOTIFICATION_CHANNEL_DESCRIPTION");
+            mNotificationManager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "YOUR_CHANNEL_ID")
+                .setSmallIcon(R.mipmap.ic_launcher) // notification icon
+                .setContentTitle(title) // title for notification
+                .setContentText(message)// message for notification
+                .setAutoCancel(true); // clear notification after click
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pi);
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
     public void ShowNoticification(String uri) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -219,8 +206,7 @@ public class ChatAttachmentAdapter extends RecyclerView.Adapter<ChatAttachmentAd
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel(
-                    channelId, channelName, importance);
+            NotificationChannel mChannel = new NotificationChannel(channelId, channelName, importance);
             notificationManager.createNotificationChannel(mChannel);
         }
 
@@ -249,7 +235,7 @@ public class ChatAttachmentAdapter extends RecyclerView.Adapter<ChatAttachmentAd
 
         File folder = new File(sdcard.getAbsoluteFile(), "RavBusiness");//the dot makes this directory hidden to the user
         folder.mkdir();
-        File file = new File(folder.getAbsoluteFile(), filename + "." + ext);
+        File file = new File(folder.getAbsoluteFile(), filename);
         if (file.exists())
             return stored;
 
@@ -274,106 +260,140 @@ public class ChatAttachmentAdapter extends RecyclerView.Adapter<ChatAttachmentAd
             return null; // swallow a 404
         }
 
-        ShowNoticification(file.getAbsolutePath());
+        showNotification("File", "Complete");
         return stored;
     }
 
 
-    public boolean downloadFile(final String path) {
+    /**
+     * Used to download the file from url.
+     * <p/>
+     * 1. Download the file using Download Manager.
+     *
+     * @param url      Url.
+     * @param fileName File Name.
+     */
+    public void downloadFile(Context activity, final String url, final String fileName) {
+        mProgressDialog.show();
         try {
-            URL url = new URL(path);
+            if (url != null && !url.isEmpty()) {
+                Uri uri = Uri.parse(url);
+              /*  activity.registerReceiver(attachmentDownloadCompleteReceive, new IntentFilter(
+                        DownloadManager.ACTION_DOWNLOAD_COMPLETE));*/
+                activity.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
-            URLConnection ucon = url.openConnection();
-            ucon.setReadTimeout(5000);
-            ucon.setConnectTimeout(10000);
-
-            InputStream is = ucon.getInputStream();
-            BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
-
-            File file = new File(context.getDir("filesdir", Context.MODE_PRIVATE) + "png");
-
-            if (file.exists()) {
-                file.delete();
+                DownloadManager.Request request = new DownloadManager.Request(uri);
+                request.setMimeType(getMimeType(uri.toString()));
+                request.setTitle(fileName);
+                request.setDescription("Downloading attachment..");
+                request.allowScanningByMediaScanner();
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+                DownloadManager dm = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
+                dm.enqueue(request);
             }
-            file.createNewFile();
-
-            FileOutputStream outStream = new FileOutputStream(file);
-            byte[] buff = new byte[5 * 1024];
-
-            int len;
-            while ((len = inStream.read(buff)) != -1) {
-                outStream.write(buff, 0, len);
-            }
-
-            outStream.flush();
-            outStream.close();
-            inStream.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        } catch (IllegalStateException e) {
+            Toast.makeText(activity, "Please insert an SD card to download file", Toast.LENGTH_SHORT).show();
         }
-
-        return true;
     }
 
-    public void downloadByVolley(String url, String file_name) {
-        ViewUtils.startProgressDialog(context);
-        //our custom volley request
-        ByteVolleyRequest volleyMultipartRequest = new ByteVolleyRequest(Request.Method.GET, url,
-                new Response.Listener<byte[]>() {
-                    @Override
-                    public void onResponse(byte[] response) {
-                        ViewUtils.endProgressDialog();
-                        try {
-                            if (response != null) {
-                                String state = "";
-                                state = Environment.getExternalStorageState();
-                                if (Environment.MEDIA_MOUNTED.equals(state)) {
+    /**
+     * Used to get MimeType from url.
+     *
+     * @param url Url.
+     * @return Mime Type for the given url.
+     */
+    private String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            type = mime.getMimeTypeFromExtension(extension);
+        }
+        return type;
+    }
 
-                                    File direct = new File(Environment.getExternalStorageDirectory()
-                                            + "/.private");
-                                    if (!direct.exists()) {
-                                        direct.mkdirs();
-                                    }
-                                    File myFile = new File(direct, file_name + ".jpg");
-                                    FileOutputStream fstream = new FileOutputStream(myFile);
-                                    fstream.write(response);
-                                    fstream.close();
+    /**
+     * Attachment download complete receiver.
+     * <p/>
+     * 1. Receiver gets called once attachment download completed.
+     * 2. Open the downloaded file.
+     */
+    BroadcastReceiver attachmentDownloadCompleteReceive = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                long downloadId = intent.getLongExtra(
+                        DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+                openDownloadedAttachment(context, downloadId);
+            }
+        }
+    };
 
-                                } else {
-//                                    Toast.makeText(MainActivity.this, "External Storage Not Found", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        ViewUtils.endProgressDialog();
+    BroadcastReceiver onComplete = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            mProgressDialog.dismiss();
 
-//                        Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            // Do Something
+        }
+    };
 
-                Map<String, String> params = new HashMap<>();
-                return params;
+    /**
+     * Used to open the downloaded attachment.
+     *
+     * @param context    Content.
+     * @param downloadId Id of the downloaded file to open.
+     */
+    private void openDownloadedAttachment(final Context context, final long downloadId) {
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Query query = new DownloadManager.Query();
+        query.setFilterById(downloadId);
+        Cursor cursor = downloadManager.query(query);
+        if (cursor.moveToFirst()) {
+            int downloadStatus = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+            String downloadLocalUri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+            String downloadMimeType = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE));
+            if ((downloadStatus == DownloadManager.STATUS_SUCCESSFUL) && downloadLocalUri != null) {
+                openDownloadedAttachment(context, Uri.parse(downloadLocalUri), downloadMimeType);
+            }
+        }
+        cursor.close();
+    }
+
+    /**
+     * Used to open the downloaded attachment.
+     * <p/>
+     * 1. Fire intent to open download file using external application.
+     * <p>
+     * 2. Note:
+     * 2.a. We can't share fileUri directly to other application (because we will get FileUriExposedException from Android7.0).
+     * 2.b. Hence we can only share content uri with other application.
+     * 2.c. We must have declared FileProvider in manifest.
+     * 2.c. Refer - https://developer.android.com/reference/android/support/v4/content/FileProvider.html
+     *
+     * @param context            Context.
+     * @param attachmentUri      Uri of the downloaded attachment to be opened.
+     * @param attachmentMimeType MimeType of the downloaded attachment.
+     */
+    private void openDownloadedAttachment(final Context context, Uri attachmentUri, final String attachmentMimeType) {
+        if (attachmentUri != null) {
+            // Get Content Uri.
+            if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme())) {
+                // FileUri - Convert it to contentUri.
+                File file = new File(attachmentUri.getPath());
+                attachmentUri = FileProvider.getUriForFile(context, "com.freshdesk.helpdesk.provider", file);
             }
 
-            @Override
-            protected Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
-                return params;
-            }
-        };
-        volleyMultipartRequest.setRetryPolicy(new DefaultRetryPolicy(10 * DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 0));
-        //adding the request to volley
-        Volley.newRequestQueue(context).add(volleyMultipartRequest);
+          /*  Intent openAttachmentIntent = new Intent(Intent.ACTION_VIEW);
+            openAttachmentIntent.setDataAndType(attachmentUri, attachmentMimeType);
+            openAttachmentIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try {
+                context.startActivity(openAttachmentIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(context, "unable_to_open_file", Toast.LENGTH_LONG).show();
+            }*/
+        }
     }
 
 
